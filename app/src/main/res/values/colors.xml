@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="control_background">#cc4285f4</color>
+    <color name="c1">#88c1d8</color>
+    <color name="h1">#6095aa</color>
+    <color name="c2">#6095aa</color>
+    <color name="btn1">#6e4681</color>
+    <color name="white">#ffffff</color>
+    <color name="colorFAB">#2196F3</color>
+    <color name="green">#43895e</color>
+    <color name="radiosel">#4cc7f4</color>
+    <color name="rowsel">#e0d6f4</color>
+    <!--<color name="c3">#034c58</color>-->
+    <!--<color name="c3_light">#d4034c58</color>-->
+    <!--<color name="c3_light_2">#9b064c58</color>-->
+    <color name="c3">#0e4269</color>
+    <color name="c3_light">#cd0e4269</color>
+    <color name="c3_light_2">#8f90a2</color>
+    <color name="c4">#6a45b4dd</color>
+
+    <color name="c5">#d8c9e5f1</color>
+    <color name="p1">#6774EA</color>
+    <color name="grey">#faadaebc</color>
+    <color name="grey1">#d0e3e4ef</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="primary">#533981</color>
+    <color name="lprimary">#D1C4E9</color>
+    <color name="f1">#03A9F4</color>
+    <color name="row">#20022e41</color>
+    <color name="row1">#718f90a2</color>
+    <color name="recy">#20ddd5e9</color>
+    <color name="g1">#01431b</color>
+
+    <color name="btn">#06547f</color>
+    <color name="bgrecy">#48c9e5f1</color>
+</resources>

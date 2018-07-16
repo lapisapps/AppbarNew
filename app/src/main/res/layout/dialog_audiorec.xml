@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:background="@android:color/white">
+
+
+
+    <LinearLayout
+
+        android:id="@+id/linearLayoutRecorder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:layout_marginTop="20dp"
+        >
+
+        <Chronometer
+            android:id="@+id/chronometerTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="60sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <LinearLayout
+
+            android:id="@+id/linearLayoutPlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:id="@+id/imageViewPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_play"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:tint="@android:color/darker_gray"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                />
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_marginBottom="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            >
+
+
+            <ImageView
+                android:id="@+id/imageViewRecord"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:tint="@color/cardview_dark_background"
+                android:src="@drawable/ic_mic_black_24dp"
+                android:background="?android:attr/selectableItemBackground"
+
+                android:clickable="true"
+                android:focusable="true"
+               />
+
+            <ImageView
+                android:id="@+id/imageViewStop"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:src="@drawable/ic_stop"
+                android:tint="@android:color/darker_gray"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:background="@drawable/btn_round2"
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            app:layout_constraintVertical_bias="0.48000002">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:textColorHint="@color/white">
+
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="Description"
+
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white" />
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:id="@+id/btnsave"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@color/c3"
+                android:drawableTint="@color/white"
+                android:gravity="center|center_horizontal"
+                android:padding="5dp"
+                android:text="Save"
+
+                android:textAlignment="gravity"
+                android:textColor="@color/white"
+                tools:layout_editor_absoluteX="265dp"
+                tools:layout_editor_absoluteY="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

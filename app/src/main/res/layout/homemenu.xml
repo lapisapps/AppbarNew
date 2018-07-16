@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg"
+>
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:theme="@style/AppTheme.AppBarOverlay">-->
+
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="?attr/colorPrimary"-->
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+        <!--<com.example.pentagon.mylibrary.CircleMenuLayout-->
+            <!--android:id="@+id/id_menulayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:padding="100dp"-->
+            <!--android:background="@drawable/circle_bg3" >-->
+
+            <!--<RelativeLayout-->
+                <!--android:id="@id/id_circle_menu_item_center"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" >-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="200dp"-->
+                    <!--android:layout_height="200dp"-->
+                    <!--android:layout_centerInParent="true"-->
+                    <!--android:background="@drawable/appicon" />-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="116.0dip"-->
+                    <!--android:layout_height="116.0dip"-->
+                    <!--android:layout_centerInParent="true"-->
+                    <!--android:background="@drawable/turnplate_mask_unlogin_normal" />-->
+            <!--</RelativeLayout>-->
+        <!--</com.example.pentagon.mylibrary.CircleMenuLayout>-->
+
+
+    <!--</LinearLayout>-->
+
+</LinearLayout>

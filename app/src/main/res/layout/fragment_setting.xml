@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+android:background="@color/white"
+    tools:context=".Fragments.SettingFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TableRow
+                android:id="@+id/prjct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/row">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/hprjct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:tag="0"
+                        android:text="Project"
+                        android:textSize="@dimen/setting_head" />
+                </LinearLayout>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/rowprjcts"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_round"
+                        android:hint="Project name">
+
+                        <EditText
+                            android:background="@android:color/transparent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:padding="10dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_round"
+
+                        android:hint="Description">
+
+                        <EditText
+                            android:background="@android:color/transparent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:padding="10dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/search_shape"
+                        android:padding="10dp"
+                        android:text="Save"
+                        android:textColor="@color/white" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycprjcts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+
+                        android:text="8 more Projects"
+                        android:textColor="@color/g1"
+                        android:textSize="@dimen/text1" />
+                </LinearLayout>
+
+
+            </TableRow>
+
+            <TableRow
+
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+
+                </LinearLayout>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/row">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/harea"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:tag="0"
+                        android:text="Area"
+                        android:textSize="@dimen/setting_head" />
+                </LinearLayout>
+
+
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone"
+                android:id="@+id/rowarea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_round"
+                        android:hint="New Area">
+
+                        <EditText
+                            android:background="@android:color/transparent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:padding="10dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+
+                        android:background="@drawable/search_shape"
+                        android:padding="10dp"
+                        android:text="Save"
+
+                        android:textColor="@color/white" />
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:text="8 more area"
+
+                        android:textSize="@dimen/text1" />
+                </LinearLayout>
+
+
+            </TableRow>
+
+            <TableRow
+
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+                android:id="@+id/system"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/row">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/hsystem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:tag="0"
+                        android:text="System"
+                        android:textSize="@dimen/setting_head" />
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+                android:visibility="gone"
+                android:id="@+id/rowsys"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_round"
+                        android:hint="New System">
+
+                        <EditText
+                            android:background="@android:color/transparent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:padding="10dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/search_shape"
+                        android:padding="10dp"
+                        android:text="Save"
+
+                        android:textColor="@color/white" />
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:text="8 more area"
+
+                        android:textSize="@dimen/text1" />
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+                android:id="@+id/discipline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/row">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/hdiscipline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:tag="0"
+                        android:text="Discipline"
+                        android:textSize="@dimen/setting_head" />
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+                android:visibility="gone"
+                android:id="@+id/rowdisc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_round"
+                        android:hint="New Discipline">
+
+                        <EditText
+                            android:background="@android:color/transparent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:padding="10dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/search_shape"
+                        android:padding="10dp"
+                        android:text="Save"
+
+                        android:textColor="@color/white" />
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:text="8 more area"
+
+                        android:textSize="@dimen/text1" />
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+                android:id="@+id/tag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/row">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/htag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:tag="0"
+                        android:text="Tags"
+                        android:textSize="@dimen/setting_head" />
+                </LinearLayout>
+
+
+            </TableRow>
+            <TableRow
+                android:visibility="gone"
+                android:id="@+id/rowtags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_round"
+                        android:hint="New Tags">
+
+                        <EditText
+                            android:background="@android:color/transparent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:padding="10dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/search_shape"
+                        android:padding="10dp"
+                        android:text="Save"
+
+                        android:textColor="@color/white" />
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:text="8 more area"
+
+                        android:textSize="@dimen/text1" />
+                </LinearLayout>
+
+
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</FrameLayout>
