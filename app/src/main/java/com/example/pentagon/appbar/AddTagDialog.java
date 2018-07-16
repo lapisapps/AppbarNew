@@ -42,7 +42,7 @@ public class AddTagDialog extends Dialog {
     LinearLayout arealayout;
     AutoCompleteTextView tag;
     TextView addtag;
-    int type;
+    int type,ddd;
     RadioButton rdex,rdnew;
     TextInputLayout sufixinp,systeminp;
     android.app.AlertDialog.Builder builder;
