@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pentagon.appbar.AddAreaDialog;
+import com.example.pentagon.appbar.AddDisciplineDialog;
 import com.example.pentagon.appbar.AddProjectDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.R;

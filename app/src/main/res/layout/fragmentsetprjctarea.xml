@@ -193,7 +193,7 @@ android:textColor="@color/white"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_height="30dp" />
 
                     <TextView
                         android:drawableTint="@color/white"

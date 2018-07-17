@@ -27,46 +27,12 @@
             android:id="@+id/head"
             android:textColor="@color/white"
             android:background="@color/c3"
-            android:text="Area"
+            android:text="Discipline"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <LinearLayout
 
-android:paddingLeft="3dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RadioGroup
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <RadioButton
-                    android:id="@+id/rdex"
-
-                    android:layout_marginRight="5dp"
-                    android:padding="4dp"
-                    android:button="@android:color/transparent"
-                    android:background="@drawable/radioback"
-                    android:textSize="12dp"
-                    android:text="Existing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <RadioButton
-                    android:id="@+id/rdnew"
-                    android:layout_marginRight="5dp"
-                    android:padding="4dp"
-                    android:button="@android:color/transparent"
-                    android:background="@drawable/radioback"
-                    android:textSize="12dp"
-                    android:text="New"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RadioGroup>
-
-        </LinearLayout>
         <LinearLayout
             android:paddingLeft="3dp"
             android:layout_marginTop="10dp"
@@ -77,8 +43,8 @@ android:paddingLeft="3dp"
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/layoutid"
+                android:visibility="visible"
+                android:id="@+id/layid"
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
                 android:layout_marginTop="5dp"
@@ -98,15 +64,15 @@ android:paddingLeft="3dp"
                         android:paddingLeft="5dp"
                         android:background="@android:color/transparent"
                         android:textSize="14dp"
-                        android:hint="Code"
+                        android:hint="code"
                         android:text=""
-
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:paddingLeft="2dp"
@@ -128,7 +94,7 @@ android:paddingLeft="3dp"
                         android:paddingLeft="5dp"
                         android:background="@android:color/transparent"
                         android:textSize="14dp"
-                        android:hint="Area"
+                        android:hint="name"
                         android:text=""
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />

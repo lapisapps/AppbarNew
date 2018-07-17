@@ -30,7 +30,9 @@ import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterProjectSt;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterSystemSt;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTagSt;
 import com.example.pentagon.appbar.AddAreaDialog;
+import com.example.pentagon.appbar.AddDisciplineDialog;
 import com.example.pentagon.appbar.AddProjectDialog;
+import com.example.pentagon.appbar.AddSystemDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.HomeActivity;
@@ -169,22 +171,20 @@ public class SettingFragment3 extends Fragment {
         adddiscipline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(prjcth.getTag().toString().equals("0"))
+                if(disciplineh.getTag().toString().equals("0"))
                     expandPrjctRow();
 
-                new AddProjectDialog(getActivity(),1);
+                new AddDisciplineDialog(getActivity(),1);
             }
         });
         addsystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(areah.getTag().toString().equals("0"))
+                if(systemh.getTag().toString().equals("0"))
                     expandSystem();
-                if((PrjctData) spinner.getSelectedItem()==null)
-                    Toast.makeText(getActivity(), "No projects found", Toast.LENGTH_SHORT).show();
-                else
-                    AddAreaDialog.prjctData=(PrjctData) spinner.getSelectedItem();
-                new AddAreaDialog(getActivity(),1);
+
+
+                new AddSystemDialog(getActivity(),1);
             }
         });
         system=v.findViewById(R.id.area);

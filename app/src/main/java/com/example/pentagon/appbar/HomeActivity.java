@@ -166,7 +166,7 @@ ReportsFragment.homeactivity=this;
         Utility.savemenu = menu.getItem(0);
         Utility.savemenu.setVisible(false);
         Utility.sharemenu = menu.getItem(1);
-        Utility.sharemenu.setVisible(true);
+        Utility.sharemenu.setVisible(false);
         return true;
     }
 

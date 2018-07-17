@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pentagon.appbar.AddAreaDialog;
+import com.example.pentagon.appbar.AddSystemDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
@@ -80,8 +81,8 @@ holder.tag.setText(product.getTag());
             holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AddAreaDialog.areadata=product;
-                    new AddAreaDialog(mContext, 2);
+                    AddSystemDialog.systemdata=product;
+                    new AddSystemDialog(mContext, 2);
                 }
             });
 
@@ -97,7 +98,7 @@ holder.tag.setText(product.getTag());
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new SqliteDb(mContext).deleteArea(product.getTagid());
+                            new SqliteDb(mContext).deleteSystem(product.getTagid());
                             dialog.dismiss();
                             // new ResponseHandler(context,ResponseHandler.this,jsonObjectCall);
                             Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();

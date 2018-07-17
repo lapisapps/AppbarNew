@@ -1,6 +1,5 @@
 package com.example.pentagon.appbar;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -60,7 +59,7 @@ public class SqliteDb extends SQLiteOpenHelper {
 //
 //    yes
 public static String CREATE_TABLE_REPORT="CREATE TABLE tblreport("+
-        "id INTEGER PRIMARY KEY,"+
+        "id INTEGER PRIMARY  KEY,"+
         "name TEXT DEFAULT NULL,"+
         "descr TEXT DEFAULT NULL,"+
         "prjctid TEXT DEFAULT NULL,"+
@@ -108,7 +107,7 @@ public static String CREATE_TABLE_REPORT="CREATE TABLE tblreport("+
             "path TEXT DEFAULT NULL,"+
             "sync INTEGER DEFAULT 0"+")";
 public static String CREATE_TABLE_PROJECT="CREATE TABLE tblproject("+
-        "id INTEGER PRIMARY KEY,"+
+        "id Text PRIMARY KEY,"+
         "prjct TEXT DEFAULT NULL,"+
         "descr TEXT DEFAULT NULL"+")";
 
@@ -120,15 +119,15 @@ public static String CREATE_TABLE_PROJECT="CREATE TABLE tblproject("+
             "tag TEXT DEFAULT NULL)";
 
     public static String CREATE_TABLE_AREA="CREATE TABLE tblareas("+
-            "id INTEGER PRIMARY KEY,"+
+            "id Text PRIMARY KEY,"+
             "code TEXT DEFAULT NULL)";
 
     public static String CREATE_TABLE_SYSTEM="CREATE TABLE tblsystem("+
-            "id INTEGER PRIMARY KEY,"+
+            "id TEXT PRIMARY KEY,"+
             "code TEXT DEFAULT NULL)";
 
     public static String CREATE_TABLE_DISCIPLINE="CREATE TABLE tbldiscipline("+
-            "id INTEGER PRIMARY KEY,"+
+            "id TEXT PRIMARY KEY,"+
             "code TEXT DEFAULT NULL)";
 
 //    public static String CREATE_TABLE_TAGS="CREATE TABLE tbltags("+
@@ -1577,18 +1576,26 @@ for(int j=0;j<prjcttags.size();j++) {
 
     }
 
-    public DataTag addArea(String prjct, String tag, boolean isnew) {
+    public boolean addArea(String prjct, String tag, boolean isnew, String s) {
 
 
         SQLiteDatabase dd=this.getReadableDatabase();
         String systemarea;
         int transactioncount=1;
-        Cursor cursor=dd.rawQuery("select max(id) from tblareas",null );
-        if(isnew&& cursor.moveToFirst())
-            transactioncount =cursor.getInt(0)+1;
-        else
-            transactioncount=Integer.parseInt(tag);
-        cursor.close();
+        Cursor cursor=null;
+        if(isnew) {
+          cursor = dd.rawQuery("select id from tblareas where id='" + s + "'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
+            cursor.close();
+        }
+
+
+
         boolean	status=false;
         cursor=dd.rawQuery("select max(id) from tblprojectarea",null );
         int prjctcount=0;
@@ -1617,7 +1624,7 @@ if(cursor.moveToFirst())
 
                 insertCategory.clearBindings();
 
-                insertCategory.bindLong(1,transactioncount);
+                insertCategory.bindString(1,s);
                 insertCategory.bindString(2,tag);
 
 
@@ -1625,7 +1632,7 @@ if(cursor.moveToFirst())
                 insertCategory1.bindLong(1,prjctcount);
                 insertCategory1.bindString(2,prjct);
 
-                insertCategory1.bindString(3,String.valueOf(transactioncount));
+                insertCategory1.bindString(3,s);
                 //insertCategory.bindString(9,actor.getString("published"));
 
                 Log.i("error1","111");
@@ -1654,35 +1661,36 @@ if(cursor.moveToFirst())
 
 //Utility.addReminder(df,co);
 //Utility.setAlaram1(co,df);
-   cursor=dd.rawQuery("select max(id) from tblareas",null );
-        DataTag dt=new DataTag();
-        dt.setTag(tag);
-        if(cursor.moveToFirst())
-        dt.setTagid(cursor.getString(0));
+//   cursor=dd.rawQuery("select max(id) from tblareas",null );
+//        DataTag dt=new DataTag();
+//        dt.setTag(tag);
+//        if(cursor.moveToFirst())
+//        dt.setTagid(cursor.getString(0));
         cursor.close();
         dd.close();
-        return dt;
+        return status;
     }
 
-    public boolean insertPrjct(String prjct, String desc) {
+    public boolean insertPrjct(String prjctid,String prjct, String desc) {
 
         SQLiteDatabase dd=this.getReadableDatabase();
         String systemarea;
         //  dd.execSQL("delete from tblreporttag where rid='"+CreateReport.loaddata.getId()+"'");
-        Cursor cursor=dd.rawQuery("select id from tblproject where prjct='"+prjct+"'",null );
+//        Cursor cursor=dd.rawQuery("select id from tblproject where prjct='"+prjct+"'",null );
+//
+//if(cursor.getCount()>0){
+//    cursor.close();
+//    return false;
+//}
 
-if(cursor.getCount()>0){
-    cursor.close();
+        Cursor  cursor=dd.rawQuery("select * from tblproject where id='"+prjctid+"'",null );
+//        int transactioncount=0;
+//                if(cursor.moveToFirst()){
+//                    transactioncount=cursor.getInt(0);
+//
+//                }
+if(cursor.getCount()>0)
     return false;
-}
-
-   cursor=dd.rawQuery("select max(id) from tblproject",null );
-        int transactioncount=0;
-                if(cursor.moveToFirst()){
-                    transactioncount=cursor.getInt(0);
-
-                }
-
         cursor.close();
         boolean	status=false;
 //        public static String CREATE_TABLE_REPORT_DATA="CREATE TABLE tblreportdata("+
@@ -1712,9 +1720,9 @@ if(cursor.getCount()>0){
             try {
 
                     insertCategory1.clearBindings();
-                    transactioncount++;
 
-                        insertCategory1.bindLong(1,transactioncount);
+
+                    insertCategory1.bindString(1,prjctid);
                     insertCategory1.bindString(2,prjct );
 
 
@@ -1820,9 +1828,9 @@ pdf=cursor.getString(0);
         String dde,pdf="";
 try{
 Log.e("oidd",id);
-    dde="delete from tblareas where id='"+id+"'";
-    dd.compileStatement(dde);
-    dd.execSQL(dde);
+//    dde="delete from tblareas where id='"+id+"'";
+//    dd.compileStatement(dde);
+//    dd.execSQL(dde);
     dde="delete from tblprojectarea where areaid='"+id+"'";
     dd.execSQL(dde);
     dd.close();
@@ -1848,9 +1856,9 @@ Log.e("oidd",id);
         String dde,pdf="";
         try{
             Log.e("oidd",tagid);
-            dde="delete from tbltags where id='"+tagid+"'";
-            dd.compileStatement(dde);
-            dd.execSQL(dde);
+//            dde="delete from tbltags where id='"+tagid+"'";
+//            dd.compileStatement(dde);
+//            dd.execSQL(dde);
             dde="delete from tblprojecttag where tagid='"+tagid+"'";
             dd.execSQL(dde);
             dd.close();
@@ -1869,5 +1877,178 @@ Log.e("oidd",id);
         return true;
 
 
+    }
+
+    public boolean updateSystem(String s1,String s) {
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String dde,pdf="";
+
+        dde="update tblsystem set code='"+s+"' where id='"+s1+"'";
+
+        dd.execSQL(dde);
+        return true;
+
+
+    }
+    public boolean updateDiscipline(String s1,String s) {
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String dde,pdf="";
+
+        dde="update tbldiscipline set code='"+s+"' where id='"+s1+"'";
+
+        dd.execSQL(dde);
+        return true;
+
+
+    }
+
+    public boolean addDiscipline(String code,String name) {
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String systemarea;
+        int transactioncount=1;
+        boolean	status=false;
+        Cursor cursor=dd.rawQuery("select * from tbldiscipline where id='"+code+"'",null );
+        if(cursor.getCount()>0)
+        {
+            cursor.close();
+            return status;
+        }
+
+
+
+
+        String insertCategoryQuery = "INSERT INTO tbldiscipline(" +
+                "id,"+
+                "code"+")"+
+                " VALUES (?,?)";
+        dd= this.getWritableDatabase();
+        SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
+
+        try {
+            //JSONArray jsn=new JSONArray(data);
+
+
+
+
+
+            try {
+
+                insertCategory.clearBindings();
+
+                insertCategory.bindString(1,code);
+                insertCategory.bindString(2,name);
+
+
+
+                insertCategory.execute();//Insert();
+
+                status=true;
+
+            }catch (android.database.sqlite.SQLiteConstraintException ee){
+                ee.printStackTrace();
+                Log.i("error",ee.toString()+"");
+            }
+
+            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+
+            // Cursor cursor=dd.rawQuery(ss,null );
+
+
+            cursor.close();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+//Utility.addReminder(df,co);
+//Utility.setAlaram1(co,df);
+
+        return status;
+    }
+    public boolean addSystem(String code,String name) {
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String systemarea;
+        int transactioncount=1;
+        Cursor cursor=dd.rawQuery("select id from tblsystem where id='"+code+"'",null );
+        boolean	status=false;
+       if(cursor.getCount()>0)
+
+        {
+            cursor.close();
+            return status;
+        }
+
+
+
+
+        String insertCategoryQuery = "INSERT INTO tblsystem(" +
+                "id,"+
+                "code"+")"+
+                " VALUES (?,?)";
+        dd= this.getWritableDatabase();
+        SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
+
+        try {
+            //JSONArray jsn=new JSONArray(data);
+
+
+
+
+
+            try {
+
+                insertCategory.clearBindings();
+
+                insertCategory.bindString(1,code);
+                insertCategory.bindString(2,name);
+
+
+
+                    insertCategory.execute();//Insert();
+
+                status=true;
+
+            }catch (android.database.sqlite.SQLiteConstraintException ee){
+                ee.printStackTrace();
+                Log.i("error",ee.toString()+"");
+            }
+
+            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+
+            // Cursor cursor=dd.rawQuery(ss,null );
+
+
+            cursor.close();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+//Utility.addReminder(df,co);
+//Utility.setAlaram1(co,df);
+
+        return status;
+    }
+    public void deleteSystem(String id) {
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String dde,pdf="";
+
+        dde="delete from tblsystem where id='"+id+"'";
+        dd.execSQL(dde);
+    }
+    public void deleteDiscipline(String id) {
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String dde,pdf="";
+
+        dde="delete from tbldiscipline where id='"+id+"'";
+        dd.execSQL(dde);
     }
 }

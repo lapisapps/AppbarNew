@@ -115,6 +115,7 @@ holder.tag.setText(product.getTag());
                         }
                     });
 
+
                     builder.show();
                 }
             });

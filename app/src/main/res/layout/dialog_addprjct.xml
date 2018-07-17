@@ -71,14 +71,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
-
             <LinearLayout
                 android:paddingTop="10dp"
+                android:layout_marginLeft="3dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginRight="2dp"
+                    android:layout_width="100dp"
+                android:layout_weight="0.5"
+                    android:textColorHint="@color/f1"
+                    android:background="@drawable/btn_round"
+                    android:layout_height="50dp">
+                    <AutoCompleteTextView
+                        android:id="@+id/prjctid"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:background="@android:color/transparent"
+                        android:textSize="14dp"
+                        android:hint="Project Id"
+                        android:text=""
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingTop="5dp"
         android:layout_marginLeft="3dp"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:layout_marginTop="5dp"
+
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -132,7 +162,8 @@ android:paddingTop="2dp"
                         android:background="@android:color/transparent"
                         android:textSize="14dp"
                         android:hint="Description"
-                        android:text="dfsdsd"
+                        android:text=""
+                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 

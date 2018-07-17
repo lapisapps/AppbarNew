@@ -8,71 +8,98 @@
     android:layout_margin="2dp"
     android:clickable="true"
     android:background="@color/row1"
-    android:elevation="3dp"
+
 
     android:layout_height="35dp">
-    <RelativeLayout
+    <TableRow
 
-        android:orientation="horizontal"
+        android:weightSum="2"
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-<TextView
-    android:id="@+id/id"
-    android:textColor="@color/white"
-    android:background="@color/green"
-    android:paddingLeft="5dp"
-android:paddingRight="5dp"
-    android:textSize="@dimen/text1"
-    android:gravity="center"
-    android:text="1"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
 
+
+        >
+
+        <LinearLayout
+            android:layout_weight="1.5"
+            android:weightSum="1"
+            android:layout_height="35dp"
+            android:layout_width="0dp"
+            >
 
             <TextView
-                android:paddingLeft="2dp"
-                android:textSize="14dp"
-                android:layout_marginRight="5dp"
-                android:layout_alignLeft="@+id/checkBox"
-                android:id="@+id/tag"
+                android:background="@color/row"
+                android:textStyle="bold"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:id="@+id/id"
+                android:textColor="@color/green"
+
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textSize="@dimen/recyh"
                 android:gravity="center"
-                android:text="10B100a"
-                android:layout_width="wrap_content"
+                android:text="1"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_weight="0.8"
+                android:id="@+id/tag"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/checkBox" />
+                android:layout_alignLeft="@+id/checkBox"
+                android:layout_alignStart="@+id/checkBox"
+                android:layout_marginRight="5dp"
 
-
-
+                android:paddingLeft="2dp"
+                android:text="10B100a"
+                android:textSize="14dp" />
         </LinearLayout>
 
-        <TextView
-android:id="@+id/delete"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+
+
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="37dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_delete_black_24dp"
-            android:drawableTint="@color/grey"
-            android:gravity="right" />
-        <TextView
-android:id="@+id/edit"
-            android:layout_marginRight="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_edit_black_24dp"
-            android:drawableTint="@color/grey"
-            android:gravity="right" />
-    </RelativeLayout>
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            >
+
+            <TextView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="7dp"
+
+                android:drawableLeft="@drawable/ic_delete_black_24dp"
+                android:drawableTint="@color/grey"
+                android:gravity="right" />
+
+            <TextView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="2dp"
+
+                android:drawableLeft="@drawable/ic_edit_black_24dp"
+                android:drawableTint="@color/grey"
+                android:gravity="right"
+                android:layout_alignParentRight="true" />
+        </LinearLayout>
+
+
+
+
+
+    </TableRow>
 
 
 

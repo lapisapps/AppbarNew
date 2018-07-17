@@ -2,7 +2,6 @@ package com.example.pentagon.appbar;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pentagon.appbar.AdapterClass.CustomAutocompleteTextViewAd;
 import com.example.pentagon.appbar.AdapterClass.FilterWithSpaceAdapter;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
@@ -26,7 +26,6 @@ import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.Fragments.CreateReport;
 import com.example.pentagon.appbar.Fragments.PageReport2;
 import com.example.pentagon.appbar.Fragments.SettingFragment1;
-import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingTag;
 import com.example.pentagon.appbar.Fragments.PageReportArea;
 
 import java.util.ArrayList;
@@ -42,13 +41,14 @@ public class AddAreaDialog extends Dialog {
 
     DataPreview dataPreview;
     LinearLayout arealayout;
-    AutoCompleteTextView tag;
+    AutoCompleteTextView tag,code;
     TextView addtag;
     RadioButton rdex,rdnew;
     TextInputLayout sufixinp,systeminp;
     android.app.AlertDialog.Builder builder;
     android.app.AlertDialog alertDialog;
 public static PrjctData prjctData;
+LinearLayout layid;
     public static DataTag areadata;
 int type;
 
@@ -97,12 +97,16 @@ this.type=type;
 
     }
     private void setView(View layout) {
-
+        layid=layout.findViewById(R.id.layoutid);
         tag=layout.findViewById(R.id.tag);
+        code=layout.findViewById(R.id.id);
         addtag=layout.findViewById(R.id.addtag);
         rdex=layout.findViewById(R.id.rdex);
         rdnew=layout.findViewById(R.id.rdnew);
         if(type==2){
+            layid.setVisibility(View.VISIBLE);
+            code.setText(areadata.getTagid());
+            code.setFocusable(false);
             tag.setText(areadata.getTag());
             rdex.setVisibility(View.GONE);
             rdnew.setVisibility(View.GONE);
@@ -115,7 +119,7 @@ this.type=type;
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     Log.e("tagss",dataTags.size()+"");
-                    FilterWithSpaceAdapter adapter1 = new FilterWithSpaceAdapter<DataTag> (context,android.R.layout.select_dialog_item,dataTags);
+                    CustomAutocompleteTextViewAd adapter1 = new CustomAutocompleteTextViewAd(context,R.layout.dialog_addarea,R.id.lbl_name,dataTags);
                     tag.setThreshold(1);//will start working from first character
                     tag.setAdapter(adapter1);//setting the adapter data into the AutoCompleteTextView
                     tag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -135,7 +139,7 @@ this.type=type;
                     });
                 }
                 else {
-
+layid.setVisibility(View.VISIBLE);
                     tag.setAdapter(null);
                 }
             }
@@ -163,7 +167,11 @@ this.type=type;
 
                 if(type==2){
 
-
+                    if(tag.getText().toString().isEmpty())
+                        tag.setError("Enter area");
+                    else if(code.getText().toString().isEmpty())
+                        code.setError("Enter code");
+                    else
                     if((new SqliteDb(context).updateArea(areadata.getTagid(),tag.getText().toString(),true))){
                         Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
@@ -173,10 +181,12 @@ this.type=type;
                 }
                 if(rdnew.isChecked()){
                     if(tag.getText().toString().isEmpty())
-                  tag.setError("Enter area code");
+                  tag.setError("Enter area");
+                    else if(code.getText().toString().isEmpty())
+                        code.setError("Enter code");
                     else
                         if(type==0){
-                            if((addedarea=new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),true))!=null){
+                            if(new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),true,code.getText().toString())){
                                 Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                                 alertDialog.dismiss();
                                 PageReport2.prjctareas.add(addedarea);
@@ -185,7 +195,7 @@ this.type=type;
 
                         }else if(type==1){
 Log.e("ffff",prjctData.getId());
-                            if((addedarea=new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),true))!=null){
+                            if(new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),true, code.getText().toString())){
                             Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
                                 SettingFragment1.loadareaset(context);
@@ -204,10 +214,10 @@ Log.e("ffff",prjctData.getId());
                 }
                 else {
                     if(selectedtag==null)
-                        Toast.makeText(context, "Invalid code", Toast.LENGTH_SHORT).show();
+                        tag.setError("invalid entry");
                     else
                         if(type==0){
-                    if((addedarea=new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),selectedtag.getTagid(),false))!=null){
+                    if((new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),selectedtag.getTagid(),false, code.getText().toString()))){
                         Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                         PageReport2.prjctareas.add(addedarea);
@@ -216,7 +226,7 @@ Log.e("ffff",prjctData.getId());
 
                 }else if(type==1){
 
-                            if((addedarea=new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),false))!=null){
+                            if((new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),false, selectedtag.getTagid()))){
                                 Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                                 alertDialog.dismiss();
                                 SettingFragment1.loadareaset(context);

@@ -34,9 +34,10 @@ public class AddProjectDialog extends Dialog {
     public  ArrayList<DataTag> dataTags;
     DataPreview dataPreview;
     LinearLayout arealayout;
-    AutoCompleteTextView Prjctname,desc;
+    AutoCompleteTextView Prjctname,desc,prjctid;
     Button addprjct;
     RadioButton rdex,rdnew;
+
     TextInputLayout sufixinp,systeminp;
     android.app.AlertDialog.Builder builder;
     android.app.AlertDialog alertDialog;
@@ -64,7 +65,7 @@ type=n;
     }
 
     private void setView(View layout) {
-
+        prjctid=layout.findViewById(R.id.prjctid);
         Prjctname=layout.findViewById(R.id.prjctname);
         desc=layout.findViewById(R.id.description);
         addprjct=layout.findViewById(R.id.addtag);
@@ -73,6 +74,9 @@ if(type==2){
    head.setText("Edit Project");
     Prjctname.setText(prjctData.getPrjct());
     desc.setText(prjctData.getDescr());
+    prjctid.setText(prjctData.getId());
+    prjctid.setVisibility(View.VISIBLE);
+    prjctid.setFocusable(false);
     addprjct.setText("Save");
 }
 
@@ -84,7 +88,7 @@ if(!Prjctname.getText().toString().isEmpty()&&!desc.getText().toString().isEmpty
     PrjctData pp=new PrjctData();
 
         if(type==0){
-            if(new SqliteDb(context).insertPrjct(Prjctname.getText().toString(),desc.getText().toString())) {
+            if(new SqliteDb(context).insertPrjct(prjctid.getText().toString(),Prjctname.getText().toString(),desc.getText().toString())) {
                 Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();
 
                 PageReport2.prjctdatas = new SqliteDb(context).getPrjcts();
@@ -100,7 +104,7 @@ if(!Prjctname.getText().toString().isEmpty()&&!desc.getText().toString().isEmpty
 
             }
         else if(type==1) {
-            if(new SqliteDb(context).insertPrjct(Prjctname.getText().toString(),desc.getText().toString())) {
+            if(new SqliteDb(context).insertPrjct(prjctid.getText().toString(),Prjctname.getText().toString(),desc.getText().toString())) {
                 Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();
 
 
