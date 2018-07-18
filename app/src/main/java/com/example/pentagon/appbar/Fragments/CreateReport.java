@@ -162,14 +162,24 @@ setFab();
     private void setViewPager() {
         customPagerAdapter=new CustomPagerAdapter(getFragmentManager());
         customPagerAdapter.addFrag(new PageReport1(), "PageReport1");
-        customPagerAdapter.addFrag(new FragmentSettingTag(), "FragmentSettingTag");
+        customPagerAdapter.addFrag(new PageReport2(), "FragmentSettingTag");
         customPagerAdapter.addFrag(new PageReportTag(), "PageReportTag");
         customPagerAdapter.addFrag(new PageReportArea(), "PageReportarea");
         customPagerAdapter.addFrag(new PageReportSystem(), "PageReportsystem");
         customPagerAdapter.addFrag(new PageReportDiscipline(), "PageReportdispl");
-        customPagerAdapter.addFrag(new PageReportImage(), "PageReportimage");
-        customPagerAdapter.addFrag(new PageReportVideo(), "PageReportvidoe");
-        customPagerAdapter.addFrag(new PageReportAudio(), "PageReportaudio");
+
+//        FragmentDataViewImage dd= new FragmentDataViewImage();
+//        Bundle bb=new Bundle();
+//        bb.putInt("type",Utility.MEDIA_TYPE_IMAGE);
+        customPagerAdapter.addFrag(new FragmentDataViewImage(), "PageReportimage");
+//      dd= new FragmentDataViewImage();
+//     bb=new Bundle();
+//        bb.putInt("type",Utility.MEDIA_TYPE_VIDEO);
+        customPagerAdapter.addFrag(new FragmentDataViewVideo(), "PageReportvidoe");
+//        dd= new FragmentDataViewImage();
+//        bb=new Bundle();
+//        bb.putInt("type",Utility.MEDIA_TYPE_AUDIO);
+        customPagerAdapter.addFrag(new FragmentDataViewAudio(), "PageReportaudio");
         customPagerAdapter.addFrag(new PageReport5(), "PageReport5");
         viewPager.setOffscreenPageLimit(10);
         viewPager.setAdapter(customPagerAdapter);
@@ -327,7 +337,7 @@ fab1.setVisibility(View.VISIBLE);
             CreateReport.dataPreviews.add(dd);
             new PreviewDialog(getContext(),dd,true);
 
-            PageReportVideo.setVideos(getActivity());
+          //  PageReportVideo.setVideos(getActivity());
 
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -620,7 +630,7 @@ fab1.setVisibility(View.VISIBLE);
             CreateReport.dataPreviews.add(dd);
             new PreviewDialog(getContext(),dd,true);
 
-            PageReportImage.setImages(getActivity());
+           // PageReportImage.setImages(getActivity());
 
         } catch (NullPointerException e) {
             e.printStackTrace();

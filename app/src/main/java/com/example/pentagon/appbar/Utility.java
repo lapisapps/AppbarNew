@@ -71,7 +71,7 @@ public class Utility extends Activity {
     public static MenuItem savemenu;
    public static Toolbar toolbar;
    // public static  PageReport1 pageReport1;
-   public static FloatingActionButton  fab1,fab2,fab3;
+   public static FloatingActionButton  fab1,fab2,fab3,fabhome;
    public static  FloatingActionButton newreport;
     public static  FloatingActionButton camera;
     private static String imageStoragePath;

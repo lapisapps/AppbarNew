@@ -108,6 +108,7 @@ public class BlankFragment extends Fragment implements View.OnTouchListener {
         Utility.fab1.setVisibility(View.GONE);
         Utility.fab2.setVisibility(View.GONE);
         Utility.fab3.setVisibility(View.GONE);
+        Utility.fabhome.setVisibility(View.GONE);
 //        mCircleMenuLayout = (CircleMenuLayout) view.findViewById(R.id.id_menulayout);
 //        mCircleMenuLayout.setMenuItemIconsAndTexts(mItemImgs, mItemTexts);
 //
@@ -191,12 +192,14 @@ public class BlankFragment extends Fragment implements View.OnTouchListener {
                         switch(get(getAngle(e1.getX(),e1.getY(),e2.getX(),e2.getY()))){
 
                           case  0:
+                              Utility.fabhome.setVisibility(View.VISIBLE);
                               openCreateReport();
-                          //  Toast.makeText(getActivity(), "Up", Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(getActivity(), "Create report", Toast.LENGTH_SHORT).show();
                             break;
                             case  1:
+                                Utility.fabhome.setVisibility(View.VISIBLE);
 openSettings();
-                                Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+                              //  Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
                                 break;
                             case  2:
                                 getActivity().finish();
@@ -204,8 +207,9 @@ openSettings();
                               //  Toast.makeText(getActivity(), "down", Toast.LENGTH_SHORT).show();
                                 break;
                             case  3:
+                                Utility.fabhome.setVisibility(View.VISIBLE);
                                 openReport();
-                              // Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+                              // Toast.makeText(getActivity(), "Open reports", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                         return super.onFling(e1, e2, velocityX, velocityY);

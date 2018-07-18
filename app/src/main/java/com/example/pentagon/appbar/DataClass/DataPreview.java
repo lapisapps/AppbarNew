@@ -1,6 +1,6 @@
 package com.example.pentagon.appbar.DataClass;
 
-public class DataPreview {
+public class DataPreview implements java.io.Serializable{
     public String getPath() {
         return path;
     }

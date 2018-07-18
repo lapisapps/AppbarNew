@@ -29,6 +29,7 @@ import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.Fragments.CreateReport;
 
+import com.example.pentagon.appbar.Fragments.FragmentDataViewImage;
 import com.example.pentagon.appbar.Fragments.PageReportAudio;
 import com.example.pentagon.appbar.Fragments.PageReportImage;
 import com.example.pentagon.appbar.Fragments.PageReportVideo;
@@ -145,12 +146,13 @@ imageView.setVisibility(View.GONE);
             @Override
             public void onClick(View v) {
                CreateReport.dataPreviews.get(CreateReport.dataPreviews.size()-1).setDescr(description.getText().toString());
-                if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_AUDIO)
-                    PageReportAudio.audios.notifyDataSetChanged();
-                else if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_VIDEO)
-                    PageReportVideo.vidoes.notifyDataSetChanged();
-                else
-                    PageReportImage.images.notifyDataSetChanged();
+//                if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_AUDIO)
+//                   // PageReportAudio.audios.notifyDataSetChanged();
+//                else if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_VIDEO)
+//                   // PageReportVideo.vidoes.notifyDataSetChanged();
+//                else
+//                    PageReportImage.images.notifyDataSetChanged();
+                FragmentDataViewImage.addImage(CreateReport.dataPreviews.get(CreateReport.dataPreviews.size()-1));
                 alertDialog.dismiss();
             }
         });

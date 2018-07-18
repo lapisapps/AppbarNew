@@ -110,6 +110,22 @@ Utility.newreport.setVisibility(View.GONE);
         Utility.fab1 = (FloatingActionButton) findViewById(R.id.fab_1);
         Utility.fab2 = (FloatingActionButton) findViewById(R.id.fab_2);
         Utility.fab3 = (FloatingActionButton) findViewById(R.id.fab_3);
+        Utility.fabhome = (FloatingActionButton) findViewById(R.id.fab_home);
+        Utility.fabhome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReportsFragment.homeactivity=HomeActivity.this;
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                //this will clear the back stack and displays no animation on the screen
+                fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, BlankFragment.newInstance("",""))
+
+                        .commit();
+            }
+        });
+
         Utility.fab1.setVisibility(View.GONE);
         Utility.fab2.setVisibility(View.GONE);
         Utility.fab3.setVisibility(View.GONE);
@@ -130,7 +146,9 @@ Utility.newreport.setVisibility(View.GONE);
 
 ReportsFragment.homeactivity=this;
                 getSupportFragmentManager().beginTransaction()
+
                         .replace(R.id.content_frame, BlankFragment.newInstance("",""))
+
                         .commit();
 
             }

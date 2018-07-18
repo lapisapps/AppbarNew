@@ -19,6 +19,7 @@ import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingTa
 import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingsProjects;
 import com.example.pentagon.appbar.HomeActivity;
 import com.example.pentagon.appbar.R;
+import com.example.pentagon.appbar.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ View view;
              //   toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 //               setSupportActionBar(toolbar);
 //                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+                Utility.fabhome.setVisibility(View.VISIBLE);
                 viewPager = (ViewPager) view.findViewById(R.id.viewpager);
                 setupViewPager(viewPager);
 
