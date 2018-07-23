@@ -29,7 +29,9 @@ import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.Fragments.CreateReport;
 
+import com.example.pentagon.appbar.Fragments.FragmentDataViewAudio;
 import com.example.pentagon.appbar.Fragments.FragmentDataViewImage;
+import com.example.pentagon.appbar.Fragments.FragmentDataViewVideo;
 import com.example.pentagon.appbar.Fragments.PageReportAudio;
 import com.example.pentagon.appbar.Fragments.PageReportImage;
 import com.example.pentagon.appbar.Fragments.PageReportVideo;
@@ -57,11 +59,11 @@ public class PreviewDialog extends Dialog {
     Dialog alertDialog;
     public PreviewDialog(@NonNull Context mContext,DataPreview dataPreview,boolean edit) {
         super(mContext);
-prjcttags=Main2Activity.prjcttags;
+        prjcttags=Main2Activity.prjcttags;
         context=mContext;
         this.dataPreview=dataPreview;
         android.app.AlertDialog.Builder builder;
-  alertDialog = new Dialog(context);
+        alertDialog = new Dialog(context);
         LayoutInflater inflater = (LayoutInflater)
                 mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         layout = inflater.inflate(R.layout.dialog_preview,
@@ -70,7 +72,7 @@ prjcttags=Main2Activity.prjcttags;
 
 
 
-alertDialog.setContentView(layout);
+        alertDialog.setContentView(layout);
 
         ImageView imageView=layout.findViewById(R.id.imageView);
         expand=layout.findViewById(R.id.expand);
@@ -80,40 +82,40 @@ alertDialog.setContentView(layout);
         recyclerViewtag=layout.findViewById(R.id.tags);
         ImageView vidpreview=layout.findViewById(R.id.videopreview);
         final VideoView videoView=layout.findViewById(R.id.videoView);
-this.edit=edit;
+        this.edit=edit;
         initialize();
 
 
-imageView.setVisibility(View.GONE);
-       videoView.setVisibility(View.GONE);
-       vidpreview.setVisibility(View.GONE);
+        imageView.setVisibility(View.GONE);
+        videoView.setVisibility(View.GONE);
+        vidpreview.setVisibility(View.GONE);
 
-            if(Integer.parseInt(dataPreview.getType())==Main2Activity.MEDIA_TYPE_IMAGE){
+        if(Integer.parseInt(dataPreview.getType())==Main2Activity.MEDIA_TYPE_IMAGE){
 
-               imageView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
 
-                Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, dataPreview.getPath());
+            Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, dataPreview.getPath());
 
-               imageView.setImageBitmap(bitmap);
-            }else if(Integer.parseInt(dataPreview.getType())==Main2Activity.MEDIA_TYPE_VIDEO) {
-                vidpreview.setImageResource(R.drawable.ic_videopreview_24dp);
-                vidpreview.setVisibility(View.VISIBLE);
-                videoView.setVisibility(View.VISIBLE);
-                videoView.setVideoPath(dataPreview.getPath());
-                videoView.seekTo(10);
-                vidpreview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        videoView.start();
-                    }
-                });
-            }else {
-                vidpreview.setVisibility(View.VISIBLE);
+            imageView.setImageBitmap(bitmap);
+        }else if(Integer.parseInt(dataPreview.getType())==Main2Activity.MEDIA_TYPE_VIDEO) {
+            vidpreview.setImageResource(R.drawable.ic_videopreview_24dp);
+            vidpreview.setVisibility(View.VISIBLE);
+            videoView.setVisibility(View.VISIBLE);
+            videoView.setVideoPath(dataPreview.getPath());
+            videoView.seekTo(10);
+            vidpreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoView.start();
+                }
+            });
+        }else {
+            vidpreview.setVisibility(View.VISIBLE);
 
-                vidpreview.setImageResource(R.drawable.audiorecorder);
+            vidpreview.setImageResource(R.drawable.audiorecorder);
 
 
-            }
+        }
 
 //        builder = new android.app.AlertDialog.Builder(mContext);
 //        builder.setView(layout);
@@ -145,14 +147,16 @@ imageView.setVisibility(View.GONE);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               CreateReport.dataPreviews.get(CreateReport.dataPreviews.size()-1).setDescr(description.getText().toString());
-//                if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_AUDIO)
-//                   // PageReportAudio.audios.notifyDataSetChanged();
-//                else if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_VIDEO)
-//                   // PageReportVideo.vidoes.notifyDataSetChanged();
-//                else
-//                    PageReportImage.images.notifyDataSetChanged();
-                FragmentDataViewImage.addImage(CreateReport.dataPreviews.get(CreateReport.dataPreviews.size()-1));
+                dataPreview.setDescr(description.getText().toString());
+                CreateReport.dataPreviews.add(dataPreview);
+                CreateReport.dataPreviews.get(CreateReport.dataPreviews.size()-1).setDescr(description.getText().toString());
+                if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_AUDIO)
+                    FragmentDataViewAudio.addImage(dataPreview,-1);
+                else if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_VIDEO)
+                    FragmentDataViewVideo.addImage(dataPreview,-1);
+                else
+
+                FragmentDataViewImage.addImage(dataPreview,-1);
                 alertDialog.dismiss();
             }
         });

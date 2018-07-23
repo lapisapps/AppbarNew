@@ -99,7 +99,7 @@ if(PageReport2.prjctareas!=null)
 
                     Utility.optionItemSave(getActivity());
                 }
-                //new AddAreaDialog(getActivity());
+               new AddAreaDialog(getActivity(),0);
             }
         });
     }
@@ -149,7 +149,7 @@ if(PageReport2.prjctareas!=null)
         recyclerView.setVisibility(View.VISIBLE);
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.VERTICAL,false);
         // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         recyclerView.setNestedScrollingEnabled(true);

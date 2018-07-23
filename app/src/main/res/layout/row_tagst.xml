@@ -10,7 +10,7 @@
     android:background="@color/row1"
 
 
-    android:layout_height="35dp">
+    android:layout_height="wrap_content">
     <TableRow
 
         android:weightSum="2"
@@ -22,9 +22,10 @@
         >
 
         <LinearLayout
-            android:layout_weight="1.5"
+
+            android:layout_weight="1.6"
             android:weightSum="1"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_width="0dp"
             >
 
@@ -46,6 +47,8 @@
                 android:layout_height="match_parent" />
 
             <TextView
+                android:paddingBottom="7dp"
+                android:paddingTop="7dp"
                 android:layout_weight="0.8"
                 android:id="@+id/tag"
                 android:layout_width="0dp"
@@ -65,7 +68,7 @@
 
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:gravity="right"
             >
 
@@ -78,7 +81,7 @@
                 android:layout_marginEnd="7dp"
 
                 android:drawableLeft="@drawable/ic_delete_black_24dp"
-                android:drawableTint="@color/grey"
+                android:drawableTint="@color/red"
                 android:gravity="right" />
 
             <TextView
@@ -90,7 +93,7 @@
                 android:layout_marginRight="2dp"
 
                 android:drawableLeft="@drawable/ic_edit_black_24dp"
-                android:drawableTint="@color/grey"
+                android:drawableTint="@color/green"
                 android:gravity="right"
                 android:layout_alignParentRight="true" />
         </LinearLayout>

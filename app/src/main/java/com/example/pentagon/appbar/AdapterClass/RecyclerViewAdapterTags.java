@@ -89,6 +89,18 @@ else
                 return  false;
             }
         });
+//        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                    if(Utility.savemenu.getTitle().equals("edit"))
+//                      if(holder.check.isChecked())
+//                          holder.check.setChecked(false);
+//else
+//
+//                return false;
+//            }
+//        });
 holder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

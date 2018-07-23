@@ -16,7 +16,6 @@ import android.widget.Button;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
 import com.example.pentagon.appbar.AddTagDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
-import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingTag;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.Utility;
 
@@ -150,7 +149,7 @@ if(PageReport2.prjcttags!=null)
         recyclerView.setVisibility(View.VISIBLE);
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.VERTICAL,false);
         // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         recyclerView.setNestedScrollingEnabled(true);

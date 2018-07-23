@@ -82,6 +82,7 @@ View view;
     private void setupViewPager(ViewPager viewPager) {
         CustomPagerAdapter adapter = new CustomPagerAdapter(getFragmentManager());
         adapter.addFrag(new SettingFragment1(), "Project");
+        adapter.addFrag(new SettingFragment4(), "Area");
         adapter.addFrag(new SettingFragment2(), "Tags");
         adapter.addFrag(new SettingFragment3(), "System");
 

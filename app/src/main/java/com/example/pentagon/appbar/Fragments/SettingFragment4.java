@@ -9,10 +9,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -33,7 +31,6 @@ import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.HomeActivity;
 import com.example.pentagon.appbar.R;
-import com.example.pentagon.appbar.RecyclerItemClickListener;
 import com.example.pentagon.appbar.SqliteDb;
 
 import java.util.ArrayList;
@@ -42,10 +39,10 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link SettingFragment1#newInstance} factory method to
+ * Use the {@link SettingFragment4#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingFragment1 extends Fragment {
+public class SettingFragment4 extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,7 +71,7 @@ TableRow prjct,tag,system,area,discipline;
     static int height;
     static Spinner spinner;
 
-    public SettingFragment1() {
+    public SettingFragment4() {
         // Required empty public constructor
     }
 
@@ -87,8 +84,8 @@ TableRow prjct,tag,system,area,discipline;
      * @return A new instance of fragment SettingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SettingFragment1 newInstance(String param1, String param2) {
-        SettingFragment1 fragment = new SettingFragment1();
+    public static SettingFragment4 newInstance(String param1, String param2) {
+        SettingFragment4 fragment = new SettingFragment4();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -109,7 +106,7 @@ TableRow prjct,tag,system,area,discipline;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragmentsetprjctarea, container, false);
+        v= inflater.inflate(R.layout.fragmentsetarea, container, false);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
        height = displayMetrics.heightPixels;
@@ -234,7 +231,7 @@ if((PrjctData) spinner.getSelectedItem()==null)
         setPrjctRecycle(getActivity());
 
         setAreaRecycle(getActivity());
-        expandPrjctRow();
+        expandArea();
 }
 
     private void expandArea() {
@@ -358,10 +355,10 @@ public void setVisiblefalse(View view,TextView icon){
         // recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(AddEventActivity.this,GridLayoutManager.HORIZONTAL,false));
         recycarea.setLayoutManager(mLayoutManager);
     //    if(areaData.size()>4){
-            ViewGroup.LayoutParams params=recycarea.getLayoutParams();
-            params.height=height*60/100;
-            if(areaData.size()*35>height*60/100)
-            recycarea.setLayoutParams(params);
+//            ViewGroup.LayoutParams params=recycarea.getLayoutParams();
+//            params.height=height*60/100;
+//            if(areaData.size()*35>height*60/100)
+//            recycarea.setLayoutParams(params);
     //}
         //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recycarea.setItemAnimator(new DefaultItemAnimator());
@@ -408,10 +405,10 @@ public void setVisiblefalse(View view,TextView icon){
         recycprjcts.setLayoutManager(mLayoutManager);
 
               //  if(prjctData.size()>6){
-//        ViewGroup.LayoutParams params=recycprjcts.getLayoutParams();
-//        params.height=height*62/100;
-//        if(prjctData.size()*35>height*62/100)
-//                    recycprjcts.setLayoutParams(params);
+        ViewGroup.LayoutParams params=recycprjcts.getLayoutParams();
+        params.height=height*62/100;
+        if(prjctData.size()*35>height*62/100)
+                    recycprjcts.setLayoutParams(params);
    // }
         //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recycprjcts.setItemAnimator(new DefaultItemAnimator());

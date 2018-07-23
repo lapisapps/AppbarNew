@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
+import com.example.pentagon.appbar.Fragments.CreateReport;
+import com.example.pentagon.appbar.Fragments.PageReportArea;
+import com.example.pentagon.appbar.Fragments.PageReportDiscipline;
 import com.example.pentagon.appbar.Fragments.SettingFragment3;
 
 import java.util.ArrayList;
@@ -103,6 +106,17 @@ code.setFocusable(false);
                             SettingFragment3.loadDisciplineset(context);
                         }
                         return;
+                    }
+                    else if(type==0){
+
+                        if((new SqliteDb(context).addDiscipline(code.getText().toString(),tag.getText().toString()))){
+                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                            addedarea.setTagid(code.getText().toString());
+                            addedarea.setTag(tag.getText().toString());
+                            alertDialog.dismiss();
+                            CreateReport.dataDisciplines.add(addedarea);
+                            PageReportDiscipline.setView(getOwnerActivity(),  CreateReport.dataDisciplines);
+                        }
                     }
                     else {
 

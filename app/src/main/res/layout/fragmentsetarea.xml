@@ -33,7 +33,7 @@ android:weightSum="2"
 
 
             <TableRow
-android:visibility="visible"
+android:visibility="gone"
                 android:id="@+id/prjct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -72,7 +72,6 @@ android:textColor="@color/white"
                         android:layout_height="30dp" />
 
                     <TextView
-                        android:visibility="gone"
                         android:drawableTint="@color/white"
                         android:tag="0"
                         android:id="@+id/hprjct"
@@ -154,7 +153,6 @@ android:background="@color/bgrecy"
 
             <TableRow
 android:weightSum="1"
-                android:visibility="gone"
                 android:id="@+id/area"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -214,7 +212,7 @@ android:textColor="@color/white"
             </TableRow>
 <TableRow
     android:id="@+id/areaprjct"
-    android:visibility="gone"
+    android:visibility="visible"
     android:background="@color/c3_light"
     android:layout_height="match_parent"
     android:layout_width="match_parent"

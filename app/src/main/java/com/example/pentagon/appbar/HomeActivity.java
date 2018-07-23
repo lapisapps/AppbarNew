@@ -197,18 +197,18 @@ ReportsFragment.homeactivity=this;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_share) {
-            Intent dbmanager = new Intent(HomeActivity.this,AndroidDatabaseManager.class);
-            startActivity(dbmanager);
+//            Intent dbmanager = new Intent(HomeActivity.this,AndroidDatabaseManager.class);
+//            startActivity(dbmanager);
 
-//          File ff= Toolbar_ActionMode_Callback.getPdfPath(CreateReport.loaddata,HomeActivity.this);
-//          if(ff!=null){
-//              ArrayList<File> fdd=new ArrayList<>();
-//              fdd.add(ff);
-//            Utility.emailNote(HomeActivity.this,fdd);}
-//            else {
-//
-//              Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
-//          }
+          File ff= Toolbar_ActionMode_Callback.getPdfPath(CreateReport.loaddata,HomeActivity.this);
+          if(ff!=null){
+              ArrayList<File> fdd=new ArrayList<>();
+              fdd.add(ff);
+            Utility.emailNote(HomeActivity.this,fdd);}
+            else {
+
+              Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+          }
             return true;
         }
         if (id == R.id.save) {

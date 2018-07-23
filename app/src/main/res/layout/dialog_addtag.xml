@@ -1,35 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="9dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
->
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="9dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
+    >
     <LinearLayout
         android:visibility="visible"
-        android:paddingLeft="3dp"
+
         android:layout_marginRight="5dp"
         android:background="#e4e4e4"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/head"
             android:textColor="@color/white"
             android:background="@color/c3"
-            android:text="Select Tags"
+            android:text="Tag"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <LinearLayout
+
+            android:paddingLeft="3dp"
             android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -63,6 +68,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:paddingLeft="3dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:id="@+id/layoutarea"
@@ -70,55 +76,88 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/layoutid"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginRight="2dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_round"
+                    android:layout_height="50dp">
+                    <AutoCompleteTextView
+                        android:id="@+id/id"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:background="@android:color/transparent"
+                        android:textSize="14dp"
+                        android:hint="Tag_no"
+                        android:text=""
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
 
-<LinearLayout
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:layout_marginTop="5dp"
-    android:layout_marginRight="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
-    android:layout_marginRight="2dp"
-    android:layout_width="0dp"
-    android:layout_weight="0.5"
-    android:background="@drawable/btn_round"
-    android:layout_height="50dp">
-    <AutoCompleteTextView
-    android:id="@+id/tag"
-    android:paddingBottom="2dp"
-    android:paddingLeft="5dp"
-    android:background="@android:color/transparent"
-    android:textSize="14dp"
-    android:hint="Tag"
-        android:text=""
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+            <LinearLayout
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginRight="2dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_round"
+                    android:layout_height="50dp">
+                    <AutoCompleteTextView
+                        android:id="@+id/tag"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:background="@android:color/transparent"
+                        android:textSize="14dp"
+                        android:hint="Tag"
+                        android:text=""
+                        android:layout_centerHorizontal="true"
+
+                        android:dropDownHeight="100dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
 
-    </android.support.design.widget.TextInputLayout>
-</LinearLayout>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
 
         </LinearLayout>
 
 
 
-        <TextView
+        <Button
             android:layout_gravity="right"
             android:id="@+id/addtag"
             android:paddingRight="5dp"
             android:textColor="@color/white"
             android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:background="@color/c2"
-            android:drawableLeft="@drawable/ic_add_black_24dp"
-            android:text="Add to tag"
+            android:background="@color/c3"
+
+            android:text="Save"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="30dp" />
     </LinearLayout>
 
 
-    </LinearLayout>
+</LinearLayout>

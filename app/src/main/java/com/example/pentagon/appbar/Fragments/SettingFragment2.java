@@ -1,33 +1,24 @@
 package com.example.pentagon.appbar.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterProjectSt;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTagSt;
 import com.example.pentagon.appbar.AddTagDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
-import com.example.pentagon.appbar.HomeActivity;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 

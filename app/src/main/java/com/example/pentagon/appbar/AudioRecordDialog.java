@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.Fragments.CreateReport;
 
+import com.example.pentagon.appbar.Fragments.FragmentDataViewAudio;
 import com.example.pentagon.appbar.Fragments.PageReportAudio;
 
 import java.io.File;
@@ -73,7 +74,7 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
                 dd.setType(MEDIA_TYPE_AUDIO+"");
                 dd.setDescr(desc.getText().toString());
                 CreateReport.dataPreviews.add(dd);
-                PageReportAudio.setAudios(context);
+                FragmentDataViewAudio.addImage(dd,-1);
                 Toast.makeText(mContext, "Audio Record saved", Toast.LENGTH_SHORT).show();
             }
         });
@@ -204,6 +205,7 @@ fileName=dataPreview.getPath();
         }catch (Exception e){
             e.printStackTrace();
         }
+
         mPlayer = null;
         //showing the play button
         imageViewPlay.setImageResource(R.drawable.ic_play);
@@ -230,7 +232,7 @@ fileName=dataPreview.getPath();
         mRecorder = null;
         //starting the chronometer
         chronometer.stop();
-        chronometer.setBase(SystemClock.elapsedRealtime());
+      //  chronometer.setBase(SystemClock.elapsedRealtime());
         //showing the play button
         linearlayoutdesc.setVisibility(View.VISIBLE);
 
@@ -244,6 +246,7 @@ fileName=dataPreview.getPath();
 
     private void startPlaying() {
         mPlayer = new MediaPlayer();
+        chronometer.setBase(SystemClock.elapsedRealtime());
         Log.d("instartPlaying",fileName);
         try {
             mPlayer.setDataSource(fileName);
@@ -273,7 +276,7 @@ fileName=dataPreview.getPath();
               //  seekUpdation();
 //    stopPlaying();
                 //starting the chronometer
-                chronometer.setBase(SystemClock.elapsedRealtime());
+               // chronometer.setBase(SystemClock.elapsedRealtime());
                 mPlayer.seekTo(lastProgress);
                 chronometer.stop();
             }

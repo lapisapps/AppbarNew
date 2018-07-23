@@ -1,7 +1,6 @@
 package com.example.pentagon.appbar.AdapterClass;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pentagon.appbar.AddAreaDialog;
 import com.example.pentagon.appbar.AddTagDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
-import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
@@ -83,7 +80,7 @@ holder.tag.setText(product.getTag());
             holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AddTagDialog.tagdata=product;
+                    AddTagDialog.areadata=product;
                     new AddTagDialog(mContext, 2);
                 }
             });

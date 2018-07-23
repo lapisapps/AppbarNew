@@ -96,6 +96,7 @@ holder.vidpreview.setVisibility(View.VISIBLE);
 holder.vidpreview.setImageResource(R.drawable.audiorecorder);
 
 
+
 }
             holder.description.setText(product.getDescr());
         }catch (Exception e){e.printStackTrace();}

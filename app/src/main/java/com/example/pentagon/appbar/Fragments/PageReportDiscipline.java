@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
+import com.example.pentagon.appbar.AddDisciplineDialog;
 import com.example.pentagon.appbar.AddTagDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.R;
@@ -89,13 +90,13 @@ if(CreateReport.dataDisciplines!=null)
 
     private void initilize() {
         recyclerView=view.findViewById(R.id.recyclerView);
-//        addtag=view.findViewById(R.id.addtag);
-//        addtag.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new AddTagDialog(getActivity());
-//            }
-//        });
+        addtag=view.findViewById(R.id.addtag);
+        addtag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AddDisciplineDialog(getActivity(),0);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -137,13 +138,13 @@ if(CreateReport.dataDisciplines!=null)
         void onFragmentInteraction(Uri uri);
     }
     public static void setView(final Activity context, ArrayList<DataTag> dataTags){
-        CreateReport.dataSystems=dataTags;
+        CreateReport.dataDisciplines=dataTags;
         Log.e("tagss",dataTags.size()+"");
         RecyclerViewAdapterTags place = new RecyclerViewAdapterTags(context,dataTags,"disciplines");
         recyclerView.setVisibility(View.VISIBLE);
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.VERTICAL,false);
         // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         recyclerView.setNestedScrollingEnabled(true);

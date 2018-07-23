@@ -130,6 +130,8 @@ View view;
             Utility.newreport.setVisibility(View.GONE);
             view=  inflater.inflate(R.layout.fragment_create_report, container, false);
         viewPager = (VerticalViewPager) view.findViewById(R.id.viewpager);
+            viewPager.canScrollVertically(1);
+
         setViewPager();
 
 //setEnable(false);
@@ -334,7 +336,7 @@ fab1.setVisibility(View.VISIBLE);
             DataPreview dd=new DataPreview();
             dd.setPath(imageStoragePath);
             dd.setType(MEDIA_TYPE_VIDEO+"");
-            CreateReport.dataPreviews.add(dd);
+         //   CreateReport.dataPreviews.add(dd);
             new PreviewDialog(getContext(),dd,true);
 
           //  PageReportVideo.setVideos(getActivity());
@@ -544,8 +546,8 @@ fab1.setVisibility(View.VISIBLE);
             dd.setPath(imageStoragePath);
             dd.setType(MEDIA_TYPE_AUDIO+"");
            new PreviewDialog(getContext(),dd,true);
-            CreateReport.dataPreviews.add(dd);
-            PageReportAudio.setAudios(getActivity());
+           // CreateReport.dataPreviews.add(dd);
+           // PageReportAudio.setAudios(getActivity());
 
 
         } catch (NullPointerException e) {
@@ -627,7 +629,7 @@ fab1.setVisibility(View.VISIBLE);
             DataPreview dd=new DataPreview();
             dd.setPath(imageStoragePath);
             dd.setType(MEDIA_TYPE_IMAGE+"");
-            CreateReport.dataPreviews.add(dd);
+            //CreateReport.dataPreviews.add(dd);
             new PreviewDialog(getContext(),dd,true);
 
            // PageReportImage.setImages(getActivity());

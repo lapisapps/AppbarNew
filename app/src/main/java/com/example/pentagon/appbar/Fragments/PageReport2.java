@@ -20,6 +20,7 @@ import com.example.pentagon.appbar.AddProjectDialog;
 import com.example.pentagon.appbar.DataClass.DataReport;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
+import com.example.pentagon.appbar.DescriptionDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
@@ -101,6 +102,12 @@ View view;
         prjctdatas= new SqliteDb(getActivity()).getPrjcts();
         prjctname=view.findViewById(R.id.prjctname);
         description=view.findViewById(R.id.description);
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DescriptionDialog(getActivity(),PageReport2.this,description.getText().toString(),true);
+            }
+        });
       adapter1 = new FilterWithSpaceAdapter<PrjctData> (getActivity(),android.R.layout.select_dialog_item,prjctdatas);
         prjctname.setThreshold(1);//will start working from first character
         prjctname.setAdapter(adapter1);//setting the adapter data into the AutoCompleteTextView
@@ -136,10 +143,10 @@ public static void loadprjctset(Activity context, PrjctData studentInfo){
 
     Log.e("isNewreport","1111"+ CreateReport.loaddata.getPrjct());
     prjcttags= new SqliteDb(context).getPrjctsTags(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
-    prjctareas= new SqliteDb(context).getPrjctsAreas(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
+   // prjctareas= new SqliteDb(context).getPrjctsAreas(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
 
     PageReportTag.setView(context,prjcttags);
-    PageReportArea.setView(context,prjctareas);
+ //   PageReportArea.setView(context,prjctareas);
     adapter1.notifyDataSetChanged();
 
 }

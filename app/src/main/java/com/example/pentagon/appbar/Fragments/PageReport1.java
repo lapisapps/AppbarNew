@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.pentagon.appbar.AdapterClass.CustomPagerAdapter;
 import com.example.pentagon.appbar.AdapterClass.VerticalViewPager;
 import com.example.pentagon.appbar.DataClass.DataReport;
+import com.example.pentagon.appbar.DescriptionDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
@@ -79,6 +80,12 @@ View view;
 
         reportname=view.findViewById(R.id.reportname);
         description=view.findViewById(R.id.description);
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DescriptionDialog(getActivity(),PageReport1.this,description.getText().toString(),true);
+            }
+        });
         if(CreateReport.loaddata!=null&&CreateReport.loaddata.getId()!=null){
 
             CreateReport.loaddata.setNewreport(false);

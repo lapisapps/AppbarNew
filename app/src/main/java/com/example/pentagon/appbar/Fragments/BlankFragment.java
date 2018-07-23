@@ -47,6 +47,7 @@ public class BlankFragment extends Fragment implements View.OnTouchListener {
     private String mParam1;
     private String mParam2;
     View view;
+    Button newreport,viewreport,exit,settings;
     private RadialMenuWidget pieMenu;
     public RadialMenuItem menunew, menucenter,menusettings,menureview,menuexit;
     private OnFragmentInteractionListener mListener;
@@ -109,6 +110,40 @@ public class BlankFragment extends Fragment implements View.OnTouchListener {
         Utility.fab2.setVisibility(View.GONE);
         Utility.fab3.setVisibility(View.GONE);
         Utility.fabhome.setVisibility(View.GONE);
+
+        exit=view.findViewById(R.id.button3);
+        viewreport=view.findViewById(R.id.button5);
+        newreport=view.findViewById(R.id.button6);
+        settings=view.findViewById(R.id.button7);
+
+        settings.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                openSettings();
+                return false;
+            }
+        });
+        viewreport.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+               openReport();
+                return false;
+            }
+        });
+        newreport.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+             openCreateReport();
+                return false;
+            }
+        });
+        exit.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                getActivity().finish();
+                return false;
+            }
+        });
 //        mCircleMenuLayout = (CircleMenuLayout) view.findViewById(R.id.id_menulayout);
 //        mCircleMenuLayout.setMenuItemIconsAndTexts(mItemImgs, mItemTexts);
 //

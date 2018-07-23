@@ -115,7 +115,7 @@ public static String CREATE_TABLE_PROJECT="CREATE TABLE tblproject("+
 //            "code TEXT PRIMARY KEY,"+
 //            "name TEXT DEFAULT NULL)";
     public static String CREATE_TABLE_TAGS="CREATE TABLE tbltags("+
-            "id INTEGER PRIMARY KEY,"+
+            "id Text PRIMARY KEY,"+
             "tag TEXT DEFAULT NULL)";
 
     public static String CREATE_TABLE_AREA="CREATE TABLE tblareas("+
@@ -231,31 +231,31 @@ Log.i("error",e.toString());}
 
         if(cursor.getCount()>0)
             return;
-String ss="INSERT OR REPLACE INTO tbltags(id,tag) VALUES(1,'test1'),(2,'test2'),(3,'test3'),(4,'test4')";
+String ss="INSERT OR REPLACE INTO tbltags(id,tag) VALUES(1,'10BA001a'),(2,'10BA100'),(3,'10L0001a'),(4,'10L1000')";
 
 
         // Cursor cursor=dd.rawQuery(ss,null );
      dd.execSQL(ss);
 
-        ss="INSERT OR REPLACE INTO tblareas(id,code) VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4')";
+        ss="INSERT OR REPLACE INTO tblareas(id,code) VALUES(1,'B123'),(2,'B145'),(3,'B156'),(4,'B789')";
 
 
         // Cursor cursor=dd.rawQuery(ss,null );
         dd.execSQL(ss);
 
-        ss="INSERT OR REPLACE INTO tblsystem(id,code) VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4')";
+        ss="INSERT OR REPLACE INTO tblsystem(id,code) VALUES('10','Drilling'),('11','Driling process'),('12','Drilling well control'),('13','Riser and well topside'),('14','Drilling control and monitoring'),('15','Drilling drain'),('18','Well and riser subsea'),('19','subsea installation-maintains and work over')";
 
 
         // Cursor cursor=dd.rawQuery(ss,null );
         dd.execSQL(ss);
 
-        ss="INSERT OR REPLACE INTO tbldiscipline(id,code) VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4')";
+        ss="INSERT OR REPLACE INTO tbldiscipline(id,code) VALUES('A','Administration'),('B','Procurement'),('C','Civil/architect'),('D','Drilling'),('E','Electrical'),('F','Project control/cost/economy'),('G','Geology'),('H','HVAC'),('I','Instrumentation/metering'),('J','Marine operation')";
 
 
         // Cursor cursor=dd.rawQuery(ss,null );
         dd.execSQL(ss);
 
-ss="INSERT OR REPLACE INTO tblproject(id,'prjct','descr') VALUES(1,'prjct1','abcde'),(2,'prjct2','abcde2'),(3,'prjct3','abcd3'),(4,'prjct4','abcde4')";
+ss="INSERT OR REPLACE INTO tblproject(id,'prjct','descr') VALUES(1,'prjct1','abcde'),(2,'prjct2','abcde2'),(3,'prjct3','abcd3'),('fpso','FPSO BOX','FPSO Box Project')";
 
 
         // Cursor cursor=dd.rawQuery(ss,null );
@@ -305,7 +305,7 @@ ss="INSERT OR REPLACE INTO tblproject(id,'prjct','descr') VALUES(1,'prjct1','abc
         //        "udate TEXT DEFAULT NULL"+")";
         dd.execSQL(ss);
 
-        ss="INSERT OR REPLACE INTO tblreportdiscipline(id,rid,disciplineid) VALUES(1,'2','1')";
+        ss="INSERT OR REPLACE INTO tblreportdiscipline(id,rid,disciplineid) VALUES(1,'2','A')";
 
 
         //         "id TEXT PRIMARY KEY,"+
@@ -317,7 +317,7 @@ ss="INSERT OR REPLACE INTO tblproject(id,'prjct','descr') VALUES(1,'prjct1','abc
         dd.execSQL(ss);
 
 
-        ss="INSERT OR REPLACE INTO tblreportsystem(id,rid,systemid) VALUES(1,'2','1')";
+        ss="INSERT OR REPLACE INTO tblreportsystem(id,rid,systemid) VALUES(1,'2','10')";
 
 
         //         "id TEXT PRIMARY KEY,"+
@@ -867,11 +867,11 @@ ss="INSERT OR REPLACE INTO tblproject(id,'prjct','descr') VALUES(1,'prjct1','abc
 
     }
 
-    public ArrayList<DataTag> getTags() {
+    public ArrayList<DataTag> getTags(String pid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
 
-        dde="select * from tbltags";
+        dde="select * from tbltags where id NOT IN(select tagid from tblprojecttag where prjctid='"+pid+"' )";
 
         Cursor cursor=dd.rawQuery(dde,null );
 
@@ -908,7 +908,7 @@ dta.add(dt);
 
     }
 
-    public boolean addTag(String prjct,String tag,boolean isnew) {
+    public boolean addTagN(String prjct,String tag,boolean isnew) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String systemarea;
         int transactioncount=0;
@@ -990,6 +990,111 @@ if(isnew)
 
         return status;
 
+    }
+
+    public boolean addTag(String prjct, String tag, boolean isnew, String s) {
+
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String systemarea;
+        int transactioncount=1;
+        Cursor cursor=null;
+        if(isnew) {
+            cursor = dd.rawQuery("select id from tbltags where id='" + s + "'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
+            cursor.close();
+        }else {
+            cursor = dd.rawQuery("select id from tblprojecttag where prjctid='" + prjct + "' and tagid='"+s+"'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
+            cursor.close();
+
+        }
+
+
+
+        boolean	status=false;
+        cursor=dd.rawQuery("select max(id) from tblprojecttag",null );
+        int prjctcount=0;
+        if(cursor.moveToFirst())
+            prjctcount=cursor.getInt(0);
+        String insertCategoryQuery1 = "INSERT INTO tblprojecttag(" +
+                "id,"+
+                "prjctid,"+
+                "tagid"+")"+
+                " VALUES (?,?,?)";
+        String insertCategoryQuery = "INSERT INTO tbltags(" +
+                "id,"+
+                "tag"+")"+
+                " VALUES (?,?)";
+        dd= this.getWritableDatabase();
+        SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
+        SQLiteStatement insertCategory1 = dd.compileStatement(insertCategoryQuery1);
+        try {
+            //JSONArray jsn=new JSONArray(data);
+
+
+
+
+
+            try {
+
+                insertCategory.clearBindings();
+
+                insertCategory.bindString(1,s);
+                insertCategory.bindString(2,tag);
+
+
+                prjctcount++;
+                insertCategory1.bindLong(1,prjctcount);
+                insertCategory1.bindString(2,prjct);
+
+                insertCategory1.bindString(3,s);
+                //insertCategory.bindString(9,actor.getString("published"));
+
+                Log.i("error1","111");
+                if(isnew)
+                    insertCategory.execute();//Insert();
+                insertCategory1.execute();
+                status=true;
+
+            }catch (android.database.sqlite.SQLiteConstraintException ee){
+                ee.printStackTrace();
+                Log.i("error",ee.toString()+"");
+            }
+
+            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+
+            // Cursor cursor=dd.rawQuery(ss,null );
+
+
+            cursor.close();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+//Utility.addReminder(df,co);
+//Utility.setAlaram1(co,df);
+//   cursor=dd.rawQuery("select max(id) from tblareas",null );
+//        DataTag dt=new DataTag();
+//        dt.setTag(tag);
+//        if(cursor.moveToFirst())
+//        dt.setTagid(cursor.getString(0));
+        cursor.close();
+        dd.close();
+        return status;
     }
     public boolean insertReport(DataReport dataReport) {
         SQLiteDatabase dd=this.getReadableDatabase();

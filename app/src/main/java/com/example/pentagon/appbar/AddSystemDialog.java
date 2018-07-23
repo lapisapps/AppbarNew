@@ -25,6 +25,8 @@ import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.Fragments.CreateReport;
 import com.example.pentagon.appbar.Fragments.PageReport2;
 import com.example.pentagon.appbar.Fragments.PageReportArea;
+import com.example.pentagon.appbar.Fragments.PageReportDiscipline;
+import com.example.pentagon.appbar.Fragments.PageReportSystem;
 import com.example.pentagon.appbar.Fragments.SettingFragment1;
 import com.example.pentagon.appbar.Fragments.SettingFragment3;
 
@@ -132,6 +134,17 @@ code.setFocusable(false);
                             SettingFragment3.loadSystemset(context);
                         }
                         return;
+                    }
+                    else if(type==0){
+
+                        if((new SqliteDb(context).addSystem(code.getText().toString(),tag.getText().toString()))){
+                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                            addedarea.setTagid(code.getText().toString());
+                            addedarea.setTag(tag.getText().toString());
+                            alertDialog.dismiss();
+                            CreateReport.dataSystems.add(addedarea);
+                            PageReportSystem.setView(getOwnerActivity(),    CreateReport.dataSystems);
+                        }
                     }
                     else {
 

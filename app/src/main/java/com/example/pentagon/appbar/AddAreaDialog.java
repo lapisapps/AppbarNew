@@ -27,6 +27,8 @@ import com.example.pentagon.appbar.Fragments.CreateReport;
 import com.example.pentagon.appbar.Fragments.PageReport2;
 import com.example.pentagon.appbar.Fragments.SettingFragment1;
 import com.example.pentagon.appbar.Fragments.PageReportArea;
+import com.example.pentagon.appbar.Fragments.SettingFragment2;
+import com.example.pentagon.appbar.Fragments.SettingFragment4;
 
 import java.util.ArrayList;
 
@@ -137,6 +139,7 @@ this.type=type;
                             }
                         }
                     });
+                    layid.setVisibility(View.GONE);
                 }
                 else {
 layid.setVisibility(View.VISIBLE);
@@ -175,7 +178,7 @@ layid.setVisibility(View.VISIBLE);
                     if((new SqliteDb(context).updateArea(areadata.getTagid(),tag.getText().toString(),true))){
                         Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
-                        SettingFragment1.loadareaset(context);
+                        SettingFragment4.loadareaset(context);
                     }
                     return;
                 }
@@ -188,6 +191,8 @@ layid.setVisibility(View.VISIBLE);
                         if(type==0){
                             if(new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),true,code.getText().toString())){
                                 Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
+                             addedarea.setTagid(code.getText().toString());
+                             addedarea.setTag(tag.getText().toString());
                                 alertDialog.dismiss();
                                 PageReport2.prjctareas.add(addedarea);
                                 PageReportArea.setView(context,  PageReport2.prjctareas);
@@ -198,7 +203,7 @@ Log.e("ffff",prjctData.getId());
                             if(new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),true, code.getText().toString())){
                             Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
-                                SettingFragment1.loadareaset(context);
+                                SettingFragment4.loadareaset(context);
                 }
 
                     }
@@ -217,8 +222,11 @@ Log.e("ffff",prjctData.getId());
                         tag.setError("invalid entry");
                     else
                         if(type==0){
-                    if((new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),selectedtag.getTagid(),false, code.getText().toString()))){
+                    if((new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),false, selectedtag.getTagid()))){
                         Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
+
+                        addedarea.setTagid(selectedtag.getTagid());
+                        addedarea.setTag(tag.getText().toString());
                         alertDialog.dismiss();
                         PageReport2.prjctareas.add(addedarea);
                         PageReportArea.setView(getOwnerActivity(),  PageReport2.prjctareas);
@@ -229,7 +237,7 @@ Log.e("ffff",prjctData.getId());
                             if((new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),false, selectedtag.getTagid()))){
                                 Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                                 alertDialog.dismiss();
-                                SettingFragment1.loadareaset(context);
+                                SettingFragment4.loadareaset(context);
                             }
 
                         }
