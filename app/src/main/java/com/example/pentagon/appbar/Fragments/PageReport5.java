@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 
 import com.example.pentagon.appbar.DataClass.DataReport;
+import com.example.pentagon.appbar.DescriptionDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
@@ -83,7 +84,12 @@ public static AutoCompleteTextView prepared,checked,approved,summary;
         prepared=view.findViewById(R.id.prepared);
         checked=view.findViewById(R.id.checked);
         summary=view.findViewById(R.id.summary);
-
+        summary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DescriptionDialog(getActivity(),PageReport5.this,summary.getText().toString(),true);
+            }
+        });
         checked.setText(dd.getChecked());
         prepared.setText(dd.getPrepared());
         approved.setText(dd.getApproved());

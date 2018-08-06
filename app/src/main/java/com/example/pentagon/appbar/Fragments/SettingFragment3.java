@@ -3,11 +3,14 @@ package com.example.pentagon.appbar.Fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +21,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -36,6 +41,7 @@ import com.example.pentagon.appbar.AddSystemDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.HomeActivity;
+import com.example.pentagon.appbar.ImportListDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 
@@ -64,7 +70,7 @@ public class SettingFragment3 extends Fragment {
     static ArrayList<DataTag> disciplineData;
     static ArrayList<DataTag> systemData;
     TableRow discipline,tag,system;
-    TableRow rowsystem,rowarea,rowdiscipline;
+    LinearLayout rowsystem,rowarea,rowdiscipline;
     TextView prjcth;
     TextView tagh;
     TextView systemh;
@@ -78,7 +84,9 @@ public class SettingFragment3 extends Fragment {
     static int height;
     static Spinner spinner;
 
-
+    Button searchbtn,cancelbtn,loadbtn;
+    AutoCompleteTextView searchtxt;
+    ConstraintLayout searchlay;
     public SettingFragment3() {
         // Required empty public constructor
     }
@@ -168,18 +176,19 @@ public class SettingFragment3 extends Fragment {
         systemcount=v.findViewById(R.id.areacount);
         adddiscipline=v.findViewById(R.id.addprjct);
         addsystem=v.findViewById(R.id.addarea);
-        adddiscipline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(disciplineh.getTag().toString().equals("0"))
-                    expandPrjctRow();
-
-                new AddDisciplineDialog(getActivity(),1);
-            }
-        });
+//        adddiscipline.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(disciplineh.getTag().toString().equals("0"))
+//                    expandPrjctRow();
+//
+//                new AddDisciplineDialog(getActivity(),1);
+//            }
+//        });
         addsystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                searchtxt.setText("");
                 if(systemh.getTag().toString().equals("0"))
                     expandSystem();
 
@@ -200,46 +209,85 @@ public class SettingFragment3 extends Fragment {
        disciplineh=v.findViewById(R.id.hprjct);
         systemh=v.findViewById(R.id.harea);
 
+        searchtxt=v.findViewById(R.id.searchtext);
+        searchlay=v.findViewById(R.id.searchlay);
+     //   searchlay.setVisibility(View.GONE);
+        loadbtn=v.findViewById(R.id.load);
 
-        discipline.setOnClickListener(new View.OnClickListener() {
+        searchbtn=v.findViewById(R.id.search);
+        cancelbtn=v.findViewById(R.id.cancel);
+        setSearchView();
+
+        loadbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//               if(prjctData==null)
-//                   prjctData= new SqliteDb(getActivity()).getPrjcts();
-//               animate(rowprjct,prjcth,1);
-//               if(areah.getTag().toString().equals("1"))
-//               animate(rowarea,areah,2);
-                expandPrjctRow();
-
-
+                searchtxt.setText("");
+                new ImportListDialog(getActivity(),"system");
             }
         });
-//       discipline.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View v) {
-//               animate(rowdiscipline,disciplineh);
-//           }
-//       });
 
-        system.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-                expandSystem();
-
-            }
-        });
-        disciplineData= new SqliteDb(getActivity()).getDiscipline();
-        Log.e("ddd",disciplineData.size()+"");
-        systemData= new SqliteDb(getActivity()).getSystems();
-        setDisplineRecycle(getActivity());
+        systemData= new SqliteDb(getActivity()).getSystems("");
+       // setDisplineRecycle(getActivity());
 
         setSystemRecycle(getActivity());
+        expandSystem();
     }
+    private void setSearchView() {
+        cancelbtn.setVisibility(View.GONE);
+        searchbtn.setTag("search");
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+               // searchlay.setVisibility(View.VISIBLE);
+                loadbtn.setVisibility(View.GONE);
+              //  searchbtn.setVisibility(View.GONE);
+                addsystem.setVisibility(View.GONE);
+                searchtxt.setText("");
+
+
+            }
+        });
+        cancelbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //searchbtn.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_search_green_24dp),null,null,null);
+              //  searchlay.setVisibility(View.GONE);
+                loadbtn.setVisibility(View.VISIBLE);
+             //   searchbtn.setVisibility(View.VISIBLE);
+                addsystem.setVisibility(View.VISIBLE);
+                searchtxt.setText("");
+                cancelbtn.setVisibility(View.GONE);
+                adapterSystem.getFilter().filter("");
+
+            }
+        });
+        searchtxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //     filter(searchtext.getText().toString());
+                Log.i("textt",searchtxt.getText().toString()+s);
+                adapterSystem.getFilter().filter(searchtxt.getText().toString());
+                if(searchtxt.getText().toString().isEmpty())
+                    cancelbtn.setVisibility(View.GONE);
+                else
+                    cancelbtn.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+
+        });
+    }
     private void expandSystem() {
         if(systemh.getTag().toString().equals("0")){
 
@@ -361,10 +409,10 @@ public class SettingFragment3 extends Fragment {
         // recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(AddEventActivity.this,GridLayoutManager.HORIZONTAL,false));
         recycsystem.setLayoutManager(mLayoutManager);
         //    if(areaData.size()>4){
-        ViewGroup.LayoutParams params=recycsystem.getLayoutParams();
-        params.height=height*60/100;
-        if(systemData.size()*35>height*60/100)
-            recycsystem.setLayoutParams(params);
+//        ViewGroup.LayoutParams params=recycsystem.getLayoutParams();
+//        params.height=height*60/100;
+//        if(systemData.size()*35>height*60/100)
+//            recycsystem.setLayoutParams(params);
         //}
         //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recycsystem.setItemAnimator(new DefaultItemAnimator());
@@ -374,7 +422,7 @@ public class SettingFragment3 extends Fragment {
             @Override
             public void onChanged() {
                 super.onChanged();
-                systemcount.setText(systemData.size()+" Systems");
+                systemcount.setText(adapterSystem.getSize()+" Systems");
             }
         });
 
@@ -499,10 +547,10 @@ public class SettingFragment3 extends Fragment {
     public void onResume() {
 
         super.onResume();
-        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
-        actionBar.setTitle("Settings");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+//        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
+//        actionBar.setTitle("Settings");
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
 
     }
 
@@ -526,14 +574,14 @@ public class SettingFragment3 extends Fragment {
 
     public static void loadDisciplineset(Activity context) {
 
-        disciplineData= new SqliteDb(context).getDiscipline();
+        disciplineData= new SqliteDb(context).getDiscipline("");
         setDisplineRecycle(context);
         recycdiscipline.scrollToPosition(disciplineData.size()-1);
 
     }
     public static void loadSystemset(Activity context) {
 
-        systemData= new SqliteDb(context).getSystems();
+        systemData= new SqliteDb(context).getSystems("");
         setSystemRecycle(context);
         recycsystem.scrollToPosition(systemData.size()-1);
 

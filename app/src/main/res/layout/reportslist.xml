@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:weightSum="1"
+
+ android:layout_margin="3dp"
+    android:clickable="true"
+    android:elevation="3dp"
+    card_view:cardBackgroundColor="@color/white"
+    card_view:cardElevation="1dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+
+android:id="@+id/back"
+android:background="@color/rportrow"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <TextView
+            android:visibility="gone"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="3dp"
+            android:id="@+id/prjctname"
+            android:text="MdMS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:visibility="gone"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="3dp"
+            android:id="@+id/prjctdescr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/prjctname"
+            android:text="Construction on tetee"
+            android:layout_alignParentLeft="true" />
+
+
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/datasize"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:text="4
+Files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/imageView"
+            android:background="@drawable/test"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:background="@color/rportrow"
+            android:textColor="@android:color/black"
+
+
+            android:layout_marginRight="5dp"
+android:layout_marginLeft="5dp"
+
+            android:layout_marginTop="5dp"
+           android:paddingLeft="10dp"
+            android:id="@+id/reportname"
+            android:focusable="false"
+
+android:paddingBottom="5dp"
+            android:text="23
+            cvcvcvcvbcb"
+            android:textSize="@dimen/recyh"
+            android:layout_weight="0.2"
+            android:layout_alignBottom="@id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingStart="10dp" />
+
+        <TextView
+            android:paddingLeft="5dp"
+
+           android:alpha="0.7"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="right"
+            android:textSize="10dp"
+            android:id="@+id/date"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:text="Last entry:6/11/2018" />
+
+
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

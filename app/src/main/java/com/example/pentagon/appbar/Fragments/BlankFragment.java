@@ -119,6 +119,7 @@ public class BlankFragment extends Fragment implements View.OnTouchListener {
         settings.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
                 openSettings();
                 return false;
             }
@@ -227,12 +228,12 @@ public class BlankFragment extends Fragment implements View.OnTouchListener {
                         switch(get(getAngle(e1.getX(),e1.getY(),e2.getX(),e2.getY()))){
 
                           case  0:
-                              Utility.fabhome.setVisibility(View.VISIBLE);
+
                               openCreateReport();
                          //   Toast.makeText(getActivity(), "Create report", Toast.LENGTH_SHORT).show();
                             break;
                             case  1:
-                                Utility.fabhome.setVisibility(View.VISIBLE);
+
 openSettings();
                               //  Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
                                 break;
@@ -242,7 +243,7 @@ openSettings();
                               //  Toast.makeText(getActivity(), "down", Toast.LENGTH_SHORT).show();
                                 break;
                             case  3:
-                                Utility.fabhome.setVisibility(View.VISIBLE);
+
                                 openReport();
                               // Toast.makeText(getActivity(), "Open reports", Toast.LENGTH_SHORT).show();
                                 break;
@@ -268,6 +269,7 @@ openSettings();
     }
 
     private void openSettings() {
+        Utility.fabhome.setVisibility(View.VISIBLE);
         Utility.toolbar.setVisibility(View.VISIBLE);
         SettinghomeFragmentNew createReport = new SettinghomeFragmentNew();
 
@@ -281,6 +283,7 @@ openSettings();
     }
 
     private void openReport() {
+        Utility.fabhome.setVisibility(View.VISIBLE);
         Utility.toolbar.setVisibility(View.VISIBLE);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, ReportsFragment.newInstance("",""))
@@ -289,6 +292,7 @@ openSettings();
     }
 
     private void openCreateReport() {
+        Utility.fabhome.setVisibility(View.VISIBLE);
         Utility.toolbar.setVisibility(View.VISIBLE);
         CreateReport createReport = new CreateReport();
 

@@ -5,6 +5,20 @@ String prjctid;
     String id;
     String tag;
 
+    public String getExist() {
+        return exist;
+    }
+
+    public void setExist(String exist) {
+        this.exist = exist;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    String exist;
+
     public String getPrjctid() {
         return prjctid;
     }
@@ -47,7 +61,7 @@ String prjctid;
         this.selected = selected;
     }
 
-    boolean selected;
+    public boolean selected;
 
     @Override
     public String toString() {

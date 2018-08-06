@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.pentagon.appbar.DataClass.DataTag;
@@ -22,10 +24,10 @@ import java.util.ArrayList;
 /**
  * Created by Ravi Tamada on 18/05/16.
  */
-public class RecyclerViewAdapterTags extends RecyclerView.Adapter<RecyclerViewAdapterTags.MyViewHolder> {
+public class RecyclerViewAdapterTags extends RecyclerView.Adapter<RecyclerViewAdapterTags.MyViewHolder>  {
 
-    private final ArrayList<DataTag> albumList;
-//    public static ArrayList<String> albumList1;
+    private  ArrayList<DataTag> albumList;
+  public  ArrayList<DataTag> mArrayList;
     private Context mContext;
   //  private List<S> albumList;
 
@@ -49,6 +51,7 @@ CheckBox check;
     public RecyclerViewAdapterTags(Context mContext, ArrayList<DataTag> albumList,String type) {
         this.mContext = mContext;
         this.albumList = albumList;
+        this.mArrayList = albumList;
 this.type=type;
 
     }
@@ -242,4 +245,43 @@ else
 //
 //        }, jsonObjectCall,1));
 //    }
+//@Override
+//public Filter getFilter() {
+//
+//    return new Filter() {
+//        @Override
+//        protected FilterResults performFiltering(CharSequence charSequence) {
+//
+//            String charString = charSequence.toString().toLowerCase();
+//
+//            if (charString.isEmpty()) {
+//
+//                albumList = mArrayList;
+//            } else {
+//
+//                ArrayList<DataTag> filteredList = new ArrayList<>();
+//
+//                for (DataTag androidVersion : mArrayList) {
+//
+//                    if (androidVersion.getTagid().toLowerCase().contains(charString.toLowerCase()) || androidVersion.getCustomername().toLowerCase().contains(charString.toLowerCase()) || androidVersion.getInovoiceno().toLowerCase().contains(charString.toLowerCase())) {
+//
+//                        filteredList.add(androidVersion);
+//                    }
+//                }
+//
+//                feedItemList = filteredList;
+//            }
+//
+//            FilterResults filterResults = new FilterResults();
+//            filterResults.values = feedItemList;
+//            return filterResults;
+//        }
+//
+//        @Override
+//        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+//            feedItemList = (ArrayList<DataOrder>) filterResults.values;
+//            notifyDataSetChanged();
+//        }
+//    };
+//}
 }

@@ -1,10 +1,13 @@
 package com.example.pentagon.appbar.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -48,7 +51,7 @@ public class ReportsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 View view;
-    RecyclerViewAdapterReports Radpater;
+  public   RecyclerViewAdapterReports Radpater;
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private ArrayList<DataReport> dataReports;
@@ -101,10 +104,84 @@ View view;
         Utility.fab2.setVisibility(View.GONE);
         Utility.fab3.setVisibility(View.GONE);
         dataReports=new ArrayList<>();
-        dataReports=  new SqliteDb(getContext()).getReports();
+        dataReports=  new SqliteDb(getContext()).getReports(null);
         Log.e("reports",dataReports.size()+"");
-        setReports();
+        ((FloatingActionButton)view.findViewById(R.id.fab1)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( ((FloatingActionButton)view.findViewById(R.id.fab1)).getTag().equals("list")){
+
+                    setReportsGrid();
+                    ((FloatingActionButton)view.findViewById(R.id.fab1)).setTag("grid");
+                }
+                else
+                {
+
+                    setReportsList();
+                    ((FloatingActionButton)view.findViewById(R.id.fab1)).setTag("list");
+                }
+            }
+        });
+        setReportsList();
         return view;
+    }
+
+    private void setReportsList() {
+        Radpater = new RecyclerViewAdapterReports(getActivity(),dataReports,"list");
+        recyclerView.setVisibility(View.VISIBLE);
+
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),1,GridLayoutManager.VERTICAL,false);
+        // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        recyclerView.setNestedScrollingEnabled(true);
+
+        // recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(AddEventActivity.this,GridLayoutManager.HORIZONTAL,false));
+        recyclerView.setLayoutManager(mLayoutManager);
+        //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(Radpater);
+
+
+
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, final int position) {
+                if (mActionMode != null)
+                    onListItemSelect(position);
+                else {
+                    CreateReport createReport = new CreateReport();
+
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_frame, createReport);
+                    //  getSupportFragmentManager().popBackStack();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("report", (Serializable) dataReports.get(position));
+                    Utility.savemenu.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_edit_black_24dp));
+                    Utility.savemenu.setTitle("edit");
+                    createReport.setArguments(bundle);
+                    Utility.savemenu.setVisible(true);
+                    Utility.sharemenu.setVisible(true);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+//                CreateReport fragment = new CreateReport();
+//                FragmentTransaction ft =getFragmentManager().beginTransaction();
+//
+//
+//                ft.replace(R.id.container, CreateReport.newInstance(dataReports.get(position),""));
+//
+//                ft.addToBackStack(null);
+//                getFragmentManager().popBackStack();
+//                ft.commit();
+                }
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+                onListItemSelect(position);
+            }
+        }));
     }
 
     private void initlize() {
@@ -149,12 +226,12 @@ View view;
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    public void setReports(){
+    public void setReportsGrid(){
 
 
 
 
-   Radpater = new RecyclerViewAdapterReports(getActivity(),dataReports);
+   Radpater = new RecyclerViewAdapterReports(getActivity(),dataReports,"grid");
         recyclerView.setVisibility(View.VISIBLE);
 
         recyclerView.setHasFixedSize(true);
@@ -241,28 +318,68 @@ View view;
     }
     //Set action mode null after use
     public void setNullToActionMode() {
-        Toast.makeText(getActivity(), "Ttttt", Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(getActivity(), "Ttttt", Toast.LENGTH_SHORT).show();
         if (mActionMode != null)
             mActionMode = null;
     }
 
     //Delete selected rows
     public void deleteRows() {
-        SparseBooleanArray selected = Radpater
-                .getSelectedIds();//Get selected ids
+        Log.e("adapter",Radpater+"");
+//Get selected ids
 
         //Loop all selected ids
-        for (int i = (selected.size() - 1); i >= 0; i--) {
-            if (selected.valueAt(i)) {
-                //If current id is selected remove the item via key
-                dataReports.remove(selected.keyAt(i));
-                Radpater.notifyDataSetChanged();//notify adapter
 
+        android.app.AlertDialog.Builder builder = Utility.alertdialog(getActivity(), "Delete", "Selected Reports data will be deleted");
+        // final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        //
+        // builder.setTitle("Autograde");
+        //  builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SparseBooleanArray selected = Radpater.getSelectedIds();
+                ArrayList<DataReport> dltreports=new ArrayList<>();
+                for (int i = (selected.size() - 1); i >= 0; i--) {
+                    if (selected.valueAt(i)) {
+                        //If current id is selected remove the item via key
+
+                        dltreports.add(dataReports.get(selected.keyAt(i)));
+                        dataReports.remove(selected.keyAt(i));
+                        Radpater.notifyDataSetChanged();//notify adapter
+
+                    }
+                }
+
+
+                new SqliteDb(getActivity()).deleteReports(dltreports);
+                Toast.makeText(getActivity(), selected.size() + " reports deleted.", Toast.LENGTH_SHORT).show();//Show Toast
+                mActionMode.finish();
             }
-        }
-        Toast.makeText(getActivity(), selected.size() + " item deleted.", Toast.LENGTH_SHORT).show();//Show Toast
-        mActionMode.finish();//Finish action mode after use
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+
+        builder.show();
+
+       //Finish action mode after use
 
     }
+    @Override
+    public void onResume() {
 
+        super.onResume();
+        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
+        actionBar.setTitle("Reports");
+
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setIcon(null);
+    }
 }

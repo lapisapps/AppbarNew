@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class AddSystemDialog extends Dialog {
 public static PrjctData prjctData;
     public static DataTag systemdata;
 int type;
+    private ImageButton nextcode,nextname;
 
     public AddSystemDialog(@NonNull Activity mContext, int type) {
         super(mContext);
@@ -68,13 +70,12 @@ this.type=type;
                 null);
 
 
-        dataTags=new SqliteDb(mContext).getAreas();
         setView(layout);
 
         builder = new android.app.AlertDialog.Builder(mContext);
         builder.setView(layout);
         alertDialog = builder.create();
-        //  alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+       alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         alertDialog.show();
     }
     private void setView1(View layout) {
@@ -98,6 +99,20 @@ this.type=type;
 
     }
     private void setView(View layout) {
+        nextcode=layout.findViewById(R.id.nextcode);
+        nextname=layout.findViewById(R.id.nextname);
+        nextname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                code.requestFocus();
+            }
+        });
+        nextcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tag.requestFocus();
+            }
+        });
         layid=layout.findViewById(R.id.layoutid);
         code=layout.findViewById(R.id.id);
         tag=layout.findViewById(R.id.tag);
@@ -129,7 +144,8 @@ code.setFocusable(false);
 
                         else
                         if((new SqliteDb(context).updateSystem(systemdata.getTagid(),tag.getText().toString()))){
-                            Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
+                            Utility.customToastSave("Changes Saved",context,"done");
+                            //Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
                             SettingFragment3.loadSystemset(context);
                         }
@@ -138,21 +154,34 @@ code.setFocusable(false);
                     else if(type==0){
 
                         if((new SqliteDb(context).addSystem(code.getText().toString(),tag.getText().toString()))){
-                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                            Utility.customToastSave("Saved",context,"done");
+                          //  Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
                             addedarea.setTagid(code.getText().toString());
                             addedarea.setTag(tag.getText().toString());
+                            addedarea.setSelected(true);
                             alertDialog.dismiss();
                             CreateReport.dataSystems.add(addedarea);
                             PageReportSystem.setView(getOwnerActivity(),    CreateReport.dataSystems);
+                        }
+                        else {
+
+                            code.setError("code already taken");
+                            code.requestFocus();
                         }
                     }
                     else {
 
                         if((new SqliteDb(context).addSystem(code.getText().toString(),tag.getText().toString()))){
-                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                            Utility.customToastSave("Saved",context,"done");
+                          //  Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
 
                             SettingFragment3.loadSystemset(context);
+                        }
+                        else {
+
+                            code.setError("code already taken");
+                            code.requestFocus();
                         }
 
                     }

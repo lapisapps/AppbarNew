@@ -14,12 +14,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import com.example.pentagon.appbar.Fragments.PageReport1;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class CameraUtils {
+
+    public static String reportid;
 
     /**
      * Refreshes gallery on adding new image/video. Gallery won't be refreshed
@@ -107,12 +111,13 @@ public class CameraUtils {
 
         // Preparing media file naming convention
         // adds timestamp
+
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
         File mediaFile;
         if (type == Main2Activity.MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + "." + Main2Activity.IMAGE_EXTENSION);
+                    + "IMG_" + timeStamp+ "." + Main2Activity.IMAGE_EXTENSION);
         } else if (type == Main2Activity.MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator
                     + "VID_" + timeStamp + "." + Main2Activity.VIDEO_EXTENSION);
@@ -125,7 +130,9 @@ public class CameraUtils {
         else if(type==Utility.MEDIA_TYPE_PDF){
 
             mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "pdf_" + timeStamp + "." + "pdf");
+                    + "pdf_"+ reportid  + "." + "pdf");
+            if(mediaFile.exists())
+                mediaFile.delete();
         }
         else {
             return null;

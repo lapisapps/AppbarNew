@@ -1,315 +1,408 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
 
->
+    >
 
     <!-- TODO: Update blank fragment layout -->
 
 
-    <ScrollView
-        android:id="@+id/scrollview"
+    <TableRow
+        android:id="@+id/prjct"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TableLayout
-android:weightSum="2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-
-
-
-
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <TableRow
-android:visibility="gone"
-                android:id="@+id/prjct"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/c3_light">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="10dp">
-
-
-                    <TextView
-android:textColor="@color/white"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-
-                        android:fontFamily="sans-serif-smallcaps"
-
-                        android:text="Project"
-                        android:textSize="@dimen/setting_head" />
-
-                    <Button
-                        android:id="@+id/addprjct"
-                        android:gravity="center"
-                        android:paddingRight="10dp"
-                        android:paddingLeft="10dp"
-                        android:background="@drawable/name_shapebtn"
-                        android:textColor="@color/c3"
-                        android:text=" New"
-                        android:drawableTint="@color/c3"
-                        android:layout_marginRight="10dp"
-                        android:drawableRight="@drawable/ic_add_black_24dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp" />
-
-                    <TextView
-                        android:drawableTint="@color/white"
-                        android:tag="0"
-                        android:id="@+id/hprjct"
-                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-
-                </LinearLayout>
-
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/rowprjcts"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="3">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:orientation="vertical"
-                    android:weightSum="3">
-
-
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycprjcts"
-android:background="@color/bgrecy"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp">
-
-                    </android.support.v7.widget.RecyclerView>
-
-                    <TextView
-                        android:id="@+id/prjctcount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_gravity="right"
-                        android:layout_weight="1"
-                        android:paddingRight="5dp"
-                        android:text="4 Projects"
-                        android:textColor="@color/g1"
-                        android:textSize="@dimen/text1" />
-                </LinearLayout>
-
-
-            </TableRow>
-
-            <TableRow
-
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:padding="1dp">
-
-
-
-                </LinearLayout>
-
-
-            </TableRow>
-
-            <TableRow
-android:weightSum="1"
-                android:id="@+id/area"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/c3_light">
-
-                <LinearLayout
-                  android:padding="10dp"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                   >
-
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-android:textColor="@color/white"
-                        android:fontFamily="sans-serif-smallcaps"
-
-                        android:text="Area"
-                        android:textSize="@dimen/setting_head" />
-
-                    <Button
-
-                        android:id="@+id/addarea"
-
-                        android:drawableRight="@drawable/ic_add_black_24dp"
-                        android:gravity="center"
-
-                        android:background="@drawable/name_shapebtn"
-                        android:textColor="@color/c3"
-                        android:text=" New"
-                        android:drawableTint="@color/c3"
-                        android:layout_marginRight="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp" />
-
-                    <TextView
-                        android:visibility="gone"
-                        android:drawableTint="@color/white"
-                        android:tag="0"
-                        android:id="@+id/harea"
-                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-
-                </LinearLayout>
-
-
-
-            </TableRow>
-<TableRow
-    android:id="@+id/areaprjct"
-    android:visibility="visible"
-    android:background="@color/c3_light"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    >
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:layout_weight="1"
-
-
-
-        android:padding="5dp"
-        android:weightSum="5"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline6">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/spinnerbg"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Project"
-            android:textColor="@color/white" />
+        android:layout_height="wrap_content"
+        android:background="@color/c3_light"
+        android:visibility="gone">
 
         <LinearLayout
-
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/spinnerbg">
+            android:layout_weight="1"
+            android:padding="10dp">
 
-            <Spinner
 
-                android:id="@+id/spinner"
-                style="@style/spinnerstyle"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
-                android:textAlignment="gravity"></Spinner>
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:fontFamily="sans-serif-smallcaps"
+
+                android:text="Project"
+
+                android:textColor="@color/white"
+                android:textSize="@dimen/setting_head" />
+
+            <Button
+                android:id="@+id/addprjct"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/name_shapebtn"
+                android:drawableRight="@drawable/ic_add_black_24dp"
+                android:drawableTint="@color/c3"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text=" New"
+                android:textColor="@color/c3" />
+
+            <TextView
+                android:id="@+id/hprjct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                android:drawableTint="@color/white"
+                android:tag="0" />
+
 
         </LinearLayout>
 
 
-    </LinearLayout>
-</TableRow>
-            <TableRow
-                android:id="@+id/rowarea"
-                android:visibility="gone"
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/rowprjcts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:weightSum="3">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:weightSum="3">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycprjcts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="3">
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/bgrecy">
 
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/prjctcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:paddingRight="5dp"
+                android:text="4 Projects"
+                android:textColor="@color/g1"
+                android:textSize="@dimen/text1" />
+        </LinearLayout>
+
+
+    </TableRow>
+
+
+    <android.support.constraint.ConstraintLayout
+
+        android:id="@+id/searchlay"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+
+        android:background="@drawable/search_shape"
+        android:gravity="center"
+        android:padding="5dp"
+        android:visibility="visible"
+        android:weightSum="1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline25"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:id="@+id/areaprjct"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/guideline22"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.428"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline23">
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+
+
+                android:padding="5dp"
+                android:weightSum="5"
+                app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guideline6">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/spinnerbg"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="Project"
+                    android:textColor="@color/white" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:orientation="vertical"
-                    android:weightSum="3">
+                    android:background="@drawable/spinnerbg">
 
+                    <Spinner
 
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycarea"
-                        android:background="@color/bgrecy"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp">
-
-                    </android.support.v7.widget.RecyclerView>
-
-                    <TextView
-                        android:id="@+id/areacount"
+                        android:id="@+id/spinner"
+                        style="@style/spinnerstyle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/white"
+                        android:textAlignment="gravity"></Spinner>
 
-                        android:layout_gravity="right"
-                        android:layout_weight="1"
-android:paddingRight="5dp"
-                        android:text="4 Area"
-                        android:textColor="@color/g1"
-                        android:textSize="@dimen/text1" />
                 </LinearLayout>
 
 
-            </TableRow>
-        </TableLayout>
-    </ScrollView>
-</FrameLayout>
+            </LinearLayout>
+        </TableRow>
+
+        <ImageButton
+            android:id="@+id/searchwith"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/icon_search"
+            android:gravity="right|center"
+            android:textColor="@color/grey1"
+            android:textSize="15dp"
+            android:tint="@color/grey1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/searchtext"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline22" />
+
+        <AutoCompleteTextView
+
+            android:id="@+id/searchtext"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            android:gravity="center|left"
+            android:hint="Search here......"
+            android:paddingLeft="12dp"
+            android:textColor="@color/grey1"
+            android:textColorHint="@color/grey1"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/searchwith"
+            app:layout_constraintTop_toTopOf="@+id/guideline22" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:alpha="0.5"
+
+            android:background="@drawable/ic_cancel_white_24dp"
+            android:backgroundTint="@color/grey1"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:text=""
+            android:textColor="@color/c3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/searchtext"
+            app:layout_constraintTop_toTopOf="@+id/guideline22" />
+
+        <TableRow
+            android:id="@+id/area"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:weightSum="1"
+            app:layout_constraintBottom_toTopOf="@+id/areaprjct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+            >
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:text="Area"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/setting_head" />
+
+                <Button
+                    android:id="@+id/load"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rounddrw"
+                    android:backgroundTint="@color/dgreen"
+                    android:drawableLeft="@drawable/ic_archive_green_24dp"
+                    android:drawableTint="@color/white"
+                    android:gravity="center"
+                    android:paddingLeft="3dp"
+
+                    android:text=""
+                    android:textColor="@color/c3" />
+
+                <Button
+                    android:id="@+id/addarea"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounddrw"
+                    android:backgroundTint="@color/dgreen"
+                    android:drawableLeft="@drawable/ic_add_white_24dp"
+                    android:drawableTint="@color/white"
+                    android:gravity="center"
+                    android:paddingLeft="3dp"
+
+                    android:text=""
+                    android:textColor="@color/c3" />
+
+                <Button
+                    android:id="@+id/search"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rounddrw"
+                    android:backgroundTint="@color/dgreen"
+                    android:drawableLeft="@drawable/ic_search_green_24dp"
+                    android:drawableTint="@color/white"
+                    android:gravity="center"
+                    android:paddingLeft="3dp"
+                    android:text=""
+
+                    android:textColor="@color/c3"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/harea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                    android:drawableTint="@color/white"
+                    android:tag="0"
+                    android:visibility="gone" />
+
+
+            </LinearLayout>
+
+
+        </TableRow>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.67" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.36" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/areacount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="right"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:paddingRight="5dp"
+        android:text="4 Area"
+        android:textColor="@color/g1"
+        android:textSize="@dimen/text1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycarea" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.26" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycarea"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/bgrecy"
+        app:layout_constraintBottom_toTopOf="@+id/areacount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline25"
+        app:layout_constraintVertical_chainStyle="spread_inside">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -11,6 +11,7 @@
     <color name="white">#ffffff</color>
     <color name="colorFAB">#2196F3</color>
     <color name="green">#43895e</color>
+    <color name="dgreen">#43895e</color>
     <color name="radiosel">#4cc7f4</color>
     <color name="rowsel">#e0d6f4</color>
     <!--<color name="c3">#034c58</color>-->
@@ -25,7 +26,7 @@
     <color name="p1">#6774EA</color>
     <color name="grey">#faadaebc</color>
     <color name="grey1">#d0e3e4ef</color>
-
+    <color name="selected">#d0828dd8</color>
     <color name="black_overlay">#66000000</color>
 
     <color name="primary">#533981</color>
@@ -35,8 +36,20 @@
     <color name="row1">#51f1f7f7</color>
     <color name="recy">#20ddd5e9</color>
     <color name="g1">#01431b</color>
-
+    <color name="textrans">#3b607483</color>
     <color name="btn">#06547f</color>
     <color name="bgrecy">#48c9e5f1</color>
+    <color name="rportrow">#95b1bc</color>
     <color name="red">#753030</color>
+    <color name="greyback">#33738e94</color>
+    <color name="bluegray3">#90a4ae</color>
+    <color name="bluegray1">#b0bec5</color>
+    <color name="whitegreen">#e8f5e9</color>
+
+    <color name="whiteblue">#e3f2fd</color>
+
+    <color name="bluegray0">#eceff1</color>
+
+    <color name="whitepink">#ccd1d5</color>
+
 </resources>

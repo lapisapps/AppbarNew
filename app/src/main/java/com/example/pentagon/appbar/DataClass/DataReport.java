@@ -151,4 +151,8 @@ public class DataReport implements java.io.Serializable {
     }
 
     public  boolean newreport;
+    public String getEmpty(){
+
+        return reportname+descrpotion+prjct+summary+checked+approved+prepared;
+    }
 }

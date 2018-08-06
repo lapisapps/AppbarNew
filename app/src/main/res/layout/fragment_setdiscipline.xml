@@ -1,135 +1,428 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.SettingsFragments.FragmentSettingsProjects">
+
+    >
 
     <!-- TODO: Update blank fragment layout -->
 
 
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.41" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.27" />
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="3"
-        android:background="@drawable/search_shape"
-
-        android:orientation="vertical"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:weightSum="2.5"
-        app:layout_constraintBottom_toTopOf="@+id/recyprjcts"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <android.support.design.widget.TextInputLayout
+        <TableLayout
+            android:weightSum="2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
 
-            android:background="@drawable/btn_round"
 
-            android:hint="New Discipline">
 
-            <EditText
+
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TableRow
+
+                android:id="@+id/prjct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/c3_light">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:fontFamily="sans-serif-smallcaps"
+
+                        android:text="Discipline"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/setting_head" />
+
+                    <Button
+                        android:id="@+id/load"
+                        android:background="@drawable/rounddrw"
+                        android:layout_width="30dp"
+                        android:paddingLeft="3dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:drawableLeft="@drawable/ic_archive_green_24dp"
+                        android:backgroundTint="@color/green"
+                        android:drawableTint="@color/white"
+                        android:gravity="center"
+
+                        android:text=""
+                        android:textColor="@color/c3" />
+                    <Button
+                        android:id="@+id/addprjct"
+                        android:background="@drawable/rounddrw"
+                        android:layout_width="30dp"
+                        android:paddingLeft="3dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:drawableLeft="@drawable/ic_add_white_24dp"
+                        android:backgroundTint="@color/green"
+                        android:drawableTint="@color/white"
+                        android:gravity="center"
+
+                        android:text=""
+                        android:textColor="@color/c3" />
+
+                    <Button
+                        android:visibility="gone"
+                        android:id="@+id/search"
+                        android:background="@drawable/rounddrw"
+                        android:layout_width="30dp"
+                        android:paddingLeft="3dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:drawableLeft="@drawable/ic_search_green_24dp"
+                        android:backgroundTint="@color/green"
+                        android:drawableTint="@color/white"
+                        android:gravity="center"
+
+                        android:text=""
+                        android:textColor="@color/c3" />
+                    <TextView
+                        android:id="@+id/hprjct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                        android:drawableTint="@color/white"
+                        android:tag="0"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
+
+
+            </TableRow>
+            <android.support.constraint.ConstraintLayout
+
+                android:id="@+id/searchlay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-
-                android:padding="10dp" />
-        </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="right"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="0.8"
-            android:background="@drawable/name_shape"
-            android:drawableRight="@drawable/ic_add_black_24dp"
-            android:drawableTint="@color/white"
-
-            android:text="Save"
-            android:textColor="@color/white" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
 
 
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:weightSum="1">
+                android:background="@drawable/search_shape"
+                android:gravity="center"
 
-            <ImageButton
+                android:padding="5dp"
+                android:visibility="visible"
+                android:weightSum="1"
+                app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guideline6">
 
-                android:id="@+id/searchwith"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
+                <ImageButton
+                    android:id="@+id/searchwith"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
 
-                android:layout_weight="0.1"
-                android:background="@drawable/icon_search"
-                android:gravity="right|center"
-                android:textColor="@color/grey1"
-                android:textSize="15dp"
-                android:tint="@color/grey1" />
 
-            <AutoCompleteTextView
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/icon_search"
+                    android:gravity="right|center"
+                    android:textColor="@color/grey1"
+                    android:textSize="15dp"
+                    android:tint="@color/grey1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/searchtext"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                android:id="@+id/searchtext"
-                android:layout_width="0dp"
+                <AutoCompleteTextView
+
+                    android:id="@+id/searchtext"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:background="@null"
+                    android:gravity="center|left"
+                    android:hint="Search here......"
+                    android:paddingLeft="12dp"
+                    android:textColor="@color/grey1"
+                    android:textColorHint="@color/grey1"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/searchwith"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                   android:backgroundTint="@color/grey1"
+                    android:background="@drawable/ic_cancel_white_24dp"
+android:alpha="0.5"
+                   android:gravity="center"
+                    android:paddingLeft="3dp"
+                    android:text=""
+                    android:textColor="@color/c3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/searchtext"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/rowprjcts"
+                android:visibility="visible"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.8"
-                android:background="@null"
-                android:gravity="center|left"
-                android:hint="Search here......"
-                android:paddingLeft="12dp"
-                android:textColor="@color/grey1"
-                android:textColorHint="@color/grey1"
-                android:textSize="15dp" />
+                android:orientation="vertical"
+                android:weightSum="3">
 
 
-        </LinearLayout>
-    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:weightSum="3">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyprjcts"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
-</android.support.constraint.ConstraintLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycprjcts"
+                        android:layout_weight="2.9"
+                        android:background="@color/bgrecy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginLeft="5dp"
+                        android:scrollbars="horizontal"
+
+                        android:layout_marginRight="5dp">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:id="@+id/prjctcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+
+                        android:layout_gravity="right"
+                        android:layout_weight="0.1"
+                        android:paddingRight="5dp"
+                        android:text="4 Projects"
+                        android:textColor="@color/g1"
+                        android:textSize="@dimen/text1" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TableRow
+
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:orientation="vertical"
+                    android:padding="1dp">
+
+
+
+                </LinearLayout>
+
+
+            </TableRow>
+
+            <TableRow
+                android:weightSum="1"
+                android:id="@+id/area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/c3_light">
+
+                <LinearLayout
+                    android:padding="10dp"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    >
+
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textColor="@color/white"
+                        android:fontFamily="sans-serif-smallcaps"
+
+                        android:text="System"
+                        android:textSize="@dimen/setting_head" />
+
+                    <Button
+
+                        android:id="@+id/addarea"
+
+                        android:drawableRight="@drawable/ic_add_black_24dp"
+                        android:gravity="center"
+
+                        android:background="@drawable/name_shapebtn"
+                        android:textColor="@color/c3"
+                        android:text=" New"
+                        android:drawableTint="@color/c3"
+                        android:layout_marginRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp" />
+
+                    <TextView
+                        android:drawableTint="@color/white"
+                        android:tag="0"
+                        android:id="@+id/harea"
+                        android:drawableRight="@drawable/ic_expand_more_black_24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </LinearLayout>
+
+
+
+            </TableRow>
+            <TableRow
+                android:id="@+id/areaprjct"
+                android:visibility="gone"
+                android:background="@color/c3_light"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                >
+
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:layout_weight="1"
+
+
+
+                    android:padding="5dp"
+                    android:weightSum="5"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/guideline6">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/spinnerbg"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="Project"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/spinnerbg">
+
+                        <Spinner
+
+                            android:id="@+id/spinner"
+                            style="@style/spinnerstyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:backgroundTint="@color/white"
+                            android:textAlignment="gravity"></Spinner>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </TableRow>
+            <TableRow
+                android:id="@+id/rowarea"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycarea"
+                        android:background="@color/bgrecy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:id="@+id/areacount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:paddingRight="5dp"
+                        android:text="4 Area"
+                        android:textColor="@color/g1"
+                        android:textSize="@dimen/text1" />
+                </LinearLayout>
+
+
+            </TableRow>
+        </TableLayout>
+
+</FrameLayout>
 

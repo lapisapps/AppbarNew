@@ -51,12 +51,13 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
     Context context;
     EditText desc;
     Button btnsave;
+    android.app.AlertDialog alertDialog;
     public static DataPreview dataPreview;
     public AudioRecordDialog(@NonNull final Context mContext,Boolean forview) {
         super(mContext);
         context=mContext;
         android.app.AlertDialog.Builder builder;
-        android.app.AlertDialog alertDialog;
+
 
 
         LayoutInflater inflater = (LayoutInflater)
@@ -73,9 +74,12 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
                 dd.setPath(fileName);
                 dd.setType(MEDIA_TYPE_AUDIO+"");
                 dd.setDescr(desc.getText().toString());
+                dd.setSelected(true);
                 CreateReport.dataPreviews.add(dd);
                 FragmentDataViewAudio.addImage(dd,-1);
+
                 Toast.makeText(mContext, "Audio Record saved", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
             }
         });
         desc=(EditText) layout.findViewById(R.id.description);

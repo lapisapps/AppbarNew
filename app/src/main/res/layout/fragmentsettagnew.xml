@@ -59,21 +59,52 @@ android:textColor="@color/white"
                     android:textSize="@dimen/setting_head" />
 
                 <Button
-
-                    android:id="@+id/addtag"
-
-                    android:drawableRight="@drawable/ic_add_black_24dp"
+                    android:id="@+id/load"
+                    android:background="@drawable/rounddrw"
+                    android:layout_width="30dp"
+                    android:paddingLeft="3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/ic_archive_green_24dp"
+                    android:backgroundTint="@color/green"
+                    android:drawableTint="@color/white"
                     android:gravity="center"
 
-                    android:background="@drawable/name_shapebtn"
-                    android:textColor="@color/c3"
-                    android:text=" New"
-                    android:drawableTint="@color/c3"
+                    android:text=""
+                    android:textColor="@color/c3" />
+                <Button
+                    android:id="@+id/addtag"
+                    android:background="@drawable/rounddrw"
+                    android:layout_width="30dp"
+                    android:paddingLeft="3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
                     android:layout_marginRight="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp" />
+                    android:drawableLeft="@drawable/ic_add_white_24dp"
+                    android:backgroundTint="@color/green"
+                    android:drawableTint="@color/white"
+                    android:gravity="center"
+
+                    android:text=""
+                    android:textColor="@color/c3" />
+
+                <Button
+                    android:visibility="gone"
+                    android:id="@+id/search"
+                    android:background="@drawable/rounddrw"
+                    android:layout_width="30dp"
+                    android:paddingLeft="3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/ic_search_green_24dp"
+                    android:backgroundTint="@color/green"
+                    android:drawableTint="@color/white"
+                    android:gravity="center"
+
+                    android:text=""
+                    android:textColor="@color/c3" />
 
 
                 <TextView
@@ -137,6 +168,7 @@ android:textColor="@color/white"
 
 
         </LinearLayout>
+
     </LinearLayout>
 
 

@@ -1,6 +1,15 @@
 package com.example.pentagon.appbar.DataClass;
 
 public class DataPreview implements java.io.Serializable{
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean selected=false;
     public String getPath() {
         return path;
     }

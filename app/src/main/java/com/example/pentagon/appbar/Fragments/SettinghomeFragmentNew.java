@@ -1,6 +1,7 @@
 package com.example.pentagon.appbar.Fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -36,6 +37,7 @@ public class SettinghomeFragmentNew extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    FloatingActionButton next,previous;
 View view;
     ViewPager viewPager;
     private TabLayout tabLayout;
@@ -68,7 +70,50 @@ View view;
                 Utility.fabhome.setVisibility(View.VISIBLE);
                 viewPager = (ViewPager) view.findViewById(R.id.viewpager);
                 setupViewPager(viewPager);
+              next=view.findViewById(R.id.floatingActionButton);
+                previous=view.findViewById(R.id.floatingActionButton2);
+                next.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(viewPager.getCurrentItem()!=viewPager.getChildCount())
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1,true);
+                    }
+                });
+                previous.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(viewPager.getCurrentItem()!=0)
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()-1,true);
+                    }
+                });
 
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                        next.setVisibility(View.VISIBLE);
+                        previous.setVisibility(View.VISIBLE);
+
+                        if(viewPager.getCurrentItem()>=viewPager.getChildCount()) {
+                            next.setVisibility(View.GONE);
+
+                        }
+
+                        if(viewPager.getCurrentItem()==0){
+                            previous.setVisibility(View.GONE);
+
+                        }
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
 //                tabLayout = (TabLayout) view.findViewById(R.id.tabs);
 //                tabLayout.setupWithViewPager(viewPager);
                 return view;
@@ -83,7 +128,8 @@ View view;
         CustomPagerAdapter adapter = new CustomPagerAdapter(getFragmentManager());
         adapter.addFrag(new SettingFragment1(), "Project");
         adapter.addFrag(new SettingFragment4(), "Area");
-        adapter.addFrag(new SettingFragment2(), "Tags");
+        adapter.addFrag(new SettingFragment6(), "Tags");
+        adapter.addFrag(new SettingFragment5(), "Discipline");
         adapter.addFrag(new SettingFragment3(), "System");
 
 viewPager.setOffscreenPageLimit(2);
@@ -124,9 +170,9 @@ viewPager.setOffscreenPageLimit(2);
         super.onResume();
         ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
         actionBar.setTitle("Settings");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setIcon(R.drawable.ic_settings_white_24dp);
     }
         }
 

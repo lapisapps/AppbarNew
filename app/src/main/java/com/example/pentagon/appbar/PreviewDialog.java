@@ -148,6 +148,7 @@ public class PreviewDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 dataPreview.setDescr(description.getText().toString());
+                dataPreview.setSelected(true);
                 CreateReport.dataPreviews.add(dataPreview);
                 CreateReport.dataPreviews.get(CreateReport.dataPreviews.size()-1).setDescr(description.getText().toString());
                 if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_AUDIO)

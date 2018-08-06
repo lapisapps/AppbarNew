@@ -4,10 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
@@ -28,6 +32,7 @@ import com.example.pentagon.appbar.Utility;
  * create an instance of this fragment.
  */
 public class PageReport1 extends Fragment {
+    String rprefix="pdesk";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +41,7 @@ public class PageReport1 extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-  public static    AutoCompleteTextView reportname;
+  public static    AutoCompleteTextView reportname,reportid;
     public static AutoCompleteTextView description;
 View view;
     private OnFragmentInteractionListener mListener;
@@ -77,9 +82,23 @@ View view;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view=  inflater.inflate(R.layout.viewreport, container, false);
+        reportid=view.findViewById(R.id.reportno);
+
+//reportid.setValidator();
+
+
+
 
         reportname=view.findViewById(R.id.reportname);
         description=view.findViewById(R.id.description);
+        reportname.setNextFocusForwardId(description.getId());
+description.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus)
+            new DescriptionDialog(getActivity(),PageReport1.this,description.getText().toString(),true);
+    }
+});
         description.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,12 +110,45 @@ View view;
             CreateReport.loaddata.setNewreport(false);
         setData();
         }else {
-            Toast.makeText(getActivity(), "fffff", Toast.LENGTH_SHORT).show();
+
+
+            //Toast.makeText(getActivity(), "fffff", Toast.LENGTH_SHORT).show();
             CreateReport.loaddata=new DataReport();
             CreateReport.loaddata.setNewreport(true);
 
             reportname.setEnabled(true);
             description.setEnabled(true);
+            String rid=rprefix+new SqliteDb(getActivity()).getReportID();
+            Log.e("isNewreport","1111"+ CreateReport.loaddata.getPrjct()+rid);
+
+        reportid.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+
+                  //  reportid.setFocusable(true);
+             //  Toast.makeText(getActivity(), "Got the focus", Toast.LENGTH_LONG).show();
+                } else {
+
+                    if(!new SqliteDb(getActivity()).getReport(reportid.getText().toString())){
+
+                     //   Toast.makeText(getActivity(), "Report number duplication", Toast.LENGTH_SHORT).show();
+                  //   if(!CreateReport.loaddata.getId().equals(reportid.getText().toString()))
+                      reportid.setError("Report number duplication");
+              //   CreateReport.viewPager.setCurrentItem(0);
+                 View v=reportid;
+                        reportname.clearFocus();
+                        v.setFocusable(true);
+                        v.setFocusableInTouchMode(true);
+                        v.requestFocus();
+
+
+                    }
+                   // Toast.makeText(getActivity(), "Lost the focus", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+            reportid.setText(rid);
         }
 
         return view;
@@ -106,13 +158,13 @@ View view;
     private void setData() {
         DataReport dd=CreateReport.loaddata;
         Log.e("ddd",dd.getReportname());
-
+reportid.setText(dd.getId());
         reportname.setText(dd.getReportname());
         description.setText(dd.getDescrpotion());
         if(Utility.savemenu.getTitle().equals("edit")){
-
+            reportid.setFocusable(false);
             reportname.setFocusable(false);
-            description.setFocusable(false);
+          //  description.setFocusable(false);
         }
 
     }
@@ -142,7 +194,7 @@ View view;
     }
 
     public  void setEnable(boolean b) {
-        Toast.makeText(getContext(), "ffff", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getContext(), "ffff", Toast.LENGTH_SHORT).show();
 reportname.setEnabled(b);
 
 

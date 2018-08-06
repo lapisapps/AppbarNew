@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pentagon.appbar.DataClass.DataReport;
@@ -27,10 +28,11 @@ public class RecyclerViewAdapterReports extends RecyclerView.Adapter<RecyclerVie
     private Context mContext;
   //  private List<S> albumList;
 
-private int type;
+private String type;
     public class MyViewHolder extends RecyclerView.ViewHolder {
-TextView prjctname,prjctdescr,date,reportname;
-
+TextView prjctname,prjctdescr,date,reportname,datasize;
+String type;
+LinearLayout back;
 ImageView data;
 
 
@@ -39,18 +41,19 @@ ImageView data;
             super(view);
 
             prjctname=(TextView) view.findViewById(R.id.prjctname);
-
+back=(LinearLayout)view.findViewById(R.id.back);
             prjctdescr=(TextView) view.findViewById(R.id.prjctdescr);
             date=(TextView) view.findViewById(R.id.date);
             reportname=(TextView) view.findViewById(R.id.reportname);
-
+            datasize=(TextView) view.findViewById(R.id.datasize);
         }
     }
 
 
-    public RecyclerViewAdapterReports(Context mContext, ArrayList<DataReport> albumList) {
+    public RecyclerViewAdapterReports(Context mContext, ArrayList<DataReport> albumList,String type) {
         this.mContext = mContext;
         this.albumList = albumList;
+        this.type=type;
         mSelectedItemsIds = new SparseBooleanArray();
 
     }
@@ -58,10 +61,13 @@ ImageView data;
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
+        if(!type.equals("list"))
         itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_reports, parent, false);
+else
 
-
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.reportslist, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -70,16 +76,23 @@ ImageView data;
         final DataReport product = albumList.get(position);
 
         try {
-holder.reportname.setText(product.getReportname());
+            if(type.equals("list"))
+holder.reportname.setText(product.getId()+"\n"+product.getReportname());
+            else
+                holder.reportname.setText(product.getReportname());
             holder.prjctdescr.setText(product.getPrjctdescr());
             holder.prjctname.setText(product.getPrjctname());
-            holder.date.setText("Last entry:"+product.getUdate());
+            holder.date.setText("Last updation:"+product.getUdate());
+            if(Integer.parseInt(product.getFiles())>0)
+            holder.datasize.setText(product.getFiles()+" Files");
+            else
+                holder.datasize.setText("No Files");
 
         }catch (Exception e){e.printStackTrace();}
         /** Change background color of the selected items in list view  **/
-        holder.itemView
-                .setBackgroundColor(mSelectedItemsIds.get(position) ? mContext.getResources().getColor(R.color.grey1)
-                        :mContext.getResources().getColor(R.color.row) );
+        holder.back
+                .setBackgroundColor(mSelectedItemsIds.get(position) ? mContext.getResources().getColor(R.color.grey)
+                        :mContext.getResources().getColor(R.color.rportrow) );
     }
     public void toggleSelection(int position) {
         selectView(position, !mSelectedItemsIds.get(position));
@@ -125,110 +138,11 @@ holder.reportname.setText(product.getReportname());
 //        popup.show();
     }
 
-    /**
-     * Click listener for popup menu items
-     */
-//    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-//
-//        public MyMenuItemClickListener() {
-//        }
-//
-//        @Override
-//        public boolean onMenuItemClick(MenuItem menuItem) {
-//            switch (menuItem.getItemId()) {
-//                case R.id.action_add_favourite:
-//                    Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                case R.id.action_play_next:
-//                    Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                default:
-//            }
-//            return false;
-//        }
-//    }
+
 
     @Override
     public int getItemCount() {
         return albumList.size();
     }
-//    private void deletearrang(final String noidd) {
-//
-//
-//        Map<String, String> params = new HashMap<>();
-//        //jObj = new JSONObject();
-//        params.put("markid", noidd);
-//
-//
-//
-//        Call<JsonObject> jsonObjectCall = new Retrofit_Helper().getRetrofitBuilder().getfromServer(Utility.markremoveurl,params);
-//        jsonObjectCall.clone().enqueue(new ResponseHandler(mContext, new ResponseCallback() {
-//            @Override
-//            public void getResponse(int code, JsonObject jsonObject) {
-//
-//                JSONObject jsonObj = null;
-//                try {
-//                    jsonObj = new JSONObject(jsonObject.toString());
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-////{"users":[{"admin_id":"admin","password":"admin"}]}
-//
-//                //JSONObject jsonObj = new JSONObject(datafromserver);
-//
-//                if (jsonObj != null) {
-//                    Log.d("getfromserver", "b4 extract");
-//                    JSONObject actor = null;
-//
-//
-//                    try {
-//                        if (jsonObj.has("mark")) {
-//                            if(jsonObj.getString("mark").equals("true")){
-//                                Toast.makeText(mContext, "Removed", Toast.LENGTH_SHORT).show();
-////for(int i=0;i<station.size();i++){
-////
-////    if(station.get(i).getFaculty_id().equals(noid)){
-////        station.remove(i);
-////        break;
-////
-////    }
-////}
-//                                Utility.MarkViewActivity.getNotification();
-//                                //  Log.i("ddd",station.size()+"");
-////adapter1.notifyDataSetChanged();
-////setView();
-//
-//                                //  JSONArray login_array = jsonObj.getJSONArray("faculty");
-//
-//                            }else {
-//                                Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
-//
-//
-//                            }}
-//
-//
-//                    } catch (Exception eee) {
-//                        eee.printStackTrace();
-//                    }
-//                    //     setView();
-//                }
-//            }
-//            @Override
-//            public void getFailure(Call<JsonObject> call, int code) {
-//                if (code==1) {
-//
-//                    Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//                    Toast.makeText(mContext, "Can't Connect with server", Toast.LENGTH_SHORT).show();
-//
-//                }
-//                if( ResponseHandler.progressDialog!=null)
-//                    ResponseHandler.progressDialog.dismiss();
-//
-//            }
-//
-//
-//        }, jsonObjectCall,1));
-//    }
+
 }

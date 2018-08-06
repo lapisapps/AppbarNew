@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,15 +26,16 @@ import java.util.ArrayList;
  */
 public class RecyclerViewAdapterSystemSt extends RecyclerView.Adapter<RecyclerViewAdapterSystemSt.MyViewHolder> {
 
-    private final ArrayList<DataTag> albumList;
+    private  ArrayList<DataTag> albumList;
+    private  ArrayList<DataTag> albumListf;
     //    public static ArrayList<String> albumList1;
     private Activity mContext;
     //  private List<S> albumList;
 
     private int type;
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tag,tagid,edit,delete;
-
+        TextView tag,tagid;
+ImageButton edit,delete;
 
 
 
@@ -41,15 +44,50 @@ public class RecyclerViewAdapterSystemSt extends RecyclerView.Adapter<RecyclerVi
 
             tag=(TextView) view.findViewById(R.id.tag);
             tagid=(TextView) view.findViewById(R.id.id);
-            edit=(TextView) view.findViewById(R.id.edit);
-            delete=(TextView) view.findViewById(R.id.delete);
+            edit= view.findViewById(R.id.edit);
+            delete= view.findViewById(R.id.delete);
         }
     }
 
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    albumList = albumListf;
+                } else {
+                    ArrayList<DataTag> filteredList = new ArrayList<>();
+                    for (DataTag row : albumListf) {
 
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getTagid().toLowerCase().contains(charString.toLowerCase()) || row.getTag().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    albumList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = albumList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                albumList = (ArrayList<DataTag>) filterResults.values;
+
+                // refresh the list with filtered data
+                notifyDataSetChanged();
+            }
+        };
+    }
     public RecyclerViewAdapterSystemSt(Activity mContext, ArrayList<DataTag> albumList, int type) {
         this.mContext = mContext;
         this.albumList = albumList;
+        this.albumListf = albumList;
         this.type=type;
 
     }
@@ -101,7 +139,8 @@ holder.tag.setText(product.getTag());
                             new SqliteDb(mContext).deleteSystem(product.getTagid());
                             dialog.dismiss();
                             // new ResponseHandler(context,ResponseHandler.this,jsonObjectCall);
-                            Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+                            Utility.customToastSave("Deleted",mContext,"delete");
+                           // Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
                             albumList.remove(position);
                             notifyDataSetChanged();
                         }
@@ -245,4 +284,8 @@ holder.tag.setText(product.getTag());
 //
 //        }, jsonObjectCall,1));
 //    }
+public  int getSize(){
+
+    return albumList.size();
+}
 }

@@ -8,11 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -20,6 +23,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +41,7 @@ import com.example.pentagon.appbar.Fragments.PageReport2;
 import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingTag;
 
 import com.example.pentagon.appbar.Fragments.PageReport5;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -44,6 +49,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -59,14 +65,18 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import static com.example.pentagon.appbar.Fragments.PageReport1.description;
+import static com.example.pentagon.appbar.Fragments.PageReport1.reportid;
 import static com.example.pentagon.appbar.Fragments.PageReport1.reportname;
 import static com.example.pentagon.appbar.Fragments.PageReport2.prjctname;
 
@@ -183,9 +193,9 @@ public class Utility extends Activity {
     }
 
 
-    public static void optionItemSave(Activity activity) {
+    public static void optionItemSave(Activity activity,int from) {
         if(Utility.savemenu.getTitle().equals("edit")){
-            Toast.makeText(activity, "ffff"+reportname.getText().toString(), Toast.LENGTH_SHORT).show();
+          ///  Toast.makeText(activity, "ffff"+reportname.getText().toString(), Toast.LENGTH_SHORT).show();
 
             setEnable(true);
             //Utility.camera.setVisibility(View.VISIBLE);
@@ -200,14 +210,24 @@ public class Utility extends Activity {
             int day = c.get(Calendar.DAY_OF_MONTH);
             if(CreateReport.loaddata.isNewreport())
             {
-                Log.e("isNewreport","1111"+ CreateReport.loaddata.getPrjct());
-                CreateReport.loaddata.setId(new SqliteDb(activity).getReportID()+1);
+//                String rid=new SqliteDb(activity).getReportID();
+//                Log.e("isNewreport","1111"+ CreateReport.loaddata.getPrjct()+rid);
+//                CreateReport.loaddata.setId(rid);
+
 
 
                 CreateReport.loaddata.setCdate(year+"-"+month+"-"+day);
 
-
-
+if(!new SqliteDb(activity).getReport(reportid.getText().toString())){
+CreateReport.viewPager.setCurrentItem(0);
+reportid.setFocusable(true);
+reportid.setError("Report number duplication");
+reportid.setTag("error");
+    //Toast.makeText(activity, "Report number duplication", Toast.LENGTH_SHORT).show();
+    return;
+}
+                CreateReport.loaddata.setId(reportid.getText().toString());
+//new SharedPreferenceClass().storeDatabaseLastReport(activity,reportid.getText().toString());
             }
 
 
@@ -227,28 +247,72 @@ public class Utility extends Activity {
 
 
             CreateReport.loaddata.setUdate(year+"-"+month+"-"+day);
-            if(CreateReport.loaddata.getReportname()!=null){
+
+            if(CreateReport.loaddata.isNewreport()){
+
+                if(!checkValuesNull()){
+                    if(from==0)
+                    Toast.makeText(activity, "Report Discarded", Toast.LENGTH_SHORT).show();
+                   else
+                        Toast.makeText(activity, "Empty Report Details", Toast.LENGTH_SHORT).show();
+
+                    return;
+
+                }}
+            if(!CreateReport.loaddata.getReportname().trim().isEmpty()||!CreateReport.loaddata.getId().trim().isEmpty()){
                 Log.e("Reportid",CreateReport.loaddata.getId()+"tag size:"+ PageReport2.prjcttags.size());
 new SqliteDb(activity).insertReport(CreateReport.loaddata);
-            new SqliteDb(activity).insertReportTags(PageReport2.prjcttags);
+if(!CreateReport.loaddata.getPrjct().equals(""))
+                new SharedPreferenceClass().storeDatabaseLastPrjct(activity,CreateReport.loaddata.getPrjct());
+
+                new SqliteDb(activity).insertReportTags(PageReport2.prjcttags);
+            if(PageReport2.prjcttags.size()>0)
+                new SharedPreferenceClass().storeDatabaseLastTags(activity,reportid.getText().toString());
+
                 new SqliteDb(activity).insertReportArea(PageReport2.prjctareas);
-                new SqliteDb(activity).insertReportSystem(CreateReport.dataSystems);
-                new SqliteDb(activity).insertReportDiscipline(CreateReport.dataDisciplines);
+                if(PageReport2.prjctareas.size()>0)
+                    new SharedPreferenceClass().storeDatabaseLastArea(activity,reportid.getText().toString());
+
+                new SqliteDb(activity).insertReportSystem(CreateReport.dataSystems,CreateReport.loaddata.getId());
+                if(CreateReport.dataSystems.size()>0)
+                    new SharedPreferenceClass().storeDatabaseLastSystem(activity,reportid.getText().toString());
+
+
+                new SqliteDb(activity).insertReportDiscipline(CreateReport.dataDisciplines,CreateReport.loaddata.getId());
+                if(CreateReport.dataDisciplines.size()>0)
+                    new SharedPreferenceClass().storeDatabaseLastDiscipline(activity,reportid.getText().toString());
+
+                //                for (int i = 0; i <CreateReport.dataPreviews.size(); i++) {
+//                    if(CreateReport)
+//
+//                }
             new SqliteDb(activity).insertReportData(CreateReport.dataPreviews);
-                Toast.makeText(activity, "Report Saved", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(activity, "Report Saved", Toast.LENGTH_SHORT).show();
+           Utility.customToastSave("Report Saved",activity,"other");
             }
 
         }
 
     }
 
+    private static boolean checkValuesNull() {
+        boolean check=false;
+        if(!CreateReport.loaddata.getEmpty().isEmpty())
+            return true;
+        else if(CreateReport.dataSystems.size()>0||CreateReport.dataSystems.size()>0||CreateReport.dataPreviews.size()>0)
+            return true;
+   else
+       return false;
+
+    }
+
     private static void setEnable(boolean b) {
         reportname.setFocusableInTouchMode(true);
         reportname.setFocusable(true);
-//        description.setFocusableInTouchMode(true);
-//        description.setFocusable(true);
-        prjctname.setFocusableInTouchMode(true);
-        prjctname.setFocusable(true);
+        description.setFocusableInTouchMode(true);
+        description.setFocusable(true);
+//        prjctname.setFocusableInTouchMode(true);
+//        prjctname.setFocusable(true);
 //   PageReport2.description.setFocusableInTouchMode(true);
 //        PageReport2.description.setFocusable(true);
         PageReport5.checked.setFocusableInTouchMode(true);
@@ -260,23 +324,34 @@ new SqliteDb(activity).insertReport(CreateReport.loaddata);
         PageReport5.approved.setFocusableInTouchMode(true);
         PageReport5.approved.setFocusable(true);
 
-        PageReport5.summary.setFocusableInTouchMode(true);
-        PageReport5.summary.setFocusable(true);
+//        PageReport5.summary.setFocusableInTouchMode(true);
+//        PageReport5.summary.setFocusable(true);
         addtag.setEnabled(true);
     }
+public static Paragraph tablepara(PdfPTable pp1){
 
-    public static File createPdf(DataReport data, ArrayList<DataTag> dataTag, ArrayList<DataPreview> dataPreview) throws IOException, DocumentException {
+    Paragraph pp=new Paragraph();
+    pp.setAlignment(Element.ALIGN_CENTER);
+    pp.add(pp1);
+    return pp;
+}
+    public static File createPdf(Activity activity,DataReport data, ArrayList<DataTag> dataTag, ArrayList<DataPreview> dataPreview) throws IOException, DocumentException {
 
 
-
+      ArrayList<DataTag> dataDisciplines = new SqliteDb(activity).getReportDiscipline(data.getId());
+        ArrayList<DataTag> dataSystems = new SqliteDb(activity).getReportSystem(data.getId());
+        ArrayList<DataTag> prjctareas= new SqliteDb(activity).getPrjctsAreas(data.getPrjct(),data.getId());
+        CameraUtils.reportid=data.getId()+"_"+data.getReportname();
         File myFile = CameraUtils.getOutputMediaFile(MEDIA_TYPE_PDF);
+
 //        if (file != null) {
 //            imageStoragePath = file.getAbsolutePath();
 //        }
 
         assert myFile != null;
         OutputStream output = new FileOutputStream(myFile);
-
+        Font bfBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bf12 = new Font(Font.FontFamily.TIMES_ROMAN, 18);
         //Step 1
 
 
@@ -289,56 +364,330 @@ PdfWriter pdfWriter= PdfWriter.getInstance(document, output);
         PdfContentByte cb =   pdfWriter.getDirectContent();
 
         //Step 3
-
-
+int indentation=0;
+//        float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+//                - document.rightMargin() - indentation) / image.getWidth()) * 100;
+//
+//        image.scalePercent(scaler);
         //Step 4 Add content
 //first page--report
 
-        document.add(getPara("Report name:"+data.getReportname()));
-        document.add(getPara("Report description:"+data.getDescrpotion()));
-      String ss=  "Report name:"+data.getReportname()+"\n"+"Project description:"+data.getDescrpotion();
+
+
+
+        document.add(tablepara(setpage1("Report",bf12,data.getId()+"-"+data.getReportname(),data.getDescrpotion(),bf12,document.getPageSize().getHeight())));
+
+        document.newPage();
+        document.add(tablepara(setpage1("Project Details",bf12,data.getPrjct()+"-"+data.getPrjctname(),data.getPrjctdescr(),bf12,document.getPageSize().getHeight())));
+
 
         document.newPage();
 
-        //second page--project
-        document.add(getParatable(ss));
-     //   document.add(getPara("Project description:"+data.getDescrpotion()));
-        document.newPage();
+//Tags
+
+        PdfPTable table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        PdfPCell cell1 = new PdfPCell(new Phrase("Project Tags", bf12));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+        document.add(tablepara(table));
 
 
-        //Third page--Tags
+        document.add(setSpace());
+     table = new PdfPTable(2);
+
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+  table.setHeaderRows(0);
+        insertCellHead(table,"Tag id",Element.ALIGN_CENTER,1,bf12);
+        insertCellHead(table,"Code",Element.ALIGN_CENTER,1,bf12);
+
         for(int j=0;j<dataTag.size();j++){
-            document.add(new Paragraph(dataTag.get(j).getTag()));
+        //    document.add(new Paragraph(dataTag.get(j).getTag()));
+            insertCell(table,dataTag.get(j).getTagid(),Element.ALIGN_CENTER,1,bf12);
+            insertCell(table,dataTag.get(j).getTag(),Element.ALIGN_CENTER,1,bf12);
 
         }
+        document.add(tablepara(table));
 
         document.newPage();
-//Fouth page
+//Area
+     table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+  cell1 = new PdfPCell(new Phrase("Area", bf12));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+        document.add(tablepara(table));
+        document.add(setSpace());
+        table = new PdfPTable(2);
+
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.setHeaderRows(0);
+        insertCellHead(table,"Code",Element.ALIGN_CENTER,1,bf12);
+        insertCellHead(table,"Name",Element.ALIGN_CENTER,1,bf12);
+        for(int j=0;j<prjctareas.size();j++){
+           // document.add(new Paragraph(prjctareas.get(j).getTag()));
+            insertCell(table,prjctareas.get(j).getTagid(),Element.ALIGN_CENTER,1,bf12);
+            insertCell(table,prjctareas.get(j).getTag(),Element.ALIGN_CENTER,1,bf12);
+
+        }
+        document.add(tablepara(table));
+
+        document.newPage();
+
+   //system
+        table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        cell1 = new PdfPCell(new Phrase("System", bf12));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+        document.add(tablepara(table));
+document.add(setSpace());
+        table = new PdfPTable(2);
+
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.setHeaderRows(0);
+        insertCellHead(table,"Code",Element.ALIGN_CENTER,1,bf12);
+        insertCellHead(table,"Name",Element.ALIGN_CENTER,1,bf12);
+        for(int j=0;j<dataSystems.size();j++){
+           // document.add(new Paragraph(dataTag.get(j).getTag()));
+            insertCell(table,dataSystems.get(j).getTagid(),Element.ALIGN_CENTER,1,bf12);
+            insertCell(table,dataSystems.get(j).getTag(),Element.ALIGN_CENTER,1,bf12);
+
+        }
+        document.add(tablepara(table));
+
+        document.newPage();
+
+        //Discipline
+
+        table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        cell1 = new PdfPCell(new Phrase("Discipline", bf12));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+        document.add(tablepara(table));
+document.add(setSpace());
+        table = new PdfPTable(2);
+
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.setHeaderRows(0);
+        insertCellHead(table,"Code",Element.ALIGN_CENTER,1,bf12);
+        insertCellHead(table,"Name",Element.ALIGN_CENTER,1,bf12);
+        for(int j=0;j<dataDisciplines.size();j++){
+          //  document.add(new Paragraph(dataDisciplines.get(j).getTag()));
+            insertCell(table,dataDisciplines.get(j).getTagid(),Element.ALIGN_CENTER,1,bf12);
+            insertCell(table,dataDisciplines.get(j).getTag(),Element.ALIGN_CENTER,1,bf12);
+
+        }
+        document.add(tablepara(table));
+
+        document.newPage();
 
 
 
-
+int flag=0;
+        PdfPTable image = new PdfPTable(1);
+        PdfPTable video = new PdfPTable(1);
+        PdfPTable audio = new PdfPTable(1);
 for(int j=0;j<dataPreview.size();j++){
+    if(dataPreview.get(j).isSelected())
 if(Integer.parseInt(dataPreview.get(j).getType())==MEDIA_TYPE_IMAGE) {
-    Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, dataPreview.get(j).getPath());
+        Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, dataPreview.get(j).getPath());
 
 
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-    byte[] byteArray = stream.toByteArray();
-    bitmap.recycle();
-    document.add(Image.getInstance(byteArray));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        bitmap.recycle();
+
+    Image img = Image.getInstance(byteArray);
+    PdfPCell cell = new PdfPCell(Image.getInstance(byteArray));
+        //set the cell alignment
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        //set the cell column span in case you want to merge two or more cells
+
+        cell.setBorderWidth(0f);
+    img.setAlignment(Image.TEXTWRAP);
+    img.scaleAbsolute(200f, 50f);
+    //img.setAbsolutePosition(imageStartX, imageStartY); // Adding Image
+
+
+    PdfPCell cellImage= new PdfPCell(img, true);
+        image.addCell(cellImage);
+image.addCell(dataPreview.get(j).getDescr());
+    flag=1;
+    }
+   else{
+
+    PdfPCell  cell = new PdfPCell(new Phrase(dataPreview.get(j).getPath(), bfBold12));
+        //set the cell alignment
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        //set the cell column span in case you want to merge two or more cells
+
+        cell.setBorderWidth(0f);
+        if(Integer.parseInt(dataPreview.get(j).getType())==MEDIA_TYPE_VIDEO){
+        video.addCell(cell);
+            video.addCell(dataPreview.get(j).getDescr());
+    } else{
+            audio.addCell(cell);
+            audio.addCell(dataPreview.get(j).getDescr());
+        }
+
+
+    }
 }
-}
+
+        table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        cell1 = new PdfPCell(new Phrase("Images", bf12));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+        if(flag==1) {
+            document.add(tablepara(table));
+
+            document.add(tablepara(image));
+
+            document.newPage();
+        }
+
+
+//        document.add(tablepara(video));
+//
+//        document.newPage();
+//        document.add(tablepara(audio));
+//
+//        document.newPage();
+
+       //end
+
+
+
+
+
+//        Paragraph pp=new Paragraph();
+//pp.setAlignment(Element.ALIGN_MIDDLE);
+//        pp.add(image);
+//        document.add(pp);
+//        document.newPage();
+
         //Fifth page
-        PdfPTable table =new PdfPTable(1);
-table.setHorizontalAlignment(table.ALIGN_CENTER);
-        document.add(getPara("Summary:"+data.getSummary()));
-        document.add(getPara("Checked:"+data.getChecked()));
-        document.add(getPara("Prepared:"+data.getPrepared()));
-        document.add(getPara("Approved:"+data.getApproved()));
+//        table = new PdfPTable(1);
+//        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+//
+//        cell1 = new PdfPCell(new Phrase("Summary\n\n"+data.getSummary(), bf12));
+//        //set the cell alignment
+//        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+//        //set the cell column span in case you want to merge two or more cells
+//        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+//
+//        cell1.setBorderWidth(0f);
+//        cell1.setRowspan(1);
+//        //in case there is no text and you wan to create an empty row
+//        cell1.setMinimumHeight(50f);
+//
+//        //add the call to the table
+//        table.addCell(cell1);
+//        document.add(table);
+//        document.add(setSpace());
+//        table = new PdfPTable(2);
+//        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+//        //document.setMargins(10f,10f,100f,10f);
+//
+//
+//
+//        insertCell(table,"Checked By:",Element.ALIGN_CENTER,1,bf12);
+//
+//        insertCell(table,data.getChecked(),Element.ALIGN_CENTER,1,bf12);
+//        insertCell(table,"Prepared By:",Element.ALIGN_CENTER,1,bf12);
+//        insertCell(table,data.getPrepared(),Element.ALIGN_CENTER,1,bf12);
+//        insertCell(table,"Approved By:",Element.ALIGN_CENTER,1,bf12);
+//        insertCell(table,data.getApproved(),Element.ALIGN_CENTER,1,bf12);
+//        table = new PdfPTable(1);
+//        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+//
 
-        document.newPage();
+        PdfPTable tables=setpageSummary(data,bf12,bf12,document.getPageSize().getHeight());
+        document.add(tablepara(tables));
+
+     //   document.newPage();
+// float columnWidths1[] = {1.5f, 3f};
+//        //create PDF table with the given widths
+//  table = new PdfPTable(columnWidths1);
+//        table.getDefaultCell().setVerticalAlignment(Element.ALIGN_CENTER);
+//        insertCell(table,"Summary:",Element.ALIGN_LEFT,1,bfBold12);
+//        insertCell(table,data.getSummary(),Element.ALIGN_LEFT,1,bfBold12);
+//        insertCell(table,"Checked:",Element.ALIGN_LEFT,1,bfBold12);
+//        insertCell(table,data.getChecked(),Element.ALIGN_LEFT,1,bfBold12);
+//        insertCell(table,"Prepared:",Element.ALIGN_LEFT,1,bfBold12);
+//        insertCell(table,data.getPrepared(),Element.ALIGN_LEFT,1,bfBold12);
+//        insertCell(table,"Approved:",Element.ALIGN_LEFT,1,bfBold12);
+//        insertCell(table,data.getApproved(),Element.ALIGN_LEFT,1,bfBold12);
+// pp=new Paragraph();
+//pp.add(table);
+//        pp.setAlignment(Element.ALIGN_MIDDLE);
+//        document.add(pp);
+
+//        document.add(getPara("Summary:"+data.getSummary()));
+//        document.add(getPara("Checked:"+data.getChecked()));
+//        document.add(getPara("Prepared:"+data.getPrepared()));
+//        document.add(getPara("Approved:"+data.getApproved()));
+
+     //   document.newPage();
 
         //Step 5: Close the document
         document.close();
@@ -346,11 +695,216 @@ table.setHorizontalAlignment(table.ALIGN_CENTER);
 
     }
 
+    private static PdfPTable setSpace() {
+        PdfPTable table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        PdfPCell cell1 = new PdfPCell();
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+        return table;
+    }
+
+    private static PdfPTable setpage1(String head,Font hfont,String content1,String content2,Font cfont,float pagersize) {
+
+        Font bfBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD, new BaseColor(0, 0, 0));
+        float[] columnWidths = {1.5f, 3f};
+        //create PDF table with the given widths
+        PdfPTable table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        PdfPCell cell1 = new PdfPCell(new Phrase(head, hfont));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+
+
+
+
+        PdfPCell cell = new PdfPCell(new Phrase(content1, bfBold12));
+        //set the cell alignment
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        //set the cell column span in case you want to merge two or more cells
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+        cell.setBorderWidth(0f);
+
+        cell.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+   //     cell.setMinimumHeight((pagersize-150f));
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(content2, cfont));
+        //set the cell alignment
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        //set the cell column span in case you want to merge two or more cells
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+        cell.setBorderWidth(0f);
+
+        cell.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell.setMinimumHeight((pagersize-150f));
+        table.addCell(cell);
+
+
+        //add the call to the table
+//        PdfPTable table1 = new PdfPTable(1);
+//        table1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//
+//        cell1 = new PdfPCell(new Phrase(head, hfont));
+//        //set the cell alignment
+//        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+//        //set the cell column span in case you want to merge two or more cells
+//        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+//
+//        cell1.setBorderWidth(1f);
+//        cell1.setRowspan(1);
+//        //in case there is no text and you wan to create an empty row
+//        cell1.setMinimumHeight(pagersize);
+//
+//        //add the call to the table
+//        table1.addCell(cell1);
+//
+//table1.addCell(table);
+
+return table;
+    }
+//private static PdfPTable setTable(ArrayList<String> contents,float minimumht,int hal,int val){
+//
+//
+//}
+    private static PdfPTable setpageSummary(DataReport dd,Font hfont,Font cfont,float pagersize) {
+
+
+        float[] columnWidths = {1.5f, 3f};
+        //create PDF table with the given widths
+        PdfPTable table = new PdfPTable(1);
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        PdfPCell cell1 = new PdfPCell(new Phrase("Summary", hfont));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+       //cell1.setMinimumHeight(50f);
+
+        //add the call to the table
+        table.addCell(cell1);
+
+
+
+
+    cell1 = new PdfPCell(new Phrase(dd.getSummary(), cfont));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+       // cell1.setMinimumHeight((pagersize-200));
+        table.addCell(cell1);
+
+        PdfPTable table1 = new PdfPTable(2);
+        //add the call to the table
+        insertCell(table1,"Checked By:",Element.ALIGN_LEFT,1,cfont);
+
+        insertCell(table1,dd.getChecked(),Element.ALIGN_RIGHT,1,cfont);
+        insertCell(table1,"Prepared By:",Element.ALIGN_LEFT,1,cfont);
+        insertCell(table1,dd.getPrepared(),Element.ALIGN_RIGHT,1,cfont);
+        insertCell(table1,"Approved By:",Element.ALIGN_LEFT,1,cfont);
+        insertCell(table1,dd.getApproved(),Element.ALIGN_RIGHT,1,cfont);
+table.addCell(table1);
+
+        return table;
+    }
+
+    private static void insertCellHead(PdfPTable table, String text, int align, int colspan, Font font){
+
+        //create a new cell with the specified Text and Font
+        PdfPCell cell = new PdfPCell(new Phrase(text.trim(), font));
+        //set the cell alignment
+        cell.setHorizontalAlignment(align);
+        //set the cell column span in case you want to merge two or more cells
+        cell.setColspan(colspan);
+        cell.setBorderWidth(1f);
+        cell.setPadding(3f);
+        //in case there is no text and you wan to create an empty row
+        if(text.trim().equalsIgnoreCase("")){
+            cell.setMinimumHeight(15f);
+
+        }
+
+        //add the call to the table
+
+
+        table.addCell(cell);
+    }
+
+    private static void insertCell(PdfPTable table, String text, int align, int colspan, Font font){
+
+        //create a new cell with the specified Text and Font
+        PdfPCell cell = new PdfPCell(new Phrase(text.trim(), font));
+        //set the cell alignment
+        cell.setHorizontalAlignment(align);
+        //set the cell column span in case you want to merge two or more cells
+        cell.setColspan(colspan);
+        cell.setBorderWidth(0f);
+        cell.setPadding(5f);
+        //in case there is no text and you wan to create an empty row
+        if(text.trim().equalsIgnoreCase("")){
+            cell.setMinimumHeight(10f);
+
+        }
+
+        //add the call to the table
+
+
+        table.addCell(cell);
+    }
+
     private static Paragraph getPara(String i) {
         Paragraph p1 = new Paragraph(i);
         Font paraFont= new Font(Font.FontFamily.COURIER);
         paraFont.setSize(10.9f);
         p1.setAlignment(Element.ALIGN_CENTER);
+
+        p1.setFont(paraFont);
+
+        return p1;
+    }
+    private static Paragraph getPara1(String i) {
+        Paragraph p1 = new Paragraph(i);
+        Font paraFont= new Font(Font.FontFamily.COURIER);
+        paraFont.setSize(20f);
+        p1.setAlignment(Element.ALIGN_MIDDLE);
+
         p1.setFont(paraFont);
 
         return p1;
@@ -400,7 +954,7 @@ table.setHorizontalAlignment(table.ALIGN_CENTER);
         emailIntent.setType("text/plain");
        // emailIntent .setType("vnd.android.cursor.dir/email");
         String to[] = {"asd@gmail.com"};
-        emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
+     //   emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
 // the attachment
         Log.e("filesize",file.size()+"");
         for(int j=0;j<file.size();j++){
@@ -411,7 +965,7 @@ table.setHorizontalAlignment(table.ALIGN_CENTER);
 
 // the mail subject
         emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, urr);
-        emailIntent .putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        emailIntent .putExtra(Intent.EXTRA_SUBJECT, "Plantdesk Report");
         activity.startActivity(Intent.createChooser(emailIntent , "Send email..."));
     }
     public static PdfPTable getParatable(String ss){
@@ -420,6 +974,7 @@ table.setHorizontalAlignment(table.ALIGN_CENTER);
         Paragraph para = new Paragraph(ss, font);
         para.setLeading(0, 1);
         PdfPTable table = new PdfPTable(1);
+
         table.setWidthPercentage(100);
 
         PdfPCell cell = new PdfPCell();
@@ -470,6 +1025,101 @@ table.setHorizontalAlignment(table.ALIGN_CENTER);
 
         return output;
     }
+    private void copyFile(String inputPath, String inputFile, String outputPath) {
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+
+            //create output directory if it doesn't exist
+            File dir = new File (outputPath);
+            if (!dir.exists())
+            {
+                dir.mkdirs();
+            }
 
 
+            in = new FileInputStream(inputPath + inputFile);
+            out = new FileOutputStream(outputPath + inputFile);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+
+            // write the output file (You have now copied the file)
+            out.flush();
+            out.close();
+            out = null;
+
+        }  catch (FileNotFoundException fnfe1) {
+            Log.e("tag", fnfe1.getMessage());
+        }
+        catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
+
+    }
+public static ArrayList<DataTag> compare(ArrayList<DataTag> first, ArrayList<DataTag> second){
+    ArrayList<DataTag> result = new ArrayList<>();
+    int j,i;
+    for ( i =0; i <first.size() ; i++) {
+Log.e("i",i+""+first.get(i).getTagid());
+        for ( j = 0; j <second.size() ; j++) {
+            if(first.get(i).getTagid().equals(second.get(j).getTagid())){
+
+
+                break;
+            }
+
+            Log.e("j",j+" "+second.get(j).getTagid());
+        }
+if(j==second.size())
+    result.add(first.get(i));
+    }
+//    for (DataTag dd:first
+//         ) {
+//        for (DataTag d1:second
+//             ) {
+//            if(dd.getTagid().equals(d1.getTagid())){
+//
+//                result.remove(dd);
+//            }
+//        }
+//
+//}
+        return result;
+}
+public static void customToastSave(String text,Activity activity,String n){
+
+    View toastView = activity.getLayoutInflater().inflate(R.layout.toastcustomview, null);
+    Drawable dd=activity.getResources().getDrawable(R.drawable.ic_delete_black_24dp);
+
+    dd.setColorFilter(new
+            PorterDuffColorFilter(activity.getResources().getColor(R.color.white),PorterDuff.Mode.SRC_IN));
+    // Initiate the Toast instance.
+    Toast toast = new Toast(activity);
+    // Set custom view in toast.
+    toast.setView(toastView);
+    TextView tt=(TextView)toastView.findViewById(R.id.customToastText);
+  tt.setText(text);
+  if(n.equals("save"))
+      tt.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_save_black_24dp),null,null,null);
+
+  else if(n.equals("done"))
+  tt.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_done_white_24dp),null,null,null);
+
+  else if(n.equals("delete"))
+      tt.setCompoundDrawablesWithIntrinsicBounds(dd,null,null,null);
+  else
+      tt.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+
+    toast.setDuration(Toast.LENGTH_SHORT);
+    toast.setGravity(Gravity.BOTTOM, 0,100);
+
+    toast.show();
+}
 }

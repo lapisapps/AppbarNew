@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.example.pentagon.appbar.Fragments.FragmentDataViewImage;
 import com.example.pentagon.appbar.Fragments.FragmentDataViewVideo;
 import com.example.pentagon.appbar.Fragments.PageReport1;
 import com.example.pentagon.appbar.Fragments.PageReport2;
+import com.example.pentagon.appbar.Fragments.PageReport5;
 
 import java.util.ArrayList;
 
@@ -73,7 +75,13 @@ public static int viewpos=-1;
         description = (EditText) layout.findViewById(R.id.editText);
         description.setText(desc);
         save = (Button) layout.findViewById(R.id.button9);
-        if(Utility.savemenu.getTitle().equals("edit")) {
+        if(fragment.getClass().equals(PageReport2.class))
+        {
+            edit = false;
+            description.setFocusable(false);
+
+        }
+        else if(Utility.savemenu.getTitle().equals("edit")) {
             edit = false;
             description.setFocusable(false);
         }  else
@@ -100,7 +108,10 @@ public static int viewpos=-1;
 
                     PageReport2.description.setText(description.getText().toString());
                 }
+                else if(fragment.getClass().equals(PageReport5.class)){
 
+                    PageReport5.summary.setText(description.getText().toString());
+                }
                 else if(fragment.getClass().equals(FragmentDataViewChild.class)){
                     int i=0,j=-1;
                     for (DataPreview dd:CreateReport.dataPreviews
@@ -145,8 +156,11 @@ alertDialog.setContentView(layout);
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(description, InputMethodManager.SHOW_IMPLICIT);
         Window window = alertDialog.getWindow();
+
+
+    window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-     window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
     }
 
 

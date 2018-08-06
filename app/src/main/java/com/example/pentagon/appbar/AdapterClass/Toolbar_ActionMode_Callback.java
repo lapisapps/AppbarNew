@@ -37,7 +37,7 @@ public class Toolbar_ActionMode_Callback implements ActionMode.Callback {
     private Activity context;
     private RecyclerViewAdapterReports recyclerView_adapter;
 
-    private ArrayList<DataReport> message_models;
+    public ArrayList<DataReport> message_models;
     private boolean isListViewFragment;
 
 ReportsFragment reportsFragment;
@@ -82,10 +82,11 @@ this.reportsFragment=reportsFragment;
 
 
                     //If current fragment is recycler view fragment
-                    Fragment recyclerFragment = new ReportsFragment();//Get recycler view fragment
-                    if (recyclerFragment != null)
+                //    Fragment recyclerFragment = new ReportsFragment();//Get recycler view fragment
+                    if (reportsFragment != null)
                         //If recycler fragment not null
-                        ((ReportsFragment) recyclerFragment).deleteRows();//delete selected rows
+                        reportsFragment.deleteRows();
+                    //delete selected rows
 
                 break;
             case R.id.action_share:
@@ -148,7 +149,7 @@ if(fil!=null)
                 mode.finish();//Finish action mode
                 break;
             case R.id.action_sync:
-                Toast.makeText(context, "You selected Forward menu.", Toast.LENGTH_SHORT).show();//Show toast
+              //  Toast.makeText(context, "You selected Forward menu.", Toast.LENGTH_SHORT).show();//Show toast
                 mode.finish();//Finish action mode
                 break;
 
@@ -160,12 +161,12 @@ public static File getPdfPath(DataReport model,Activity context){
        File ff = null;
 
     try {
-        String filepath=new SqliteDb(context).getPdf(model.getId());
-        if(filepath.isEmpty())
-        {
+//        String filepath=new SqliteDb(context).getPdf(model.getId());
+//        if(filepath.isEmpty())
+//        {
             if(ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
 
-                ff=    Utility.createPdf(model,new SqliteDb(context).getPrjctsTags(model.getPrjct(),model.getId()),new SqliteDb(context).getReportData(model.getId()));
+                ff=    Utility.createPdf(context,model,new SqliteDb(context).getPrjctsTags(model.getPrjct(),model.getId()),new SqliteDb(context).getReportData(model.getId()));
                 new SqliteDb(context).savePdf( ff.getAbsolutePath(),model.getId())  ;
 
             }else {
@@ -174,11 +175,11 @@ public static File getPdfPath(DataReport model,Activity context){
             }
 
 
-        }else{
-
-             ff =new File(filepath);
-
-        }
+//        }else{
+//
+//             ff =new File(filepath);
+//
+//        }
 
 
     } catch (IOException e) {

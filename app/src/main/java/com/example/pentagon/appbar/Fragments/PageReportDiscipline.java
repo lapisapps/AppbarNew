@@ -6,18 +6,26 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
 import com.example.pentagon.appbar.AddDisciplineDialog;
+import com.example.pentagon.appbar.AddProjectDialog;
 import com.example.pentagon.appbar.AddTagDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
+import com.example.pentagon.appbar.ProjectListDialog;
 import com.example.pentagon.appbar.R;
+import com.example.pentagon.appbar.SharedPreferenceClass;
+import com.example.pentagon.appbar.SqliteDb;
+import com.example.pentagon.appbar.Utility;
 
 import java.util.ArrayList;
 
@@ -82,19 +90,58 @@ public static RecyclerView recyclerView;
         view=  inflater.inflate(R.layout.viewdiscipline, container, false);
 
 initilize();
-if(CreateReport.dataDisciplines!=null)
+if(CreateReport.dataDisciplines==null)
+    CreateReport.dataDisciplines=new ArrayList<>();
+
     setView(getActivity(),CreateReport.dataDisciplines);
         return view;
 
     }
 
     private void initilize() {
+        ((Button)view.findViewById(R.id.copy)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Utility.savemenu.getTitle().equals("edit")){
+
+                    Utility.optionItemSave(getActivity(),0);
+                }
+
+                loadcopy();
+            }
+        });
         recyclerView=view.findViewById(R.id.recyclerView);
         addtag=view.findViewById(R.id.addtag);
         addtag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AddDisciplineDialog(getActivity(),0);
+
+                PopupMenu popup = new PopupMenu(getContext(), addtag);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.popupaddnew, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getTitle().equals("New")) {
+                            if(Utility.savemenu.getTitle().equals("edit")){
+
+                                Utility.optionItemSave(getActivity(),0);
+                            }
+                            new AddDisciplineDialog(getActivity(), 0);
+                        }  else{
+                            if(Utility.savemenu.getTitle().equals("edit")){
+
+                                Utility.optionItemSave(getActivity(),0);
+                            }
+                            new ProjectListDialog(getActivity(),2);}
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+
             }
         });
     }
@@ -137,6 +184,7 @@ if(CreateReport.dataDisciplines!=null)
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
     public static void setView(final Activity context, ArrayList<DataTag> dataTags){
         CreateReport.dataDisciplines=dataTags;
         Log.e("tagss",dataTags.size()+"");
@@ -170,6 +218,15 @@ if(CreateReport.dataDisciplines!=null)
 //
 //            }
 //        }));
+
+    }
+
+    public void loadcopy(){
+
+      String id=  new SharedPreferenceClass().getStoredValueLastDiscipline(getContext());
+      ArrayList<DataTag> dataTags=new SqliteDb(getContext()).getReportDiscipline(id);
+      CreateReport.dataDisciplines.addAll(Utility.compare(dataTags,CreateReport.dataDisciplines));
+      setView(getActivity(),  CreateReport.dataDisciplines);
 
     }
 }

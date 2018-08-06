@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,19 +35,60 @@ import java.util.ArrayList;
 /**
  * Created by Ravi Tamada on 18/05/16.
  */
-public class RecyclerViewAdapterProjectSt extends RecyclerView.Adapter<RecyclerViewAdapterProjectSt.MyViewHolder> {
+public class RecyclerViewAdapterProjectSt extends RecyclerView.Adapter<RecyclerViewAdapterProjectSt.MyViewHolder> implements Filterable {
 
-    private final ArrayList<PrjctData> albumList;
-    //    public static ArrayList<String> albumList1;
+    private ArrayList<PrjctData> albumList;
+      public  ArrayList<PrjctData> albumListf;
     private Activity mContext;
     //  private List<S> albumList;
 
     private String type;
     private int mExpandedPosition=-1;
     RecyclerView recyclerView;
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView prjct,desc,id,edit,delete;
+    private static int size;
 
+    @Override
+
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    albumList = albumListf;
+                } else {
+                    ArrayList<PrjctData> filteredList = new ArrayList<>();
+                    for (PrjctData row : albumListf) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getPrjct().toLowerCase().contains(charString.toLowerCase()) || row.getId().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    albumList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = albumList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                albumList = (ArrayList<PrjctData>) filterResults.values;
+              //  size=albumList.size();
+                // refresh the list with filtered data
+                notifyDataSetChanged();
+
+
+            }
+        };
+    }
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView prjct,desc,id;
+ImageButton edit,delete;
 View v;
 
 
@@ -56,8 +100,8 @@ View v;
             prjct=(TextView) view.findViewById(R.id.tag);
             desc=(TextView) view.findViewById(R.id.textView7);
 
-            edit=(TextView) view.findViewById(R.id.edit);
-            delete=(TextView) view.findViewById(R.id.delete);
+            edit= view.findViewById(R.id.edit);
+            delete= view.findViewById(R.id.delete);
          //   recyclerView=(RecyclerView) view.findViewById(R.id.prjcttags);
         }
     }
@@ -66,6 +110,7 @@ View v;
     public RecyclerViewAdapterProjectSt(Activity mContext, ArrayList<PrjctData> albumList, RecyclerView recyclerView) {
         this.mContext = mContext;
         this.albumList = albumList;
+        this.albumListf = albumList;
         this.recyclerView=recyclerView;
         this.type=type;
 
@@ -143,7 +188,8 @@ View v;
                             new SqliteDb(mContext).deletePrjct(product.getId());
                             dialog.dismiss();
                             // new ResponseHandler(context,ResponseHandler.this,jsonObjectCall);
-                            Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+                            Utility.customToastSave("Deleted",mContext,"delete");
+                           // Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
                             albumList.remove(position);
                             notifyDataSetChanged();
                         }
@@ -221,110 +267,16 @@ ArrayList<DataTag> dataTags=new SqliteDb(mContext).getPrjctsTags(prjct,"");
 //        popup.show();
     }
 
-    /**
-     * Click listener for popup menu items
-     */
-//    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-//
-//        public MyMenuItemClickListener() {
-//        }
-//
-//        @Override
-//        public boolean onMenuItemClick(MenuItem menuItem) {
-//            switch (menuItem.getItemId()) {
-//                case R.id.action_add_favourite:
-//                    Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                case R.id.action_play_next:
-//                    Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                default:
-//            }
-//            return false;
-//        }
-//    }
+
 
     @Override
     public int getItemCount() {
+        //size=albumList.size();
         return albumList.size();
     }
-//    private void deletearrang(final String noidd) {
-//
-//
-//        Map<String, String> params = new HashMap<>();
-//        //jObj = new JSONObject();
-//        params.put("markid", noidd);
-//
-//
-//
-//        Call<JsonObject> jsonObjectCall = new Retrofit_Helper().getRetrofitBuilder().getfromServer(Utility.markremoveurl,params);
-//        jsonObjectCall.clone().enqueue(new ResponseHandler(mContext, new ResponseCallback() {
-//            @Override
-//            public void getResponse(int code, JsonObject jsonObject) {
-//
-//                JSONObject jsonObj = null;
-//                try {
-//                    jsonObj = new JSONObject(jsonObject.toString());
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-////{"users":[{"admin_id":"admin","password":"admin"}]}
-//
-//                //JSONObject jsonObj = new JSONObject(datafromserver);
-//
-//                if (jsonObj != null) {
-//                    Log.d("getfromserver", "b4 extract");
-//                    JSONObject actor = null;
-//
-//
-//                    try {
-//                        if (jsonObj.has("mark")) {
-//                            if(jsonObj.getString("mark").equals("true")){
-//                                Toast.makeText(mContext, "Removed", Toast.LENGTH_SHORT).show();
-////for(int i=0;i<station.size();i++){
-////
-////    if(station.get(i).getFaculty_id().equals(noid)){
-////        station.remove(i);
-////        break;
-////
-////    }
-////}
-//                                Utility.MarkViewActivity.getNotification();
-//                                //  Log.i("ddd",station.size()+"");
-////adapter1.notifyDataSetChanged();
-////setView();
-//
-//                                //  JSONArray login_array = jsonObj.getJSONArray("faculty");
-//
-//                            }else {
-//                                Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
-//
-//
-//                            }}
-//
-//
-//                    } catch (Exception eee) {
-//                        eee.printStackTrace();
-//                    }
-//                    //     setView();
-//                }
-//            }
-//            @Override
-//            public void getFailure(Call<JsonObject> call, int code) {
-//                if (code==1) {
-//
-//                    Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//                    Toast.makeText(mContext, "Can't Connect with server", Toast.LENGTH_SHORT).show();
-//
-//                }
-//                if( ResponseHandler.progressDialog!=null)
-//                    ResponseHandler.progressDialog.dismiss();
-//
-//            }
-//
-//
-//        }, jsonObjectCall,1));
-//    }
+    public  int getSize(){
+
+        return albumList.size();
+    }
+
 }

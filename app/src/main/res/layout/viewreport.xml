@@ -11,108 +11,166 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-<android.support.constraint.ConstraintLayout
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout_editor_absoluteY="81dp">
+    <android.support.constraint.ConstraintLayout
 
-    <TextView
-        android:gravity="center_vertical"
-        android:id="@+id/textView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/c3_light"
-        android:padding="5dp"
-        android:text="Report"
-        android:fontFamily="serif"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="81dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/c3_light"
+            android:fontFamily="serif"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:paddingLeft="10dp"
 
 
-        android:paddingLeft="10dp"
+            android:text="Report"
 
-        android:textColor="@color/white"
-        android:textSize="18dp"  android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
 
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout3"
-        android:layout_width="280dp"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout4"
+            android:layout_width="0dp"
 
-        android:layout_height="59dp"
-        android:layout_marginBottom="27dp"
-        android:layout_marginEnd="62dp"
-        android:layout_marginLeft="42dp"
-        android:layout_marginRight="62dp"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="60dp"
-        android:layout_weight="0.5"
-        android:elevation="3dp"
-android:background="@drawable/edittextshadow"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline2">
+            android:layout_height="59dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="35dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/edittextshadow"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
+            app:layout_constraintEnd_toStartOf="@+id/guideline14"
+            app:layout_constraintStart_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintVertical_chainStyle="spread">
 
-        <AutoCompleteTextView
-            android:id="@+id/reportname"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
+            <AutoCompleteTextView
+android:singleLine="true"
+                android:maxLength="14"
+                android:maxLines="1"
+                android:imeOptions="actionNext"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMaxTextSize="14dp"
+                android:autoSizeMinTextSize="5dp"
+                android:id="@+id/reportno"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
 
-            android:hint="name"
-            android:paddingBottom="2dp"
-            android:paddingLeft="5dp"
-            android:textSize="14dp" />
-    </android.support.design.widget.TextInputLayout>
+                android:hint="Report No"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:textSize="14dp" />
+        </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        android:layout_width="282dp"
-        android:layout_height="150dp"
-        android:layout_marginBottom="23dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginLeft="42dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginStart="42dp"
-        android:layout_weight="0.5"
-        android:background="@drawable/edittextshadow"
-        android:elevation="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            android:layout_width="0dp"
 
-        <AutoCompleteTextView
-            android:paddingTop="5dp"
-            android:gravity="top"
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-android:text=""
-            android:hint="Description"
-            android:paddingBottom="2dp"
-            android:paddingLeft="5dp"
-            android:textSize="14dp" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="59dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/edittextshadow"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+            app:layout_constraintEnd_toStartOf="@+id/guideline14"
+            app:layout_constraintStart_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.10" />
+            <AutoCompleteTextView
+                android:singleLine="true"
+                android:maxLength="14"
+                android:maxLines="1"
+                android:imeOptions="actionNext"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMaxTextSize="14dp"
+                android:autoSizeMinTextSize="5dp"
+                android:id="@+id/reportname"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.72" />
-</android.support.constraint.ConstraintLayout>
+                android:hint="name"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:textSize="14dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            android:layout_width="0dp"
+            android:layout_height="143dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/edittextshadow"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintEnd_toStartOf="@+id/guideline14"
+            app:layout_constraintStart_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+            <AutoCompleteTextView
+
+
+
+
+
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+             android:focusable="true"
+                android:hint="Description"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:editable="false"
+                android:text=""
+                android:textSize="14dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.10" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.73" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.06686047" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9011628" />
+    </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

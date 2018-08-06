@@ -3,12 +3,17 @@ package com.example.pentagon.appbar.Fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TableRow;
@@ -26,12 +32,17 @@ import android.widget.Toast;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterAreaSt;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterProjectSt;
 import com.example.pentagon.appbar.AddAreaDialog;
+import com.example.pentagon.appbar.AddDisciplineDialog;
 import com.example.pentagon.appbar.AddProjectDialog;
+import com.example.pentagon.appbar.AreaListDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.HomeActivity;
+import com.example.pentagon.appbar.ImportListDialog;
+import com.example.pentagon.appbar.ProjectListDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
+import com.example.pentagon.appbar.Utility;
 
 import java.util.ArrayList;
 
@@ -53,8 +64,8 @@ public class SettingFragment4 extends Fragment {
     private String mParam1;
     private String mParam2;
     static View v;
-  public   static RecyclerViewAdapterProjectSt adapterprjcts;
-static ArrayList<PrjctData> prjctData;
+
+
     static ArrayList<DataTag> areaData;
 TableRow prjct,tag,system,area,discipline;
     TableRow rowprjct,rowtag,rowsystem,rowarea,rowdiscipline,rowareaprjct;
@@ -69,7 +80,13 @@ TableRow prjct,tag,system,area,discipline;
     static RecyclerView recycarea;
     private static RecyclerViewAdapterAreaSt adapterareas;
     static int height;
-    static Spinner spinner;
+    public static Spinner spinner;
+
+
+    Button searchbtn,cancelbtn,loadbtn;
+    AutoCompleteTextView searchtxt;
+    ConstraintLayout searchlay;
+    private ArrayList<PrjctData> prjctData;
 
     public SettingFragment4() {
         // Required empty public constructor
@@ -136,6 +153,7 @@ initilize();
 
                     areaData=new SqliteDb(getContext()).getPrjctsAreas(tag.getId(),"");
                    setAreaRecycle(getActivity());
+                    adapterareas.getFilter().filter(searchtxt.getText().toString());
                     //setProjectTags(0);
 //                if(prjcttags.size()>0){
 //                    prjcttags.get(0).setSelected(true);
@@ -172,13 +190,37 @@ initilize();
 addarea.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-if(areah.getTag().toString().equals("0"))
-    expandArea();
+        searchtxt.setText("");
+
 if((PrjctData) spinner.getSelectedItem()==null)
     Toast.makeText(getActivity(), "No projects found", Toast.LENGTH_SHORT).show();
      else
-        AddAreaDialog.prjctData=(PrjctData) spinner.getSelectedItem();
-        new AddAreaDialog(getActivity(),1);
+{
+
+    PopupMenu popup = new PopupMenu(getContext(), addarea);
+    //Inflating the Popup using xml file
+    popup.getMenuInflater()
+            .inflate(R.menu.popupaddnew, popup.getMenu());
+
+    //registering popup with OnMenuItemClickListener
+    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        public boolean onMenuItemClick(MenuItem item) {
+            PrjctData pp=(PrjctData) spinner.getSelectedItem();
+            if(item.getTitle().equals("New")) {
+                AddAreaDialog.prjctData=pp;
+                new AddAreaDialog(getActivity(),1);
+            }  else{
+
+                new AreaListDialog(getActivity(),0,pp.getId(),"setting");
+              }
+            return true;
+        }
+    });
+
+    popup.show();
+}
+
+
     }
 });
        area=v.findViewById(R.id.area);
@@ -195,45 +237,88 @@ if((PrjctData) spinner.getSelectedItem()==null)
     areah=v.findViewById(R.id.harea);
 
 
-//       prjct.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View v) {
-//
-////               if(prjctData==null)
-////                   prjctData= new SqliteDb(getActivity()).getPrjcts();
-////               animate(rowprjct,prjcth,1);
-////               if(areah.getTag().toString().equals("1"))
-////               animate(rowarea,areah,2);
-//               expandPrjctRow();
-//
-//
-//           }
-//       });
-////       discipline.setOnClickListener(new View.OnClickListener() {
-////           @Override
-////           public void onClick(View v) {
-////               animate(rowdiscipline,disciplineh);
-////           }
-////       });
-//
-//        area.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//
-//
-//
-//expandArea();
-//
-//        }
-//    });
-        prjctData= new SqliteDb(getActivity()).getPrjcts();
-        areaData= new SqliteDb(getActivity()).getAreas();
-        setPrjctRecycle(getActivity());
+        searchtxt=v.findViewById(R.id.searchtext);
+        searchlay=v.findViewById(R.id.searchlay);
+       // searchlay.setVisibility(View.GONE);
+        loadbtn=v.findViewById(R.id.load);
+
+        searchbtn=v.findViewById(R.id.search);
+        cancelbtn=v.findViewById(R.id.cancel);
+        setSearchView();
+
+        loadbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchtxt.setText("");
+new ImportListDialog(getActivity(),"area");
+            }
+        });
+
+
+
+      prjctData= new SqliteDb(getActivity()).getPrjcts();
+        areaData= new SqliteDb(getActivity()).getAreas("");
+     //   setPrjctRecycle(getActivity());
 
         setAreaRecycle(getActivity());
-        expandArea();
+setAreaView();
 }
+    private void setSearchView() {
+        cancelbtn.setVisibility(View.GONE);
+        searchbtn.setTag("search");
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+               // searchlay.setVisibility(View.VISIBLE);
+                loadbtn.setVisibility(View.GONE);
+              //  searchbtn.setVisibility(View.GONE);
+                addprjct.setVisibility(View.GONE);
+                searchtxt.setText("");
+
+
+            }
+        });
+        cancelbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //searchbtn.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_search_green_24dp),null,null,null);
+              //  searchlay.setVisibility(View.GONE);
+                 loadbtn.setVisibility(View.VISIBLE);
+               // searchbtn.setVisibility(View.VISIBLE);
+                addprjct.setVisibility(View.VISIBLE);
+                searchtxt.setText("");
+                cancelbtn.setVisibility(View.GONE);
+                adapterareas.getFilter().filter("");
+
+            }
+        });
+        searchtxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //     filter(searchtext.getText().toString());
+                Log.i("textt",searchtxt.getText().toString()+s);
+                adapterareas.getFilter().filter(searchtxt.getText().toString());
+                if(searchtxt.getText().toString().isEmpty())
+                    cancelbtn.setVisibility(View.GONE);
+                else
+                    cancelbtn.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+
+        });
+    }
     private void expandArea() {
         if(areah.getTag().toString().equals("0")){
 
@@ -267,7 +352,7 @@ if((PrjctData) spinner.getSelectedItem()==null)
             prjcth.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_less_black_24dp, 0);
             prjcth.setTag("1");
             rowprjct.setVisibility(View.VISIBLE);
-            setPrjctRecycle(getActivity());
+            //setPrjctRecycle(getActivity());
         }else
         {
 
@@ -283,47 +368,7 @@ if((PrjctData) spinner.getSelectedItem()==null)
         }
     }
 
-    public boolean animate(View view,final TextView icon,int n){
-        Animation animation = null;
-        boolean b=false;
-        if(icon.getTag().toString().equals("0")) {
-            animation = AnimationUtils.loadAnimation(getActivity(), R.anim.animexpand);
-            icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_less_black_24dp, 0);
-            icon.setTag("1");
-b=true;
-            view.setVisibility(View.VISIBLE);
-            if(n==1){
-                animation.setDuration(400);
-                view.setAnimation(animation);
-                view.animate();
-                animation.start();
-          setPrjctRecycle(getActivity());
 
-            }
-            else{
-                animation.setDuration(400);
-                view.setAnimation(animation);
-                view.animate();
-                animation.start();
-              setAreaRecycle(getActivity());
-
-            }
-        }   else {
-            icon.setTag("0");
-            icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
-            animation = AnimationUtils.loadAnimation(getActivity(), R.anim.animless);
-            view.setVisibility(View.GONE);
-            animation.setDuration(400);
-            view.setAnimation(animation);
-            view.animate();
-            animation.start();
-        }
-
-
-
-
-        return b;
-    }
 public void setVisiblefalse(View view,TextView icon){
 
     icon.setTag("0");
@@ -368,7 +413,7 @@ public void setVisiblefalse(View view,TextView icon){
             @Override
             public void onChanged() {
                 super.onChanged();
-                areacount.setText(areaData.size()+" Areas");
+                areacount.setText(adapterareas.getSize()+" Areas");
             }
         });
 
@@ -386,100 +431,8 @@ public void setVisiblefalse(View view,TextView icon){
 //        }));
     }
 
-    private static void setPrjctRecycle(final Activity context) {
 
 
-        prjctcount.setText(prjctData.size()+" Projects");
-        adapterprjcts=null;
-        recycprjcts=v.findViewById(R.id.recycprjcts);
-        adapterprjcts = new RecyclerViewAdapterProjectSt(context,prjctData,recycprjcts);
-        recycprjcts.setVisibility(View.VISIBLE);
-
-        recycprjcts.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.VERTICAL,false);
-        // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        recycprjcts.setNestedScrollingEnabled(true);
-
-        // recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(AddEventActivity.this,GridLayoutManager.HORIZONTAL,false));
-        recycprjcts.setLayoutManager(mLayoutManager);
-
-              //  if(prjctData.size()>6){
-        ViewGroup.LayoutParams params=recycprjcts.getLayoutParams();
-        params.height=height*62/100;
-        if(prjctData.size()*35>height*62/100)
-                    recycprjcts.setLayoutParams(params);
-   // }
-        //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recycprjcts.setItemAnimator(new DefaultItemAnimator());
-        recycprjcts.setAdapter(adapterprjcts);
-
-
-        adapterprjcts.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-           prjctcount.setText(prjctData.size()+" Projects");
-            }
-        });
-
-//        recycprjcts.addOnItemTouchListener(new RecyclerItemClickListener(context, recycprjcts, new RecyclerItemClickListener.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//               TextView desc=view.findViewById(R.id.textView7);
-////                if (expandpos == position) {
-////                    Log.i("ddd","onclick2exp"+expandpos);
-//////                         rcview.getChildAt(expandpos).findViewById(R.id.expand).setVisibility(View.GONE);
-//////
-//////                         rcview.getChildAt(expandpos).findViewById(R.id.expand).startAnimation(animationUp);
-//////                         expandpos=-1;
-////                    return;
-////                }
-////                for(int j=0;j<recycprjcts.getChildCount();j++){
-////
-////                    recycprjcts.getChildAt(j).findViewById(R.id.textView7).setVisibility(View.GONE);
-////
-////                  //  recycprjcts.getChildAt(j).findViewById(R.id.expand).startAnimation(animationUp);
-////                }
-////
-////                recycprjcts.scrollToPosition(position);
-//             //animate(desc,context);
-//
-//
-//            }
-//
-//            @Override
-//            public void onLongItemClick(View view, int position) {
-//
-//            }
-//        }));
-
-    }
-        public static boolean animate(View view,Context context){
-        Animation animation = null;
-        boolean b=false;
-        if(view.getTag().toString().equals("0")) {
-            animation = AnimationUtils.loadAnimation(context, R.anim.animexpand);
-         //   icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_less_black_24dp, 0);
-            view.setTag("1");
-
-            view.setVisibility(View.VISIBLE);
-b=true;
-        }   else {
-            view.setTag("0");
-           // icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
-            animation = AnimationUtils.loadAnimation(context, R.anim.animless);
-            view.setVisibility(View.GONE);
-        }
-
-
-
-        animation.setDuration(600);
-        view.setAnimation(animation);
-        view.animate();
-        animation.start();
-        return b;
-    }
     public static void setImages(final Context context) {
 
     }
@@ -493,10 +446,10 @@ b=true;
     public void onResume() {
 
         super.onResume();
-        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
-        actionBar.setTitle("Settings");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+//        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
+//        actionBar.setTitle("Settings");
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
 
     }
 
@@ -518,13 +471,7 @@ b=true;
         return super.onOptionsItemSelected(item);
     }
 
-    public static void loadPrjctsset(Activity context) {
 
-        prjctData= new SqliteDb(context).getPrjcts();
-        setPrjctRecycle(context);
-        recycprjcts.scrollToPosition(prjctData.size()-1);
-
-    }
     public static void loadareaset(Activity context) {
 
         areaData= new SqliteDb(context).getPrjctsAreas(((PrjctData)spinner.getSelectedItem()).getId(),"");

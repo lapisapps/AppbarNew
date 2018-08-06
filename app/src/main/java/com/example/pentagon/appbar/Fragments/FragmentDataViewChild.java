@@ -19,7 +19,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Chronometer;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -118,12 +120,60 @@ public DataPreview getDataPreview(){
 
         dataPreview = (DataPreview) getArguments().getSerializable("data");
         viewpagerpos=getArguments().getInt("position");
+        if(Integer.parseInt(dataPreview.getType())==Main2Activity.MEDIA_TYPE_AUDIO)
+        view=inflater.inflate(R.layout.fragment_fragment_data_viewaudio, container, false);
+      else
         view=inflater.inflate(R.layout.fragment_fragment_data_view, container, false);
+
         initial();
         return view;
     }
     public void initial(){
+        final CheckBox select=(CheckBox)view.findViewById(R.id.add);
+        select.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Boolean b=false;
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
 
+                    if(Utility.savemenu.getTitle().equals("edit"))
+                        return true;
+
+                }
+                return  false;
+            }
+        });
+        select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                setSelect(isChecked);
+            }
+        });
+        if(dataPreview.isSelected()) {
+ select.setChecked(true);
+
+        }
+        else {
+            select.setChecked(false);
+
+        }
+//       select.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(select.getTag().toString().equals("0")) {
+//                    select.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_done_black_24dp), null);
+//              select.setTag("1");
+//              setSelect(true);
+//                }
+//                else {
+//                   select.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_add_white_24dp), null);
+//
+//                    select.setTag("0");
+//                    setSelect(false);
+//                }
+//
+//            }
+//        });
         ImageView imageView=view.findViewById(R.id.imageView);
         final TextView desc=view.findViewById(R.id.description);
         desc.setText(dataPreview.getDescr());
@@ -501,5 +551,16 @@ mMediaPlayer.start();
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
+public void setSelect(boolean bb){
+int i=0,j=0;
+    for (DataPreview dd:CreateReport.dataPreviews
+            ) {
+        if(dd.getId().equals(dataPreview.getId())){
 
+            CreateReport.dataPreviews.get(i).setSelected(bb);
+            break;
+        }
+        i++;
+    }
+}
 }

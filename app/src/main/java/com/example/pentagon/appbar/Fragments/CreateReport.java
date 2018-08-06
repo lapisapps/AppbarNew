@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataReport;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingTag;
+import com.example.pentagon.appbar.HomeActivity;
 import com.example.pentagon.appbar.PreviewDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
@@ -79,7 +82,7 @@ public class CreateReport extends Fragment    implements View.OnTouchListener {
     Animation hide_fab_3;
     private boolean FAB_Status = false;
     private static String imageStoragePath;
-    VerticalViewPager viewPager;
+   public static VerticalViewPager viewPager;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -144,8 +147,12 @@ View view;
            CreateReport.dataDisciplines = new SqliteDb(getActivity()).getReportDiscipline(CreateReport.loaddata.getId());
            CreateReport.dataSystems = new SqliteDb(getActivity()).getReportSystem(CreateReport.loaddata.getId());
        }
-       else
+       else{
            CreateReport.dataPreviews=new ArrayList<>();
+           CreateReport.dataDisciplines=new ArrayList<>();
+           CreateReport.dataSystems=new ArrayList<>();
+       }
+
 
         }catch (Exception e){
 
@@ -187,6 +194,7 @@ setFab();
         viewPager.setAdapter(customPagerAdapter);
 
         viewPager.setPageMargin(12);
+
 
     }
 
@@ -235,10 +243,10 @@ fab1.setVisibility(View.VISIBLE);
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (CameraUtils.checkPermissions(getActivity())) {
+             if (CameraUtils.checkPermissions(getActivity())) {
                     if(Utility.savemenu.getTitle().equals("edit")){
 
-                    Utility.optionItemSave(getActivity());
+                    Utility.optionItemSave(getActivity(),0);
                     }
                  captureImage();
                 } else {
@@ -254,7 +262,7 @@ fab1.setVisibility(View.VISIBLE);
 
                     if(Utility.savemenu.getTitle().equals("edit")){
 
-                        Utility.optionItemSave(getActivity());
+                        Utility.optionItemSave(getActivity(),0);
                     }
                     captureVideo();
                 } else {
@@ -269,7 +277,7 @@ fab1.setVisibility(View.VISIBLE);
                 if (CameraUtils.checkPermissions(getActivity())) {
                     if(Utility.savemenu.getTitle().equals("edit")){
 
-                        Utility.optionItemSave(getActivity());
+                        Utility.optionItemSave(getActivity(),0);
                     }
                     captureAudio();
                 } else {
@@ -302,8 +310,10 @@ fab1.setVisibility(View.VISIBLE);
 //
     @Override
     public void onDetach() {
+        Utility.optionItemSave(getActivity(),0);
         super.onDetach();
-        Toast.makeText(getActivity(), "nnnnnn", Toast.LENGTH_SHORT).show();
+
+        //Toast.makeText(getActivity(), "onDetach", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -637,5 +647,17 @@ fab1.setVisibility(View.VISIBLE);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
+        actionBar.setTitle("Editor");
+
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setIcon(null);
+
     }
 }

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="9dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:visibility="visible"
+
+        android:background="@color/bluegray3"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:gravity="left"
+            android:id="@+id/head"
+            android:textColor="@color/white"
+            android:background="@color/c3"
+            android:text="Import"
+            android:padding="5dp"
+            android:textSize="16dp"
+
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+     <TableLayout
+         android:layout_gravity="center"
+         android:padding="15dp"
+         android:layout_width="250dp"
+         android:layout_height="wrap_content">
+         <TableRow
+             android:background="@color/white"
+             android:id="@+id/rownorsok"
+             android:paddingRight="5dp"
+             android:paddingLeft="5dp"
+             android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+             android:weightSum="2"
+             android:layout_weight="1"
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             >
+
+             <TextView
+
+                 android:gravity="center_vertical"
+                 android:text="NORSOK"
+                 android:layout_weight="1"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 />
+             <LinearLayout
+
+                 android:layout_margin="3dp"
+                 android:layout_height="match_parent"
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:gravity="center_vertical|right"
+                 >
+                 <ImageButton
+                     android:layout_marginLeft="5dp"
+                     android:id="@+id/loadn"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_alignParentTop="true"
+                     android:layout_marginRight="5dp"
+
+                     android:background="@drawable/ic_load_green_24dp"
+
+                     android:layout_alignParentRight="true" />
+                 <ImageButton
+                     android:visibility="gone"
+                     android:id="@+id/deleten"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+
+                     android:background="@drawable/ic_delete_black_24dp"
+
+
+                     android:gravity="right" />
+
+
+             </LinearLayout>
+         </TableRow>
+         <TableRow
+             android:layout_marginTop="3dp"
+             android:background="@color/white"
+             android:id="@+id/rowsfi"
+             android:paddingRight="5dp"
+             android:paddingLeft="5dp"
+             android:paddingBottom="10dp"
+             android:paddingTop="10dp"
+             android:weightSum="2"
+             android:layout_weight="1"
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             >
+
+             <TextView
+                 android:text="SFI"
+                 android:layout_weight="1"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 />
+             <LinearLayout
+
+                 android:layout_margin="3dp"
+                 android:layout_height="match_parent"
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:gravity="center_vertical|right"
+                 >
+                 <ImageButton
+                     android:layout_marginLeft="5dp"
+                     android:id="@+id/loads"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_alignParentTop="true"
+                     android:layout_marginRight="5dp"
+
+                     android:background="@drawable/ic_load_green_24dp"
+
+                     android:layout_alignParentRight="true" />
+                 <ImageButton
+                     android:visibility="gone"
+                     android:id="@+id/deletes"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+
+                     android:background="@drawable/ic_delete_black_24dp"
+
+
+                     android:gravity="right" />
+
+
+             </LinearLayout>
+         </TableRow>
+         <TableRow
+             android:layout_marginTop="3dp"
+             android:background="@color/white"
+             android:id="@+id/rowplantdesk"
+             android:paddingRight="5dp"
+             android:paddingLeft="5dp"
+             android:paddingBottom="10dp"
+             android:paddingTop="10dp"
+             android:weightSum="2"
+             android:layout_weight="1"
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             >
+
+             <TextView
+                 android:text="PLANTDESK DB"
+                 android:layout_weight="1"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 />
+             <LinearLayout
+
+                 android:layout_margin="3dp"
+                 android:layout_height="match_parent"
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:gravity="center_vertical|right"
+                 >
+                 <ImageButton
+                     android:layout_marginLeft="5dp"
+                     android:id="@+id/loadp"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_alignParentTop="true"
+                     android:layout_marginRight="5dp"
+
+                     android:background="@drawable/ic_load_green_24dp"
+
+                     android:layout_alignParentRight="true" />
+                 <ImageButton
+                     android:visibility="gone"
+                     android:id="@+id/deletep"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+
+                     android:background="@drawable/ic_delete_black_24dp"
+
+
+                     android:gravity="right" />
+
+
+             </LinearLayout>
+         </TableRow>
+         <TableRow
+             android:layout_marginTop="3dp"
+             android:background="@color/white"
+             android:id="@+id/rowcsv"
+             android:paddingRight="5dp"
+             android:paddingLeft="5dp"
+             android:paddingBottom="10dp"
+             android:paddingTop="10dp"
+             android:weightSum="2"
+             android:layout_weight="1"
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             >
+
+             <TextView
+                 android:text="CSV"
+                 android:layout_weight="1"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 />
+             <LinearLayout
+
+                 android:layout_margin="3dp"
+                 android:layout_height="match_parent"
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:gravity="center_vertical|right"
+                 >
+                 <ImageButton
+                     android:layout_marginLeft="5dp"
+                     android:id="@+id/loadc"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_alignParentTop="true"
+                     android:layout_marginRight="5dp"
+
+                     android:background="@drawable/ic_load_green_24dp"
+
+                     android:layout_alignParentRight="true" />
+                 <ImageButton
+                     android:visibility="gone"
+                     android:id="@+id/deletec"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+
+                     android:background="@drawable/ic_delete_black_24dp"
+
+
+                     android:gravity="right" />
+
+
+             </LinearLayout>
+         </TableRow>
+     </TableLayout>
+
+
+
+
+        <Button
+            android:visibility="gone"
+            android:layout_gravity="right"
+            android:id="@+id/addtag"
+            android:paddingRight="5dp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:background="@color/c3"
+            android:paddingLeft="5dp"
+
+            android:text="Save"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

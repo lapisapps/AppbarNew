@@ -9,10 +9,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -37,20 +39,23 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class AddAreaDialog extends Dialog {
     Activity context;
     public  RecyclerView recyclerView,recyclerViewtag;
-    public DataTag selectedtag;
+    public static DataTag selectedtag;
     public static Main2Activity main2Activity;
     public  ArrayList<DataTag> dataTags;
 
     DataPreview dataPreview;
     LinearLayout arealayout;
-    AutoCompleteTextView tag,code;
+    public static  AutoCompleteTextView tag;
+    AutoCompleteTextView code;
     TextView addtag;
     RadioButton rdex,rdnew;
     TextInputLayout sufixinp,systeminp;
     android.app.AlertDialog.Builder builder;
     android.app.AlertDialog alertDialog;
+    ImageButton nextcode,nextname;
 public static PrjctData prjctData;
 LinearLayout layid;
+String pid;
     public static DataTag areadata;
 int type;
 
@@ -69,13 +74,16 @@ this.type=type;
                 null);
 
 
-        dataTags=new SqliteDb(mContext).getAreas();
+        dataTags=new SqliteDb(mContext).getAreas("");
         setView(layout);
-
+if(type==0)
+    pid=CreateReport.loaddata.getPrjct();
+else
+    pid=prjctData.getId();
         builder = new android.app.AlertDialog.Builder(mContext);
         builder.setView(layout);
         alertDialog = builder.create();
-        //  alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+         alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         alertDialog.show();
     }
     private void setView1(View layout) {
@@ -99,12 +107,27 @@ this.type=type;
 
     }
     private void setView(View layout) {
+        nextcode=layout.findViewById(R.id.nextcode);
+        nextname=layout.findViewById(R.id.nextname);
+        nextname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                code.requestFocus();
+            }
+        });
+        nextcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tag.requestFocus();
+            }
+        });
         layid=layout.findViewById(R.id.layoutid);
         tag=layout.findViewById(R.id.tag);
         code=layout.findViewById(R.id.id);
         addtag=layout.findViewById(R.id.addtag);
         rdex=layout.findViewById(R.id.rdex);
         rdnew=layout.findViewById(R.id.rdnew);
+        layid.setVisibility(View.VISIBLE);
         if(type==2){
             layid.setVisibility(View.VISIBLE);
             code.setText(areadata.getTagid());
@@ -112,34 +135,37 @@ this.type=type;
             tag.setText(areadata.getTag());
             rdex.setVisibility(View.GONE);
             rdnew.setVisibility(View.GONE);
-            addtag.setText("Save");
+            addtag.setText("");
         }else
-            addtag.setText("Add to project");
+            addtag.setText("");
 
         rdex.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    Log.e("tagss",dataTags.size()+"");
-                    CustomAutocompleteTextViewAd adapter1 = new CustomAutocompleteTextViewAd(context,R.layout.dialog_addarea,R.id.lbl_name,dataTags);
-                    tag.setThreshold(1);//will start working from first character
-                    tag.setAdapter(adapter1);//setting the adapter data into the AutoCompleteTextView
-                    tag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Object item1 = parent.getItemAtPosition(position);
-                            if (item1 instanceof DataTag) {
-                                selectedtag=new DataTag();
-                                selectedtag = (DataTag) item1;
-
-
-
-
-
-                            }
-                        }
-                    });
+//                    Log.e("tagss",dataTags.size()+"");
+//                    CustomAutocompleteTextViewAd adapter1 = new CustomAutocompleteTextViewAd(context,R.layout.dialog_addarea,R.id.lbl_name,dataTags);
+//                    tag.setThreshold(1);//will start working from first character
+//                    tag.setAdapter(adapter1);//setting the adapter data into the AutoCompleteTextView
+//                    tag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            Object item1 = parent.getItemAtPosition(position);
+//                            if (item1 instanceof DataTag) {
+//                                selectedtag=new DataTag();
+//                                selectedtag = (DataTag) item1;
+//
+//
+//
+//
+//
+//                            }
+//                        }
+//                    });
                     layid.setVisibility(View.GONE);
+
+
+
                 }
                 else {
 layid.setVisibility(View.VISIBLE);
@@ -147,22 +173,30 @@ layid.setVisibility(View.VISIBLE);
                 }
             }
         });
-        tag.addTextChangedListener(new TextWatcher() {
+//        tag.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                selectedtag=null;
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+        tag.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                selectedtag=null;
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+            public void onClick(View v) {
+               // if(rdex.isChecked())
+                    //new AreaListDialog(context,0,pid);
             }
         });
+
         addtag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,35 +210,49 @@ layid.setVisibility(View.VISIBLE);
                         code.setError("Enter code");
                     else
                     if((new SqliteDb(context).updateArea(areadata.getTagid(),tag.getText().toString(),true))){
-                        Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
+                        Utility.customToastSave("Changes Saved",context,"done");
+                       // Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                         SettingFragment4.loadareaset(context);
                     }
                     return;
                 }
-                if(rdnew.isChecked()){
+                //if(rdnew.isChecked()){
                     if(tag.getText().toString().isEmpty())
                   tag.setError("Enter area");
                     else if(code.getText().toString().isEmpty())
                         code.setError("Enter code");
                     else
                         if(type==0){
-                            if(new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),true,code.getText().toString())){
-                                Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
+                            if(new SqliteDb(context).addArea(pid,tag.getText().toString(),true,code.getText().toString())){
+                                Utility.customToastSave("Area added to project",context,"done");
+                               // Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                              addedarea.setTagid(code.getText().toString());
                              addedarea.setTag(tag.getText().toString());
+                                addedarea.setSelected(true);
                                 alertDialog.dismiss();
                                 PageReport2.prjctareas.add(addedarea);
                                 PageReportArea.setView(context,  PageReport2.prjctareas);
                             }
+                            else {
+
+                                code.setError("code already taken");
+                                code.requestFocus();
+                            }
 
                         }else if(type==1){
 Log.e("ffff",prjctData.getId());
-                            if(new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),true, code.getText().toString())){
-                            Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
+                            if(new SqliteDb(context).addArea(pid,tag.getText().toString(),true, code.getText().toString())){
+                                Utility.customToastSave("Area added to project",context,"done");
+
+                             //   Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
                                 SettingFragment4.loadareaset(context);
-                }
+                }  else {
+
+                                code.setError("code already taken");
+                                code.requestFocus();
+                            }
 
                     }
                         else {
@@ -216,41 +264,48 @@ Log.e("ffff",prjctData.getId());
 
                             }
 
-                }
-                else {
-                    if(selectedtag==null)
-                        tag.setError("invalid entry");
-                    else
-                        if(type==0){
-                    if((new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),false, selectedtag.getTagid()))){
-                        Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
-
-                        addedarea.setTagid(selectedtag.getTagid());
-                        addedarea.setTag(tag.getText().toString());
-                        alertDialog.dismiss();
-                        PageReport2.prjctareas.add(addedarea);
-                        PageReportArea.setView(getOwnerActivity(),  PageReport2.prjctareas);
-                    }
-
-                }else if(type==1){
-
-                            if((new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),false, selectedtag.getTagid()))){
-                                Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
-                                alertDialog.dismiss();
-                                SettingFragment4.loadareaset(context);
-                            }
-
-                        }
-                        else {
-
-
-                        }
-
-                }
+              //  }
+//                else {
+//                    if(selectedtag==null)
+//                        tag.setError("invalid entry");
+//                    else
+//                        if(type==0){
+//                    if((new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),false, selectedtag.getTagid()))){
+//                        Utility.customToastSave("Area added to project",context,1);
+//
+//
+//                       // Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
+//
+//                        addedarea.setTagid(selectedtag.getTagid());
+//                        addedarea.setTag(tag.getText().toString());
+//                        addedarea.setSelected(true);
+//                        alertDialog.dismiss();
+//                        PageReport2.prjctareas.add(addedarea);
+//                        PageReportArea.setView(getOwnerActivity(),  PageReport2.prjctareas);
+//                    }
+//
+//                }else if(type==1){
+//
+//                            if((new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),false, selectedtag.getTagid()))){
+//
+//                                Utility.customToastSave("Area added to project",context,1);
+//
+//                               // Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
+//                                alertDialog.dismiss();
+//                                SettingFragment4.loadareaset(context);
+//                            }
+//
+//                        }
+//                        else {
+//
+//
+//                        }
+//
+//                }
 
             }
         });
-        rdex.setChecked(true);
+
 
     }
 

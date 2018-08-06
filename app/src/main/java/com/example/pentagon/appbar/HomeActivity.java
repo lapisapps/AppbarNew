@@ -65,7 +65,7 @@ public class HomeActivity extends AppCompatActivity implements CreateReport.OnFr
         setSupportActionBar(toolbar);
         new SqliteDb(this).insertTemp();
 toolbar.setVisibility(View.VISIBLE);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Utility.newreport = (FloatingActionButton) findViewById(R.id.fab);
 Utility.newreport.setVisibility(View.GONE);
         Utility.newreport.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +212,7 @@ ReportsFragment.homeactivity=this;
             return true;
         }
         if (id == R.id.save) {
-    Utility.optionItemSave(HomeActivity.this);
+    Utility.optionItemSave(HomeActivity.this,1);
             return true;
         }
         if (id == android.R.id.home) {

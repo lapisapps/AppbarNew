@@ -3,11 +3,14 @@ package com.example.pentagon.appbar.Fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +22,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,6 +37,7 @@ import com.example.pentagon.appbar.AddProjectDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.HomeActivity;
+import com.example.pentagon.appbar.ImportListDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.RecyclerItemClickListener;
 import com.example.pentagon.appbar.SqliteDb;
@@ -60,7 +66,8 @@ public class SettingFragment1 extends Fragment {
 static ArrayList<PrjctData> prjctData;
     static ArrayList<DataTag> areaData;
 TableRow prjct,tag,system,area,discipline;
-    TableRow rowprjct,rowtag,rowsystem,rowarea,rowdiscipline,rowareaprjct;
+LinearLayout  rowprjct;
+    TableRow rowtag,rowsystem,rowarea,rowdiscipline,rowareaprjct;
    TextView prjcth;
     TextView tagh;
     TextView systemh;
@@ -73,6 +80,9 @@ TableRow prjct,tag,system,area,discipline;
     private static RecyclerViewAdapterAreaSt adapterareas;
     static int height;
     static Spinner spinner;
+Button searchbtn,cancelbtn,loadbtn;
+AutoCompleteTextView searchtxt;
+ConstraintLayout searchlay;
 
     public SettingFragment1() {
         // Required empty public constructor
@@ -163,9 +173,15 @@ initilize();
         areacount=v.findViewById(R.id.areacount);
         addprjct=v.findViewById(R.id.addprjct);
         addarea=v.findViewById(R.id.addarea);
+
+
+
         addprjct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                searchtxt.setText("");
+                cancelbtn.setVisibility(View.GONE);
+                adapterprjcts.getFilter().filter("");
                 if(prjcth.getTag().toString().equals("0"))
                     expandPrjctRow();
 
@@ -198,44 +214,96 @@ if((PrjctData) spinner.getSelectedItem()==null)
     areah=v.findViewById(R.id.harea);
 
 
-//       prjct.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View v) {
-//
-////               if(prjctData==null)
-////                   prjctData= new SqliteDb(getActivity()).getPrjcts();
-////               animate(rowprjct,prjcth,1);
-////               if(areah.getTag().toString().equals("1"))
-////               animate(rowarea,areah,2);
-//               expandPrjctRow();
-//
-//
-//           }
-//       });
-////       discipline.setOnClickListener(new View.OnClickListener() {
-////           @Override
-////           public void onClick(View v) {
-////               animate(rowdiscipline,disciplineh);
-////           }
-////       });
-//
-//        area.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//
-//
-//
-//expandArea();
-//
-//        }
-//    });
+
+searchtxt=v.findViewById(R.id.searchtext);
+        searchlay=v.findViewById(R.id.searchlay);
+       // searchlay.setVisibility(View.GONE);
+        loadbtn=v.findViewById(R.id.load);
+
+        searchbtn=v.findViewById(R.id.search);
+        cancelbtn=v.findViewById(R.id.cancel);
+setSearchView();
+
+loadbtn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+new ImportListDialog(getActivity(),"project");
+    }
+});
+
+
+
+
+
+
         prjctData= new SqliteDb(getActivity()).getPrjcts();
-        areaData= new SqliteDb(getActivity()).getAreas();
+        areaData= new SqliteDb(getActivity()).getAreas("");
         setPrjctRecycle(getActivity());
 
         setAreaRecycle(getActivity());
         expandPrjctRow();
 }
+
+    private void setSearchView() {
+        cancelbtn.setVisibility(View.GONE);
+        searchbtn.setTag("search");
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                  //  searchlay.setVisibility(View.VISIBLE);
+                    loadbtn.setVisibility(View.GONE);
+                   // searchbtn.setVisibility(View.GONE);
+                    addprjct.setVisibility(View.GONE);
+                    searchtxt.setText("");
+
+
+            }
+        });
+
+        cancelbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //searchbtn.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_search_green_24dp),null,null,null);
+               // searchlay.setVisibility(View.GONE);
+               // loadbtn.setVisibility(View.VISIBLE);
+                //searchbtn.setVisibility(View.VISIBLE);
+
+
+                addprjct.setVisibility(View.VISIBLE);
+
+                searchtxt.setText("");
+                cancelbtn.setVisibility(View.GONE);
+                adapterprjcts.getFilter().filter("");
+
+            }
+        });
+        searchtxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //     filter(searchtext.getText().toString());
+                Log.i("textt",searchtxt.getText().toString()+s);
+                adapterprjcts.getFilter().filter(searchtxt.getText().toString());
+if(searchtxt.getText().toString().isEmpty())
+    cancelbtn.setVisibility(View.GONE);
+else
+    cancelbtn.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+
+        });
+    }
 
     private void expandArea() {
         if(areah.getTag().toString().equals("0")){
@@ -422,7 +490,8 @@ public void setVisiblefalse(View view,TextView icon){
             @Override
             public void onChanged() {
                 super.onChanged();
-           prjctcount.setText(prjctData.size()+" Projects");
+                Log.e("fff1",adapterprjcts.getSize()+"");
+           prjctcount.setText(adapterprjcts.getSize()+" Projects");
             }
         });
 
@@ -496,10 +565,10 @@ b=true;
     public void onResume() {
 
         super.onResume();
-        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
-        actionBar.setTitle("Settings");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+//        ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
+//        actionBar.setTitle("Settings");
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
 
     }
 

@@ -12,14 +12,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
 import com.example.pentagon.appbar.AddTagDialog;
+import com.example.pentagon.appbar.DataClass.DataReport;
 import com.example.pentagon.appbar.DataClass.DataTag;
+import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.R;
+import com.example.pentagon.appbar.SharedPreferenceClass;
+import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
 
 import java.util.ArrayList;
+
+import static com.example.pentagon.appbar.Fragments.PageReport2.loadprjctset;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,6 +96,17 @@ if(PageReport2.prjcttags!=null)
     }
 
     private void initilize() {
+
+        ((Button)view.findViewById(R.id.copy)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Utility.savemenu.getTitle().equals("edit")){
+
+                    Utility.optionItemSave(getActivity(),0);
+                }
+                loadcopy();
+            }
+        });
         recyclerView=view.findViewById(R.id.recyclerView);
         addtag=view.findViewById(R.id.addtag);
         addtag.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +115,12 @@ if(PageReport2.prjcttags!=null)
 
                 if(Utility.savemenu.getTitle().equals("edit")){
 
-                    Utility.optionItemSave(getActivity());
+                    Utility.optionItemSave(getActivity(),0);
                 }
+                if(CreateReport.loaddata.getPrjct()!=null&&!CreateReport.loaddata.getPrjct().equals(""))
                 new AddTagDialog(getActivity(),0);
+                else
+                    Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -175,6 +196,31 @@ if(PageReport2.prjcttags!=null)
 //
 //            }
 //        }));
+
+    }
+    public void loadcopy(){
+
+        String id=  new SharedPreferenceClass().getStoredValueLastPrjct(getContext());
+        if(id==null)
+            return;
+        ArrayList<DataReport> dataTags;
+        // new SqliteDb(getActivity()).copyTagsPrjct(CreateReport.loaddata.getId(),id);
+         if((CreateReport.loaddata.getPrjct()==null||CreateReport.loaddata.getPrjct().equals("")))
+         {  Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
+
+         return;}
+          new SqliteDb(getActivity()).insertToPrjctTags(new SqliteDb(getActivity()).getPrjctsTags(id,""),CreateReport.loaddata.getPrjct());
+
+
+        ArrayList<PrjctData> pp= new SqliteDb(getActivity()).getPrjct(CreateReport.loaddata.getPrjct());
+        if(pp.size()>0)
+            loadprjctset(getActivity(),pp.get(0));
+        else
+            Toast.makeText(getActivity(), "Project not existing", Toast.LENGTH_SHORT).show();
+        //   prjcttags= new SqliteDb(getActivity()).getPrjctsTags(dd.getPrjct(),dd.getId());
+        //  prjctareas= new SqliteDb(getActivity()).getPrjctsAreas(dd.getPrjct(),dd.getId());
+        //  setView(getActivity(),  CreateReport.dataDisciplines);
+
 
     }
 }

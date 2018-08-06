@@ -8,5 +8,5 @@
     <dimen name="setting_head">16dp</dimen>
     <dimen name="text1">12dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="recyh">14dp</dimen>
+    <dimen name="recyh">13dp</dimen>
 </resources>

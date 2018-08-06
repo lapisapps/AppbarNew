@@ -11,17 +11,14 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-    <ScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
 
         <TableLayout
             android:weightSum="2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
 
+android:paddingBottom="10dp"
 
 
 
@@ -33,7 +30,7 @@
 
 
             <TableRow
-
+android:visibility="gone"
                 android:id="@+id/prjct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -130,26 +127,26 @@
 
             </TableRow>
 
-            <TableRow
+            <!--<TableRow-->
 
 
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-                <LinearLayout
+                <!--<LinearLayout-->
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:orientation="vertical"
-                    android:padding="1dp">
-
-
-
-                </LinearLayout>
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="0.2"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="1dp">-->
 
 
-            </TableRow>
+
+                <!--</LinearLayout>-->
+
+
+            <!--</TableRow>-->
 
             <TableRow
                 android:weightSum="1"
@@ -179,23 +176,55 @@
                         android:textSize="@dimen/setting_head" />
 
                     <Button
-
-                        android:id="@+id/addarea"
-
-                        android:drawableRight="@drawable/ic_add_black_24dp"
+                        android:id="@+id/load"
+                        android:background="@drawable/rounddrw"
+                        android:layout_width="30dp"
+                        android:paddingLeft="3dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:drawableLeft="@drawable/ic_archive_green_24dp"
+                        android:backgroundTint="@color/green"
+                        android:drawableTint="@color/white"
                         android:gravity="center"
 
-                        android:background="@drawable/name_shapebtn"
-                        android:textColor="@color/c3"
-                        android:text=" New"
-                        android:drawableTint="@color/c3"
+                        android:text=""
+                        android:textColor="@color/c3" />
+                    <Button
+                        android:id="@+id/addarea"
+                        android:background="@drawable/rounddrw"
+                        android:layout_width="30dp"
+                        android:paddingLeft="3dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:drawableLeft="@drawable/ic_add_white_24dp"
+                        android:backgroundTint="@color/green"
+                        android:drawableTint="@color/white"
+                        android:gravity="center"
+
+                        android:text=""
+                        android:textColor="@color/c3" />
+
+                    <Button
+                        android:visibility="gone"
+                        android:id="@+id/search"
+                        android:background="@drawable/rounddrw"
+                        android:layout_width="30dp"
+                        android:paddingLeft="3dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
                         android:layout_marginRight="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp" />
+                        android:drawableLeft="@drawable/ic_search_green_24dp"
+                        android:backgroundTint="@color/green"
+                        android:drawableTint="@color/white"
+                        android:gravity="center"
+
+                        android:text=""
+                        android:textColor="@color/c3" />
 
                     <TextView
+                        android:visibility="gone"
                         android:drawableTint="@color/white"
                         android:tag="0"
                         android:id="@+id/harea"
@@ -209,6 +238,88 @@
 
 
             </TableRow>
+            <android.support.constraint.ConstraintLayout
+
+                android:id="@+id/searchlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+
+                android:background="@drawable/search_shape"
+                android:gravity="center"
+
+                android:padding="5dp"
+                android:visibility="visible"
+                android:weightSum="1"
+                app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guideline6">
+
+                <ImageButton
+                    android:id="@+id/searchwith"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+
+
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/icon_search"
+                    android:gravity="right|center"
+                    android:textColor="@color/grey1"
+                    android:textSize="15dp"
+                    android:tint="@color/grey1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/searchtext"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <AutoCompleteTextView
+
+                    android:id="@+id/searchtext"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:background="@null"
+                    android:gravity="center|left"
+                    android:hint="Search here......"
+                    android:paddingLeft="12dp"
+                    android:textColor="@color/grey1"
+                    android:textColorHint="@color/grey1"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/searchwith"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+
+                    android:backgroundTint="@color/grey1"
+                    android:background="@drawable/ic_cancel_white_24dp"
+
+              android:alpha="0.5"
+                    android:gravity="center"
+                    android:paddingLeft="3dp"
+                    android:text=""
+                    android:textColor="@color/c3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/searchtext"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
             <TableRow
                 android:id="@+id/areaprjct"
                 android:visibility="gone"
@@ -265,11 +376,11 @@
 
                 </LinearLayout>
             </TableRow>
-            <TableRow
+            <LinearLayout
                 android:id="@+id/rowarea"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:weightSum="3">
 
@@ -285,9 +396,11 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycarea"
-                        android:background="@color/bgrecy"
+                        android:background="@drawable/backgroundpic2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="2.85"
+
                         android:layout_marginBottom="3dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp">
@@ -297,10 +410,10 @@
                     <TextView
                         android:id="@+id/areacount"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
 
                         android:layout_gravity="right"
-                        android:layout_weight="1"
+                        android:layout_weight="0.15"
                         android:paddingRight="5dp"
                         android:text="4 Area"
                         android:textColor="@color/g1"
@@ -308,7 +421,7 @@
                 </LinearLayout>
 
 
-            </TableRow>
+            </LinearLayout>
         </TableLayout>
-    </ScrollView>
+
 </FrameLayout>

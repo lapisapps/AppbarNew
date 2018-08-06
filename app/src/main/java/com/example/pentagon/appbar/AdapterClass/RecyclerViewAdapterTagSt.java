@@ -6,11 +6,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pentagon.appbar.AddTagDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
+import com.example.pentagon.appbar.DataClass.PrjctData;
+import com.example.pentagon.appbar.Fragments.SettingFragment2;
+import com.example.pentagon.appbar.Fragments.SettingFragment3;
+import com.example.pentagon.appbar.Fragments.SettingFragment6;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
@@ -22,16 +28,17 @@ import java.util.ArrayList;
  */
 public class RecyclerViewAdapterTagSt extends RecyclerView.Adapter<RecyclerViewAdapterTagSt.MyViewHolder> {
 
-    private final ArrayList<DataTag> albumList;
+    private  ArrayList<DataTag> albumList;
+    private  ArrayList<DataTag> albumListf;
     //    public static ArrayList<String> albumList1;
     private Activity mContext;
     //  private List<S> albumList;
 
     private int type;
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tag,tagid,edit,delete;
+        TextView tag,tagid;
 
-
+        ImageButton edit,delete;
 
 
         public MyViewHolder(View view) {
@@ -39,15 +46,50 @@ public class RecyclerViewAdapterTagSt extends RecyclerView.Adapter<RecyclerViewA
 
             tag=(TextView) view.findViewById(R.id.tag);
             tagid=(TextView) view.findViewById(R.id.id);
-            edit=(TextView) view.findViewById(R.id.edit);
-            delete=(TextView) view.findViewById(R.id.delete);
+            edit= view.findViewById(R.id.edit);
+            delete= view.findViewById(R.id.delete);
         }
     }
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    albumList = albumListf;
+                } else {
+                    ArrayList<DataTag> filteredList = new ArrayList<>();
+                    for (DataTag row : albumListf) {
 
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getTagid().toLowerCase().contains(charString.toLowerCase()) || row.getTag().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    albumList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = albumList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                albumList = (ArrayList<DataTag>) filterResults.values;
+
+                // refresh the list with filtered data
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public RecyclerViewAdapterTagSt(Activity mContext, ArrayList<DataTag> albumList,int type) {
         this.mContext = mContext;
         this.albumList = albumList;
+        this.albumListf = albumList;
         this.type=type;
 
     }
@@ -55,12 +97,12 @@ public class RecyclerViewAdapterTagSt extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
-if(type==0)
+//if(type==0)
         itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_tagst, parent, false);
-else
-    itemView = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.row_tagst1, parent, false);
+//else
+//    itemView = LayoutInflater.from(parent.getContext())
+//            .inflate(R.layout.row_tagst1, parent, false);
 
 
         return new MyViewHolder(itemView);
@@ -76,11 +118,15 @@ else
 holder.tag.setText(product.getTag());
             holder.tagid.setText(product.getTagid());
 
-
+if(type==2) {
+    holder.edit.setVisibility(View.GONE);
+    holder.delete.setVisibility(View.GONE);
+}
             holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AddTagDialog.areadata=product;
+                    AddTagDialog.prjctData= (PrjctData) SettingFragment6.spinner.getSelectedItem() ;
                     new AddTagDialog(mContext, 2);
                 }
             });
@@ -100,7 +146,8 @@ holder.tag.setText(product.getTag());
                             new SqliteDb(mContext).deleteTag(product.getTagid());
                             dialog.dismiss();
                             // new ResponseHandler(context,ResponseHandler.this,jsonObjectCall);
-                            Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+                            Utility.customToastSave("Deleted",mContext,"delete");
+                        //    Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
                             albumList.remove(position);
                             notifyDataSetChanged();
                         }
@@ -241,4 +288,8 @@ holder.tag.setText(product.getTag());
 //
 //        }, jsonObjectCall,1));
 //    }
+public  int getSize(){
+
+    return albumList.size();
+}
 }

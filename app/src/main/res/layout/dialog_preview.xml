@@ -16,7 +16,8 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,8 +27,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
 
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -436,55 +437,66 @@
     </LinearLayout>
 
     <LinearLayout
+
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp"
-        android:background="@drawable/btn_round2"
-        android:orientation="horizontal"
+android:minHeight="150dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
+
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textColorHint="@color/white">
+            android:background="@color/textrans"
+            >
 
             <EditText
+                android:gravity="top"
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:hint="Description"
-android:text=""
+
                 android:paddingTop="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+
+                android:textColorHint="@color/black_overlay" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/btnsave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:background="@color/c3"
-            android:drawableTint="@color/white"
-            android:gravity="center|center_horizontal"
-            android:padding="5dp"
-            android:text="Save"
-
-            android:textAlignment="gravity"
-            android:textColor="@color/white"
-            tools:layout_editor_absoluteX="265dp"
-            tools:layout_editor_absoluteY="16dp" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnsave"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/c3"
+        android:drawableTint="@color/white"
+        android:gravity="center|center_horizontal"
+        android:padding="5dp"
+        android:text="Save"
+        android:textAlignment="gravity"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
