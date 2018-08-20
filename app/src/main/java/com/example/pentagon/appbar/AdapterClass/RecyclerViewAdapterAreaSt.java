@@ -118,7 +118,10 @@ else
 
 
         try {
-
+            if(product.getExist().equals("0"))
+                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.row));
+            else
+                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
 holder.tag.setText(product.getTag());
             holder.tagid.setText(product.getTagid());
 

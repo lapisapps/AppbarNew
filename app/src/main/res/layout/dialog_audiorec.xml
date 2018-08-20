@@ -43,7 +43,7 @@
                 android:id="@+id/imageViewPlay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_play"
+                app:srcCompat="@drawable/ic_play"
                 android:layout_gravity="center_vertical"
                 android:clickable="true"
                 android:tint="@android:color/darker_gray"
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:tint="@color/cardview_dark_background"
-                android:src="@drawable/ic_mic_black_24dp"
+                app:srcCompat="@drawable/ic_mic_black_24dp"
                 android:background="?android:attr/selectableItemBackground"
 
                 android:clickable="true"
@@ -89,7 +89,7 @@
                 android:id="@+id/imageViewStop"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
-                android:src="@drawable/ic_stop"
+                app:srcCompat="@drawable/ic_stop"
                 android:tint="@android:color/darker_gray"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_gravity="center_vertical"
@@ -102,19 +102,24 @@
 
 
         <LinearLayout
-            android:background="@android:color/transparent"
+
+            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:gravity="center"
+            android:background="@color/greyback"
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline"
             app:layout_constraintVertical_bias="0.48000002">
             <Button
+                android:visibility="gone"
                 android:id="@+id/btnsave"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
@@ -134,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:minHeight="150dp"
+                android:visibility="gone"
                 android:background="@color/textrans"
             >
 
@@ -150,7 +156,72 @@
                     android:textColorHint="@color/black_overlay" />
             </android.support.design.widget.TextInputLayout>
 
+            <LinearLayout
+                android:layout_marginRight="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="10dp">
+
+                <Button
+                    android:id="@+id/done"
+                    android:layout_width="0dp"
+
+                    android:layout_height="match_parent"
+
+                    android:layout_weight="1"
+
+                    android:background="@drawable/ic_ok"
+
+                    android:gravity="center"
+                    android:text=""
+
+                    android:textColor="@color/c3"
+                    tools:layout_editor_absoluteX="282dp"
+                    tools:layout_editor_absoluteY="8dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="40dp"
+
+                android:layout_height="40dp"
+              android:layout_marginLeft="10dp"
+
+
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.61"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="10dp">
+
+                <Button
+
+                    android:id="@+id/close"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="match_parent"
+
+
+                    android:background="@drawable/ic_cancel2"
+
+
+                    android:gravity="center"
+                    android:text=""
+
+                    android:textColor="@color/c3"
+                    tools:layout_editor_absoluteX="282dp"
+                    tools:layout_editor_absoluteY="8dp" />
+            </LinearLayout>
+
+
+
         </LinearLayout>
+
     </LinearLayout>
 
 

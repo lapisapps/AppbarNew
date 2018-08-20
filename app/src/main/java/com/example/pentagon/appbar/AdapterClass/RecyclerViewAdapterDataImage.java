@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.pentagon.appbar.CameraUtils;
 import com.example.pentagon.appbar.DataClass.DataPreview;
-import com.example.pentagon.appbar.Main2Activity;
+import com.example.pentagon.appbar.DescriptionDialog;
+import com.example.pentagon.appbar.Fragments.FragmentDataViewChild;
 import com.example.pentagon.appbar.R;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import static com.example.pentagon.appbar.Main2Activity.BITMAP_SAMPLE_SIZE;
 /**
  * Created by Ravi Tamada on 18/05/16.
  */
-public class RecyclerViewAdapterCameraPreviews extends RecyclerView.Adapter<RecyclerViewAdapterCameraPreviews.MyViewHolder> {
+public class RecyclerViewAdapterDataImage extends RecyclerView.Adapter<RecyclerViewAdapterDataImage.MyViewHolder> {
 
     private final ArrayList<DataPreview> albumList;
 //    public static ArrayList<String> albumList1;
@@ -35,26 +35,27 @@ public  int type;
     public class MyViewHolder extends RecyclerView.ViewHolder {
      ImageView imageView,vidpreview;
      VideoView videoView;
-     TextView description;
+     TextView desc;
 
 
 
 
         public MyViewHolder(View view) {
             super(view);
-
-            vidpreview=(ImageView) view.findViewById(R.id.videopreview);
-            imageView=(ImageView) view.findViewById(R.id.imageView3);
-            videoView = (VideoView) view.findViewById(R.id.videoView);
-            description = (TextView) view.findViewById(R.id.description);
+            imageView=view.findViewById(R.id.imageView);
+         desc=view.findViewById(R.id.description);
+//            vidpreview=(ImageView) view.findViewById(R.id.videopreview);
+//            imageView=(ImageView) view.findViewById(R.id.imageView3);
+//            videoView = (VideoView) view.findViewById(R.id.videoView);
+//            description = (TextView) view.findViewById(R.id.description);
         }
     }
 
 
-    public RecyclerViewAdapterCameraPreviews(Context mContext, ArrayList<DataPreview> albumList) {
+    public RecyclerViewAdapterDataImage(Context mContext, ArrayList<DataPreview> albumList) {
         this.mContext = mContext;
         this.albumList = albumList;
-this.type=type;
+
 
     }
 
@@ -64,7 +65,7 @@ this.type=type;
 
 
         itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_fragment_data_viewaudio, parent, false);
+                .inflate(R.layout.fragment_fragment_data_view, parent, false);
 
 
         return new MyViewHolder(itemView);
@@ -77,6 +78,22 @@ this.type=type;
 
 
 
+        holder.desc.setText(product.getDescr());
+
+        holder.desc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // DescriptionDialog.viewpos=viewpagerpos;
+                DescriptionDialog.dataPreview=product;
+                new DescriptionDialog(mContext,null, holder.desc.getText().toString(),true);
+            }
+        });
+
+        //imageView.setVisibility(View.VISIBLE);
+
+        Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, product.getPath());
+
+        holder.imageView.setImageBitmap(bitmap);
 
     }
 

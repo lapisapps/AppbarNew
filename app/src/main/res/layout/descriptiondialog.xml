@@ -49,6 +49,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:visibility="gone"
         android:id="@+id/button9"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
@@ -84,5 +85,83 @@
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
+    <LinearLayout
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.61"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/done"
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+
+
+                android:background="@drawable/ic_ok"
+
+
+                android:gravity="center"
+                android:text=""
+
+                android:textColor="@color/c3"
+                tools:layout_editor_absoluteX="282dp"
+                tools:layout_editor_absoluteY="8dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="0dp"
+
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+
+                android:background="@drawable/ic_cancel2"
+
+                android:gravity="center"
+                android:text=""
+
+                android:textColor="@color/c3"
+                tools:layout_editor_absoluteX="282dp"
+                tools:layout_editor_absoluteY="8dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

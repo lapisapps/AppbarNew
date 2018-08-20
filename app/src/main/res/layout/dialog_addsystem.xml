@@ -106,7 +106,7 @@
                 </android.support.design.widget.TextInputLayout>
                 <LinearLayout
 
-                    android:backgroundTint="@color/white"
+
                     android:layout_gravity="center"
                     android:background="@drawable/rounddrw"
                     android:layout_width="30dp"
@@ -114,8 +114,7 @@
 
                     <ImageButton
                         android:layout_gravity="center"
-                        android:backgroundTint="@color/dgreen"
-                        android:id="@+id/nextcode"
+                       android:id="@+id/nextcode"
                         android:background="@drawable/ic_navigate_next_white_24dp"
 
                         android:layout_width="30dp"
@@ -152,7 +151,7 @@
                 </android.support.design.widget.TextInputLayout>
                 <LinearLayout
 
-                    android:backgroundTint="@color/white"
+
                     android:layout_gravity="center"
                     android:background="@drawable/rounddrw"
                     android:layout_width="30dp"
@@ -160,7 +159,7 @@
 
                     <ImageButton
                         android:layout_gravity="center"
-                        android:backgroundTint="@color/dgreen"
+
                         android:id="@+id/nextname"
                         android:background="@drawable/ic_navigate_next_white_24dp"
 

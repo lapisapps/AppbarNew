@@ -81,7 +81,7 @@ View view;
 
     private void setupViewPager(ViewPager viewPager) {
         CustomPagerAdapter adapter = new CustomPagerAdapter(getFragmentManager());
-        adapter.addFrag(new FragmentSettingsProjects(), "Project");
+       // adapter.addFrag(new FragmentSettingsProjects(), "Project");
         adapter.addFrag(new FragmentSettingTag(), "Tags");
         adapter.addFrag(new FragmentSettingSystem(), "System");
         adapter.addFrag(new FragmentSettingArea(), "Area");
@@ -124,9 +124,10 @@ viewPager.setOffscreenPageLimit(4);
         super.onResume();
         ActionBar actionBar = ((HomeActivity)getActivity()).getSupportActionBar();
         actionBar.setTitle("Settings");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
 
     }
+
         }
 

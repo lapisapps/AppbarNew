@@ -2,6 +2,7 @@ package com.example.pentagon.appbar.AdapterClass;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.pentagon.appbar.Fragments.CreateReport;
 import com.example.pentagon.appbar.Fragments.PageReport2;
 import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingTag;
 import com.example.pentagon.appbar.R;
+import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class RecyclerViewAdapterTags extends RecyclerView.Adapter<RecyclerViewAd
 
 private String type;
     public class MyViewHolder extends RecyclerView.ViewHolder {
-TextView tag;
+TextView tag,id;
 CheckBox check;
 
 
@@ -42,7 +44,7 @@ CheckBox check;
             super(view);
 
             tag=(TextView) view.findViewById(R.id.tag);
-
+            id=(TextView) view.findViewById(R.id.id);
             check=(CheckBox) view.findViewById(R.id.checkBox);
         }
     }
@@ -60,7 +62,7 @@ this.type=type;
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
         itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tag_row, parent, false);
+                .inflate(R.layout.tag_row1, parent, false);
 
 
         return new MyViewHolder(itemView);
@@ -73,6 +75,7 @@ this.type=type;
 
         try {
 holder.tag.setText(product.getTag());
+            holder.id.setText(product.getTagid());
 if(product.getSelected())
 holder.check.setChecked(true);
 else
@@ -109,16 +112,23 @@ holder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListen
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
+        switch (type) {
+            case "tags":
+                PageReport2.prjcttags.get(holder.getAdapterPosition()).setSelected(isChecked);
+                break;
+            case "disciplines":
+                PageReport2.prjctdiscipline.get(holder.getAdapterPosition()).setSelected(isChecked);
+                break;
+            case "area":
 
-
-if(type.equals("tags"))
-    PageReport2.prjcttags.get(position).setSelected(isChecked);
-else if(type.equals("disciplines"))
-    CreateReport.dataDisciplines.get(position).setSelected(isChecked);
-else if (type.equals("area"))
-    PageReport2.prjctareas.get(position).setSelected(isChecked);
-else
-    CreateReport.dataSystems.get(position).setSelected(isChecked);
+                PageReport2.prjctareas.get(holder.getAdapterPosition()).setSelected(isChecked);
+                break;
+            default:
+                PageReport2.prjctsystem.get(holder.getAdapterPosition()).setSelected(isChecked);
+                break;
+        }
+        Log.e("dd",position+" "+holder.getAdapterPosition()+""+isChecked);
+        albumList.get(holder.getAdapterPosition()).setSelected(isChecked);
 
     }
 });

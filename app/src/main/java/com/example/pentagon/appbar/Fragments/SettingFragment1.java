@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -83,7 +85,7 @@ LinearLayout  rowprjct;
 Button searchbtn,cancelbtn,loadbtn;
 AutoCompleteTextView searchtxt;
 ConstraintLayout searchlay;
-
+   public static FragmentManager transaction;
     public SettingFragment1() {
         // Required empty public constructor
     }
@@ -125,7 +127,7 @@ ConstraintLayout searchlay;
        height = displayMetrics.heightPixels;
       //  width = displayMetrics.widthPixels;
 initilize();
-
+       transaction =getActivity().getSupportFragmentManager();
         return v;
     }
 
@@ -182,8 +184,7 @@ initilize();
                 searchtxt.setText("");
                 cancelbtn.setVisibility(View.GONE);
                 adapterprjcts.getFilter().filter("");
-                if(prjcth.getTag().toString().equals("0"))
-                    expandPrjctRow();
+
 
                 new AddProjectDialog(getActivity(),1);
             }
@@ -215,12 +216,13 @@ if((PrjctData) spinner.getSelectedItem()==null)
 
 
 
-searchtxt=v.findViewById(R.id.searchtext);
+
         searchlay=v.findViewById(R.id.searchlay);
        // searchlay.setVisibility(View.GONE);
         loadbtn=v.findViewById(R.id.load);
 
         searchbtn=v.findViewById(R.id.search);
+        searchtxt=v.findViewById(R.id.searchtext);
         cancelbtn=v.findViewById(R.id.cancel);
 setSearchView();
 
@@ -240,8 +242,8 @@ new ImportListDialog(getActivity(),"project");
         areaData= new SqliteDb(getActivity()).getAreas("");
         setPrjctRecycle(getActivity());
 
-        setAreaRecycle(getActivity());
-        expandPrjctRow();
+
+
 }
 
     private void setSearchView() {
@@ -498,27 +500,24 @@ public void setVisiblefalse(View view,TextView icon){
 //        recycprjcts.addOnItemTouchListener(new RecyclerItemClickListener(context, recycprjcts, new RecyclerItemClickListener.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(View view, int position) {
-//               TextView desc=view.findViewById(R.id.textView7);
-////                if (expandpos == position) {
-////                    Log.i("ddd","onclick2exp"+expandpos);
-//////                         rcview.getChildAt(expandpos).findViewById(R.id.expand).setVisibility(View.GONE);
-//////
-//////                         rcview.getChildAt(expandpos).findViewById(R.id.expand).startAnimation(animationUp);
-//////                         expandpos=-1;
-////                    return;
-////                }
-////                for(int j=0;j<recycprjcts.getChildCount();j++){
-////
-////                    recycprjcts.getChildAt(j).findViewById(R.id.textView7).setVisibility(View.GONE);
-////
-////                  //  recycprjcts.getChildAt(j).findViewById(R.id.expand).startAnimation(animationUp);
-////                }
-////
-////                recycprjcts.scrollToPosition(position);
-//             //animate(desc,context);
 //
 //
-//            }
+//                SettinghomeFragment createReport = new SettinghomeFragment();
+//
+//               // FragmentTransaction transaction =context.getSupportFragmentManager().beginTransaction();
+////                transaction.replace(R.id.content_frame, createReport);
+////                //  getSupportFragmentManager().popBackStack();
+////                Bundle bundle=new Bundle();
+////
+////                transaction.addToBackStack(null);
+////                transaction.commit();
+//                //transaction.popBackStackImmediate(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//
+//                transaction.beginTransaction()
+//                        .replace(R.id.content_frame, createReport)
+//.addToBackStack(null)
+//                        .commit();
+// }
 //
 //            @Override
 //            public void onLongItemClick(View view, int position) {

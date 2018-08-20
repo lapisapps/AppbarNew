@@ -15,12 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
+import com.example.pentagon.appbar.AddAreaDialog;
 import com.example.pentagon.appbar.AddDisciplineDialog;
 import com.example.pentagon.appbar.AddProjectDialog;
 import com.example.pentagon.appbar.AddTagDialog;
+import com.example.pentagon.appbar.AreaListDialog;
+import com.example.pentagon.appbar.DataClass.DataReport;
 import com.example.pentagon.appbar.DataClass.DataTag;
+import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.ProjectListDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SharedPreferenceClass;
@@ -28,6 +33,8 @@ import com.example.pentagon.appbar.SqliteDb;
 import com.example.pentagon.appbar.Utility;
 
 import java.util.ArrayList;
+
+import static com.example.pentagon.appbar.Fragments.PageReport2.loadprjctset;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,10 +97,10 @@ public static RecyclerView recyclerView;
         view=  inflater.inflate(R.layout.viewdiscipline, container, false);
 
 initilize();
-if(CreateReport.dataDisciplines==null)
-    CreateReport.dataDisciplines=new ArrayList<>();
+if(PageReport2.prjctdiscipline==null)
+    PageReport2.prjctdiscipline=new ArrayList<>();
 
-    setView(getActivity(),CreateReport.dataDisciplines);
+    setView(getActivity(),PageReport2.prjctdiscipline);
         return view;
 
     }
@@ -116,31 +123,44 @@ if(CreateReport.dataDisciplines==null)
             @Override
             public void onClick(View v) {
 
-                PopupMenu popup = new PopupMenu(getContext(), addtag);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater()
-                        .inflate(R.menu.popupaddnew, popup.getMenu());
+//                PopupMenu popup = new PopupMenu(getContext(), addtag);
+//                //Inflating the Popup using xml file
+//                popup.getMenuInflater()
+//                        .inflate(R.menu.popupaddnew, popup.getMenu());
+//
+//                //registering popup with OnMenuItemClickListener
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        if(item.getTitle().equals("New")) {
+//                            if(Utility.savemenu.getTitle().equals("edit")){
+//
+//                                Utility.optionItemSave(getActivity(),0);
+//                            }
+//                            new AddDisciplineDialog(getActivity(), 0);
+//                        }  else{
+//                            if(Utility.savemenu.getTitle().equals("edit")){
+//
+//                                Utility.optionItemSave(getActivity(),0);
+//                            }
+//                            new ProjectListDialog(getActivity(),PageReportDiscipline.this);}
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show(); //showing popup menu
+                if(Utility.savemenu.getTitle().equals("edit")){
 
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getTitle().equals("New")) {
-                            if(Utility.savemenu.getTitle().equals("edit")){
+                    Utility.optionItemSave(getActivity(),0);
+                }
 
-                                Utility.optionItemSave(getActivity(),0);
-                            }
-                            new AddDisciplineDialog(getActivity(), 0);
-                        }  else{
-                            if(Utility.savemenu.getTitle().equals("edit")){
+                if(CreateReport.loaddata.getPrjct()!=null&&!CreateReport.loaddata.getPrjct().equals(""))
+                {
 
-                                Utility.optionItemSave(getActivity(),0);
-                            }
-                            new ProjectListDialog(getActivity(),2);}
-                        return true;
-                    }
-                });
+                    new AreaListDialog(getActivity(),2,CreateReport.loaddata.getPrjct(),PageReportDiscipline.this);
 
-                popup.show(); //showing popup menu
+                }
+                else
+                    Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -186,7 +206,7 @@ if(CreateReport.dataDisciplines==null)
     }
 
     public static void setView(final Activity context, ArrayList<DataTag> dataTags){
-        CreateReport.dataDisciplines=dataTags;
+        PageReport2.prjctdiscipline=dataTags;
         Log.e("tagss",dataTags.size()+"");
         RecyclerViewAdapterTags place = new RecyclerViewAdapterTags(context,dataTags,"disciplines");
         recyclerView.setVisibility(View.VISIBLE);
@@ -220,13 +240,40 @@ if(CreateReport.dataDisciplines==null)
 //        }));
 
     }
+//
+//    public void loadcopy(){
+//
+//      String id=  new SharedPreferenceClass().getStoredValueLastDiscipline(getContext());
+//      ArrayList<DataTag> dataTags=new SqliteDb(getContext()).getReportDiscipline(id);
+//        PageReport2.prjctdiscipline.addAll(Utility.compare(dataTags,PageReport2.prjctdiscipline));
+//      setView(getActivity(),  PageReport2.prjctdiscipline);
+//
+//    }
+
 
     public void loadcopy(){
 
-      String id=  new SharedPreferenceClass().getStoredValueLastDiscipline(getContext());
-      ArrayList<DataTag> dataTags=new SqliteDb(getContext()).getReportDiscipline(id);
-      CreateReport.dataDisciplines.addAll(Utility.compare(dataTags,CreateReport.dataDisciplines));
-      setView(getActivity(),  CreateReport.dataDisciplines);
+        String id=  new SharedPreferenceClass().getStoredValueLastPrjct(getContext());
+        if(id==null)
+            return;
+        ArrayList<DataReport> dataTags;
+        // new SqliteDb(getActivity()).copyTagsPrjct(CreateReport.loaddata.getId(),id);
+        if((CreateReport.loaddata.getPrjct()==null||CreateReport.loaddata.getPrjct().equals("")))
+        {  Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
+
+            return;}
+        new SqliteDb(getActivity()).insertToPrjctDiscipline(new SqliteDb(getActivity()).getPrjctsDiscipline(id,""),CreateReport.loaddata.getPrjct());
+
+
+        ArrayList<PrjctData> pp= new SqliteDb(getActivity()).getPrjct(CreateReport.loaddata.getPrjct());
+        if(pp.size()>0)
+            loadprjctset(getActivity(),pp.get(0));
+        else
+            Toast.makeText(getActivity(), "Project not existing", Toast.LENGTH_SHORT).show();
+        //   prjcttags= new SqliteDb(getActivity()).getPrjctsTags(dd.getPrjct(),dd.getId());
+        //  prjctareas= new SqliteDb(getActivity()).getPrjctsAreas(dd.getPrjct(),dd.getId());
+        //  setView(getActivity(),  CreateReport.dataDisciplines);
+
 
     }
 }

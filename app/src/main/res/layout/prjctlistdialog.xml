@@ -9,11 +9,11 @@
     <TableRow
         android:id="@+id/prjctlist"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:background="@color/c3_light"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/guideline17"
+        app:layout_constraintBottom_toTopOf="@+id/searchlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,48 +24,51 @@
             android:layout_weight="1"
             android:padding="10dp">
 
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_weight="0.5"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_marginBottom="2dp"
-        android:id="@+id/head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
 
-        android:fontFamily="sans-serif-smallcaps"
+                <TextView
+                    android:id="@+id/head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
 
-        android:text="Select Project"
+                    android:fontFamily="sans-serif-smallcaps"
 
-        android:textColor="@color/white"
-        android:textSize="@dimen/setting_head" />
-    <CheckBox
+                    android:text="Select Project"
 
-        android:id="@+id/norsok"
-        android:layout_gravity="start"
-        android:textColor="@color/white"
-        android:text="Norsok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/setting_head" />
 
-</LinearLayout>
+                <CheckBox
+android:visibility="gone"
+                    android:id="@+id/norsok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="Norsok"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
 
 
             <Button
+
                 android:id="@+id/close"
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
 
                 android:layout_height="30dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/name_shapebtn"
+                android:background="@drawable/ic_cancel_white_24dp"
 
                 android:drawableTint="@color/c3"
-                android:gravity="center"
+                android:gravity="right"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text=" Close"
+                android:text=""
                 android:textColor="@color/c3"
                 android:visibility="visible" />
 
@@ -84,18 +87,98 @@
 
     </TableRow>
 
+    <android.support.constraint.ConstraintLayout
+
+        android:id="@+id/searchlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+
+        android:background="@drawable/search_shape"
+
+        android:gravity="center"
+        android:padding="5dp"
+        android:visibility="visible"
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prjctlist">
+
+        <ImageButton
+            android:id="@+id/searchwith"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/icon_search"
+            android:gravity="right|center"
+            android:textColor="@color/grey1"
+            android:textSize="15dp"
+            android:tint="@color/grey1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/searchtext"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <AutoCompleteTextView
+
+            android:id="@+id/searchtext"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:background="@null"
+            android:gravity="center|left"
+            android:hint="Search here......"
+            android:paddingLeft="12dp"
+            android:textColor="@color/grey1"
+            android:textColorHint="@color/grey1"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/searchwith"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+android:visibility="gone"
+            android:id="@+id/cancel"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:alpha="0.5"
+            android:background="@drawable/ic_cancel_white_24dp"
+
+            android:backgroundTint="@color/grey1"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:text=""
+            android:textColor="@color/c3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/searchtext"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/rowprjcts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:visibility="visible"
         android:weightSum="1"
-        app:layout_constraintBottom_toTopOf="@+id/button11"
+        app:layout_constraintTop_toBottomOf="@id/searchlay"
+        app:layout_constraintBottom_toTopOf="@+id/textView13"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prjctlist">
+        app:layout_constraintStart_toStartOf="parent">
 
 
         <LinearLayout
@@ -171,16 +254,15 @@
         android:layout_width="wrap_content"
         android:layout_height="38dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="256dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/btndialog"
-        android:layout_marginStart="256dp"
         android:text="Add"
         android:textColor="@color/white"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rowprjcts" />
 
@@ -210,7 +292,46 @@
     <android.support.constraint.Group
 
         android:id="@+id/group2"
+        android:layout_width="23dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="button11,selected"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/c3_light"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="Added to project"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rowprjcts" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addnew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="button11,selected" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rowprjcts"
+        app:layout_constraintVertical_bias="0.90999997"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 </android.support.constraint.ConstraintLayout>

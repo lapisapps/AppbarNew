@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
 import com.example.pentagon.appbar.AddAreaDialog;
 import com.example.pentagon.appbar.AddTagDialog;
+import com.example.pentagon.appbar.AreaListDialog;
 import com.example.pentagon.appbar.DataClass.DataReport;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
@@ -114,15 +115,29 @@ if(PageReport2.prjctareas!=null)
         addtag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                if(Utility.savemenu.getTitle().equals("edit")){
+//
+//                    Utility.optionItemSave(getActivity(),0);
+//                }
+//
+//                if(CreateReport.loaddata.getPrjct()!=null&&!CreateReport.loaddata.getPrjct().equals(""))
+//                    new AddAreaDialog(getActivity(),0);
+//                else
+//                    Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
                 if(Utility.savemenu.getTitle().equals("edit")){
 
                     Utility.optionItemSave(getActivity(),0);
                 }
 
                 if(CreateReport.loaddata.getPrjct()!=null&&!CreateReport.loaddata.getPrjct().equals(""))
-                    new AddAreaDialog(getActivity(),0);
+                {
+
+                    new AreaListDialog(getActivity(),0,CreateReport.loaddata.getPrjct(),PageReportArea.this);
+
+                }
                 else
                     Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
+
 
             }
         });

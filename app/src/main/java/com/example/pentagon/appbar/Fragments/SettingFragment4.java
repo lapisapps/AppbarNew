@@ -81,7 +81,7 @@ TableRow prjct,tag,system,area,discipline;
     private static RecyclerViewAdapterAreaSt adapterareas;
     static int height;
     public static Spinner spinner;
-
+public static TextView selectedprjct;
 
     Button searchbtn,cancelbtn,loadbtn;
     AutoCompleteTextView searchtxt;
@@ -172,52 +172,73 @@ initilize();
 
     public void initilize(){
 
-        recycarea=v.findViewById(R.id.recycarea);
-       prjct=v.findViewById(R.id.prjct);
-        prjctcount=v.findViewById(R.id.prjctcount);
-        areacount=v.findViewById(R.id.areacount);
-        addprjct=v.findViewById(R.id.addprjct);
-        addarea=v.findViewById(R.id.addarea);
-        addprjct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(prjcth.getTag().toString().equals("0"))
-                    expandPrjctRow();
+        recycarea=v.findViewById(R.id.recyclerView5);
+      // prjct=v.findViewById(R.id.prjct);
 
-                new AddProjectDialog(getActivity(),1);
-            }
-        });
+        areacount=v.findViewById(R.id.textView11);
+        selectedprjct=v.findViewById(R.id.prjct);
+    selectedprjct.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            new ProjectListDialog(getActivity(),SettingFragment4.this);
+        }
+    });
+//    selectedprjct.addTextChangedListener(new TextWatcher() {
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable s) {
+//
+//        }
+//    });
+        addarea=v.findViewById(R.id.addtag);
+
 addarea.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         searchtxt.setText("");
 
-if((PrjctData) spinner.getSelectedItem()==null)
+if(selectedprjct.getTag().toString().equals("null"))
     Toast.makeText(getActivity(), "No projects found", Toast.LENGTH_SHORT).show();
      else
 {
 
-    PopupMenu popup = new PopupMenu(getContext(), addarea);
-    //Inflating the Popup using xml file
-    popup.getMenuInflater()
-            .inflate(R.menu.popupaddnew, popup.getMenu());
+//    PopupMenu popup = new PopupMenu(getContext(), addarea);
+//    //Inflating the Popup using xml file
+//    popup.getMenuInflater()
+//            .inflate(R.menu.popupaddnew, popup.getMenu());
+//
+//    //registering popup with OnMenuItemClickListener
+//    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//        public boolean onMenuItemClick(MenuItem item) {
+//            PrjctData pp=(PrjctData) selectedprjct.getTag();
+//            if(item.getTitle().equals("New")) {
+//                AddAreaDialog.prjctData=pp;
+//                new AddAreaDialog(getActivity(),1);
+//            }  else{
+//
+//                new AreaListDialog(getActivity(),0,pp.getId(),SettingFragment4.this);
+//              }
+//            return true;
+//        }
+//    });
+//
+//
+//
+//    popup.show();
 
-    //registering popup with OnMenuItemClickListener
-    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-        public boolean onMenuItemClick(MenuItem item) {
-            PrjctData pp=(PrjctData) spinner.getSelectedItem();
-            if(item.getTitle().equals("New")) {
-                AddAreaDialog.prjctData=pp;
-                new AddAreaDialog(getActivity(),1);
-            }  else{
 
-                new AreaListDialog(getActivity(),0,pp.getId(),"setting");
-              }
-            return true;
-        }
-    });
+    PrjctData pp=(PrjctData) selectedprjct.getTag();
+    new AreaListDialog(getActivity(),0,pp.getId(),SettingFragment4.this);
 
-    popup.show();
 }
 
 
@@ -260,8 +281,8 @@ new ImportListDialog(getActivity(),"area");
         areaData= new SqliteDb(getActivity()).getAreas("");
      //   setPrjctRecycle(getActivity());
 
-        setAreaRecycle(getActivity());
-setAreaView();
+//        setAreaRecycle(getActivity());
+//setAreaView();
 }
     private void setSearchView() {
         cancelbtn.setVisibility(View.GONE);
@@ -286,7 +307,7 @@ setAreaView();
               //  searchlay.setVisibility(View.GONE);
                  loadbtn.setVisibility(View.VISIBLE);
                // searchbtn.setVisibility(View.VISIBLE);
-                addprjct.setVisibility(View.VISIBLE);
+
                 searchtxt.setText("");
                 cancelbtn.setVisibility(View.GONE);
                 adapterareas.getFilter().filter("");
@@ -298,11 +319,12 @@ setAreaView();
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //     filter(searchtext.getText().toString());
                 Log.i("textt",searchtxt.getText().toString()+s);
+                if(adapterareas!=null){
                 adapterareas.getFilter().filter(searchtxt.getText().toString());
                 if(searchtxt.getText().toString().isEmpty())
                     cancelbtn.setVisibility(View.GONE);
                 else
-                    cancelbtn.setVisibility(View.VISIBLE);
+                    cancelbtn.setVisibility(View.VISIBLE);}
             }
 
             @Override
@@ -474,7 +496,7 @@ public void setVisiblefalse(View view,TextView icon){
 
     public static void loadareaset(Activity context) {
 
-        areaData= new SqliteDb(context).getPrjctsAreas(((PrjctData)spinner.getSelectedItem()).getId(),"");
+        areaData= new SqliteDb(context).getPrjctsAreas(((PrjctData)selectedprjct.getTag()).getId(),"");
         setAreaRecycle(context);
         recycarea.scrollToPosition(areaData.size()-1);
 

@@ -1,8 +1,6 @@
-package com.example.pentagon.appbar.Fragments;
+package com.example.pentagon.appbar.Fragments.SettingsFragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -28,16 +26,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterProjectSt;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTagSt;
-import com.example.pentagon.appbar.AddAreaDialog;
-import com.example.pentagon.appbar.AddProjectDialog;
 import com.example.pentagon.appbar.AddTagDialog;
 import com.example.pentagon.appbar.AreaListDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.ImportListDialog;
-import com.example.pentagon.appbar.ProjectListDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 
@@ -47,11 +41,11 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link SettingFragment6#newInstance} factory method to
+ * Use the {@link SettingFragment7#newInstance} factory method to
  * create an instance of this fragment.
  */
 
-public class SettingFragment6 extends Fragment {
+public class SettingFragment7 extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,30 +56,32 @@ public class SettingFragment6 extends Fragment {
     private String mParam2;
     View v;
 Button addtag;
-
-
-
-
-
-
-
-    static TextView prjctcount;
-
+    LinearLayout prjct,tag,system,area,discipline;
+    LinearLayout rowprjct;
+    TableRow rowtag,rowsystem,rowarea,rowdiscipline;
+    TextView prjcth;
+    TextView tagh;
+    TextView systemh;
+    TextView areah;
+    TextView disciplineh;
+    Button addprjct,addarea;
+    static TextView prjctcount, areacount;
+    static RecyclerView recycnontags;
+    static RecyclerView recycarea;
     static ArrayList<DataTag> tagData;
-
-
+    static ArrayList<DataTag> etagData;
+    static ArrayList<DataTag> nontagData;
     ArrayList<PrjctData> prjctData;
     static int height;
    public static Spinner spinner;
-    static RecyclerView recycex;
-    public static TextView selectedprjct;
+    static RecyclerView recycnonex,recycex;
+    private static RecyclerViewAdapterTagSt adaptertags;
+    private static RecyclerViewAdapterTagSt adapternontags;
 
     Button searchbtn,cancelbtn,loadbtn;
     AutoCompleteTextView searchtxt;
     static ConstraintLayout searchlay;
-    private static RecyclerViewAdapterTagSt adaptertags;
-
-    public SettingFragment6() {
+    public SettingFragment7() {
         // Required empty public constructor
     }
 
@@ -98,8 +94,8 @@ Button addtag;
      * @return A new instance of fragment SettingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SettingFragment6 newInstance(String param1, String param2) {
-        SettingFragment6 fragment = new SettingFragment6();
+    public static SettingFragment7 newInstance(String param1, String param2) {
+        SettingFragment7 fragment = new SettingFragment7();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -120,7 +116,7 @@ Button addtag;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragmentsettagnew, container, false);
+        v= inflater.inflate(R.layout.fragmentsetnew1, container, false);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -138,13 +134,14 @@ initilize();
 
     public static void loadtagset(Activity context) {
 
-        tagData= new SqliteDb(context).getPrjctTags(((PrjctData)selectedprjct.getTag()).getId());
-  //     etagData= new SqliteDb(context).getTagsExiting(((PrjctData)spinner.getSelectedItem()).getId(),"1");
+        nontagData= new SqliteDb(context).getTagsExiting(((PrjctData)spinner.getSelectedItem()).getId(),"0");
+        etagData= new SqliteDb(context).getTagsExiting(((PrjctData)spinner.getSelectedItem()).getId(),"1");
 
 
+        adapternontags.notifyDataSetChanged();
+setNonExistingRecycle(context);
 
-
-
+      adaptertags.notifyDataSetChanged();
       setExistingRecycle(context);
        // recycnonex.scrollToPosition(nontagData.size()-1);
 
@@ -183,10 +180,11 @@ initilize();
 public void initilize(){
 
 
-
-    prjctcount=v.findViewById(R.id.textView11);
-
-
+    prjct=v.findViewById(R.id.prjct);
+    prjctcount=v.findViewById(R.id.prjctcount);
+    areacount=v.findViewById(R.id.areacount);
+    addprjct=v.findViewById(R.id.addprjct);
+    addarea=v.findViewById(R.id.addarea);
 //    addprjct.setOnClickListener(new View.OnClickListener() {
 //        @Override
 //        public void onClick(View v) {
@@ -196,56 +194,87 @@ public void initilize(){
 //            new AddProjectDialog(getActivity(),1);
 //        }
 //    });
-    selectedprjct=v.findViewById(R.id.prjct);
-    selectedprjct.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            new ProjectListDialog(getActivity(),SettingFragment6.this);
-        }
-    });
     addtag=v.findViewById(R.id.addtag) ;
     addtag.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             searchtxt.setText("");
-            if(selectedprjct.getTag().toString().equals("null"))
+            if((PrjctData)spinner.getSelectedItem()==null)
                 Toast.makeText(getActivity(), "No projects found", Toast.LENGTH_SHORT).show();
             else{
 
-//                PopupMenu popup = new PopupMenu(getContext(), addtag);
-//                //Inflating the Popup using xml file
-//                popup.getMenuInflater()
-//                        .inflate(R.menu.popupaddnew, popup.getMenu());
-//
-//                //registering popup with OnMenuItemClickListener
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        PrjctData pp=(PrjctData) selectedprjct.getTag();
-//                        if(item.getTitle().equals("New")) {
-//                            AddTagDialog.prjctData=pp;
-//                            new AddTagDialog(getActivity(),1);
-//                        }  else{
-//
-//                            new AreaListDialog(getActivity(),1,pp.getId(),SettingFragment6.this);
-//                        }
-//                        return true;
-//                    }
-//                });
-//
-//                popup.show();
+                PopupMenu popup = new PopupMenu(getContext(), addtag);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.popupaddnew, popup.getMenu());
 
-                PrjctData pp=(PrjctData) selectedprjct.getTag();
-                new AreaListDialog(getActivity(),1,pp.getId(),SettingFragment6.this);
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        PrjctData pp=(PrjctData) spinner.getSelectedItem();
+                        if(item.getTitle().equals("New")) {
+                            AddTagDialog.prjctData=pp;
+                            new AddTagDialog(getActivity(),1);
+                        }  else{
 
+                            new AreaListDialog(getActivity(),1,pp.getId(),SettingFragment7.this);
+                        }
+                        return true;
+                    }
+                });
+
+                popup.show();
 //                AddTagDialog.prjctData=(PrjctData)spinner.getSelectedItem();
 //                new AddTagDialog(getActivity(),1);
 
             }
         }
     });
+    area=v.findViewById(R.id.area);
 
-    recycex=v.findViewById(R.id.recyclerView5);
+    rowarea=v.findViewById(R.id.rowarea);
 
+    rowprjct=v.findViewById(R.id.rowprjcts);
+    rowarea=v.findViewById(R.id.rowarea);
+
+
+    rowtag=v.findViewById(R.id.rowtags);
+
+    prjcth=v.findViewById(R.id.hprjct);
+    areah=v.findViewById(R.id.harea);
+    recycex=v.findViewById(R.id.recycprjcts);
+    recycnonex=v.findViewById(R.id.recycarea);
+       prjct.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+//               if(prjctData==null)
+//                   prjctData= new SqliteDb(getActivity()).getPrjcts();
+//               animate(rowprjct,prjcth,1);
+//               if(areah.getTag().toString().equals("1"))
+//               animate(rowarea,areah,2);
+               expandPrjctRow();
+
+
+           }
+       });
+//       discipline.setOnClickListener(new View.OnClickListener() {
+//           @Override
+//           public void onClick(View v) {
+//               animate(rowdiscipline,disciplineh);
+//           }
+//       });
+
+        area.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+
+
+expandArea();
+
+        }
+    });
 
     searchtxt=v.findViewById(R.id.searchtext);
     searchlay=v.findViewById(R.id.searchlay);
@@ -279,11 +308,12 @@ public void initilize(){
 
                 PrjctData tag = (PrjctData) item1;
 
-                tagData=new SqliteDb(getContext()).getPrjctTags(tag.getId());
-           setExistingRecycle(getActivity());
-
+                etagData=new SqliteDb(getContext()).getTagsExiting(tag.getId(),"1");
+                nontagData=new SqliteDb(getContext()).getTagsExiting(tag.getId(),"0");
+                setExistingRecycle(getActivity());
+                setNonExistingRecycle(getActivity());
                 adaptertags.getFilter().filter(searchtxt.getText().toString());
-
+                adapternontags.getFilter().filter(searchtxt.getText().toString());
                 //setProjectTags(0);
 //                if(prjcttags.size()>0){
 //                    prjcttags.get(0).setSelected(true);
@@ -329,7 +359,7 @@ public void initilize(){
                 searchtxt.setText("");
                 cancelbtn.setVisibility(View.GONE);
                 adaptertags.getFilter().filter("");
-
+                adapternontags.getFilter().filter("");
             }
         });
         searchtxt.addTextChangedListener(new TextWatcher() {
@@ -337,13 +367,12 @@ public void initilize(){
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //     filter(searchtext.getText().toString());
                 Log.i("textt",searchtxt.getText().toString()+s);
-                if(adaptertags!=null){
                 adaptertags.getFilter().filter(searchtxt.getText().toString());
-
+                adapternontags.getFilter().filter(searchtxt.getText().toString());
                 if(searchtxt.getText().toString().isEmpty())
                     cancelbtn.setVisibility(View.GONE);
                 else
-                    cancelbtn.setVisibility(View.VISIBLE);}
+                    cancelbtn.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -364,10 +393,10 @@ public void initilize(){
 private static void setExistingRecycle(final Activity context) {
 
 
-    prjctcount.setText(tagData.size()+" tags");
+    prjctcount.setText(etagData.size()+" tags");
     adaptertags=null;
 
-    adaptertags = new RecyclerViewAdapterTagSt(context,tagData,0);
+    adaptertags = new RecyclerViewAdapterTagSt(context,etagData,0);
     recycex.setVisibility(View.VISIBLE);
 
     recycex.setHasFixedSize(true);
@@ -378,18 +407,18 @@ private static void setExistingRecycle(final Activity context) {
 
     // recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(AddEventActivity.this,GridLayoutManager.HORIZONTAL,false));
     recycex.setLayoutManager(mLayoutManager);
-//    final float scale = context.getResources().getDisplayMetrics().density;
-//    int pixels = (int) (40 * scale + 0.5f);
-//    //  if(prjctData.size()>6){
-//    ViewGroup.LayoutParams params=recycex.getLayoutParams();
-//
-//    if(etagData.size()*pixels>height*55/100)
-//        params.height=height*55/100;
-//    else
-//    {
-//        params.height=etagData.size()*pixels;
-//
-//    }
+    final float scale = context.getResources().getDisplayMetrics().density;
+    int pixels = (int) (40 * scale + 0.5f);
+    //  if(prjctData.size()>6){
+    ViewGroup.LayoutParams params=recycex.getLayoutParams();
+
+    if(etagData.size()*pixels>height*55/100)
+        params.height=height*55/100;
+    else
+    {
+        params.height=etagData.size()*pixels;
+
+    }
     // }
     //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
     recycex.setItemAnimator(new DefaultItemAnimator());
@@ -420,6 +449,117 @@ private static void setExistingRecycle(final Activity context) {
 
 
 }
+    private static void setNonExistingRecycle(final Activity context) {
 
 
+        areacount.setText(nontagData.size()+" Tags");
+        adapternontags=null;
+
+        adapternontags = new RecyclerViewAdapterTagSt(context,nontagData,0);
+        recycnonex.setVisibility(View.VISIBLE);
+
+        recycnonex.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.VERTICAL,false);
+        // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        recycnonex.setNestedScrollingEnabled(true);
+
+        // recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(AddEventActivity.this,GridLayoutManager.HORIZONTAL,false));
+        recycnonex.setLayoutManager(mLayoutManager);
+        final float scale = context.getResources().getDisplayMetrics().density;
+        int pixels = (int) (40 * scale + 0.5f);
+        //  if(prjctData.size()>6){
+        ViewGroup.LayoutParams params=recycnonex.getLayoutParams();
+
+        if(nontagData.size()*pixels>height*50/100)
+            params.height=height*50/100;
+        else
+        {
+            params.height=nontagData.size()*pixels;
+
+        }
+        recycnonex.setLayoutParams(params);
+        // }
+        //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        recycnonex.setItemAnimator(new DefaultItemAnimator());
+        recycnonex.setAdapter(adapternontags);
+
+
+        adapternontags.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                areacount.setText(adapternontags.getSize()+" Tags");
+//                final float scale = context.getResources().getDisplayMetrics().density;
+//                int pixels = (int) (40 * scale + 0.5f);
+//                //  if(prjctData.size()>6){
+//                ViewGroup.LayoutParams params=recycnonex.getLayoutParams();
+//                if(recycex.getChildCount()*pixels>height*50/100)
+//                    params.height=height*50/100;
+//                else
+//                {
+//                    params.height=recycex.getChildCount()*pixels;
+//
+//                }
+//                if(searchlay.getVisibility()==View.VISIBLE)
+//                recycnonex.setLayoutParams(params);
+
+
+            }
+        });
+
+
+
+    }
+    private void expandArea() {
+        if(areah.getTag().toString().equals("0")){
+
+
+            areah.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_less_black_24dp, 0);
+            areah.setTag("1");
+            rowarea.setVisibility(View.VISIBLE);
+
+            //setAreaRecycle();
+            setNonExistingRecycle(getActivity());
+            //adaptertags.getFilter().filter(searchtxt.getText().toString());
+            adapternontags.getFilter().filter(searchtxt.getText().toString());
+        }else {
+
+            areah.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
+            areah.setTag("0");
+
+            rowarea.setVisibility(View.GONE);
+        }
+
+        if(prjcth.getTag().toString().equals("1")){
+            prjcth.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
+            rowprjct.setVisibility(View.GONE);
+            prjcth.setTag("0");
+        }
+
+    }
+
+    private void expandPrjctRow() {
+        if(prjcth.getTag().toString().equals("0")) {
+
+            prjcth.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_less_black_24dp, 0);
+            prjcth.setTag("1");
+            rowprjct.setVisibility(View.VISIBLE);
+            setExistingRecycle(getActivity());
+         adaptertags.getFilter().filter(searchtxt.getText().toString());
+            //adapternontags.getFilter().filter(searchtxt.getText().toString());
+        }else
+        {
+
+            prjcth.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
+            prjcth.setTag("0");
+            rowprjct.setVisibility(View.GONE);
+        }
+        if(areah.getTag().toString().equals("1")){
+            areah.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
+            rowarea.setVisibility(View.GONE);
+//            rowareaprjct.setVisibility(View.GONE);
+            areah.setTag("0");
+        }
+    }
 }

@@ -143,7 +143,7 @@ plantdeskrow=layout.findViewById(R.id.rowplantdesk);
                        dd="NORSOK unloaded Successfully";
                        new SqliteDb(context).unloadSystem("norsok");}
                    Utility.customToastSave(dd,context,"done");
-                   SettingFragment3.loadSystemset(context);
+               SettingFragment3.loadSystemset(context);
                    alertDialog.dismiss();
                }
            });

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,11 +30,15 @@ import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterDisciplineSt;
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterSystemSt;
+import com.example.pentagon.appbar.AddAreaDialog;
 import com.example.pentagon.appbar.AddDisciplineDialog;
 import com.example.pentagon.appbar.AddSystemDialog;
+import com.example.pentagon.appbar.AreaListDialog;
 import com.example.pentagon.appbar.DataClass.DataTag;
+import com.example.pentagon.appbar.DataClass.PrjctData;
 import com.example.pentagon.appbar.HomeActivity;
 import com.example.pentagon.appbar.ImportListDialog;
+import com.example.pentagon.appbar.ProjectListDialog;
 import com.example.pentagon.appbar.R;
 import com.example.pentagon.appbar.SqliteDb;
 
@@ -69,16 +74,18 @@ public class SettingFragment5 extends Fragment {
     TextView areah;
     TextView disciplineh;
     Button adddiscipline,addsystem;
-    static TextView disciplinecount, systemcount;
+    static TextView disciplinecount;
     static RecyclerView recycdiscipline;
-    static RecyclerView recycsystem;
-    private static RecyclerViewAdapterSystemSt adapterSystem;
+
+
     static int height;
     static Spinner spinner;
 
     Button searchbtn,cancelbtn,loadbtn;
     AutoCompleteTextView searchtxt;
     ConstraintLayout searchlay;
+    public static TextView selectedprjct;
+
     public SettingFragment5() {
         // Required empty public constructor
     }
@@ -162,35 +169,64 @@ public class SettingFragment5 extends Fragment {
 
     public void initilize(){
 
-        recycsystem=v.findViewById(R.id.recycarea);
-        discipline=v.findViewById(R.id.prjct);
-        disciplinecount=v.findViewById(R.id.prjctcount);
-        systemcount=v.findViewById(R.id.areacount);
-        adddiscipline=v.findViewById(R.id.addprjct);
-        addsystem=v.findViewById(R.id.addarea);
+selectedprjct=v.findViewById(R.id.prjct);
+        selectedprjct=v.findViewById(R.id.prjct);
+        selectedprjct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ProjectListDialog(getActivity(),SettingFragment5.this);
+            }
+        });
+        disciplinecount=v.findViewById(R.id.textView11);
+
+        adddiscipline=v.findViewById(R.id.addtag);
+
         adddiscipline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchtxt.setText("");
-                if(disciplineh.getTag().toString().equals("0"))
-                    expandPrjctRow();
 
-                new AddDisciplineDialog(getActivity(),1);
+
+                if(selectedprjct.getTag().toString().equals("null"))
+                    Toast.makeText(getActivity(), "No projects found", Toast.LENGTH_SHORT).show();
+                else
+                {
+
+//                    PopupMenu popup = new PopupMenu(getContext(), adddiscipline);
+//                    //Inflating the Popup using xml file
+//                    popup.getMenuInflater()
+//                            .inflate(R.menu.popupaddnew, popup.getMenu());
+//
+//                    //registering popup with OnMenuItemClickListener
+//                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                        public boolean onMenuItemClick(MenuItem item) {
+//                            PrjctData pp=(PrjctData) selectedprjct.getTag();
+//                            if(item.getTitle().equals("New")) {
+//                                AddDisciplineDialog.prjctData=pp;
+//                                new AddDisciplineDialog(getActivity(),1);
+//                            }  else{
+//
+//                                new AreaListDialog(getActivity(),2,pp.getId(),SettingFragment5.this);
+//                            }
+//                            return true;
+//                        }
+//                    });
+//
+//                    popup.show();
+                    PrjctData pp=(PrjctData) selectedprjct.getTag();
+                    new AreaListDialog(getActivity(),2,pp.getId(),SettingFragment5.this);
+                }
+
             }
         });
 
-        system=v.findViewById(R.id.area);
 
-        rowsystem=v.findViewById(R.id.rowarea);
-       // rowareaprjct=v.findViewById(R.id.areaprjct);
-        rowdiscipline=v.findViewById(R.id.rowprjcts);
-        rowsystem=v.findViewById(R.id.rowarea);
+
 
 
        // rowtag=v.findViewById(R.id.rowtags);
 
-       disciplineh=v.findViewById(R.id.hprjct);
-        systemh=v.findViewById(R.id.harea);
+
 
 
         searchtxt=v.findViewById(R.id.searchtext);
@@ -210,13 +246,13 @@ public class SettingFragment5 extends Fragment {
             }
         });
 
-        disciplineData= new SqliteDb(getActivity()).getDiscipline("");
-        Log.e("ddd",disciplineData.size()+"");
-       // systemData= new SqliteDb(getActivity()).getSystems();
-        setDisplineRecycle(getActivity());
+//        disciplineData= new SqliteDb(getActivity()).getDiscipline("");
+//        Log.e("ddd",disciplineData.size()+"");
+//       // systemData= new SqliteDb(getActivity()).getSystems();
+//        setDisplineRecycle(getActivity());
 
       //  setSystemRecycle(getActivity());
-        expandPrjctRow();
+
     }
     private void setSearchView() {
         cancelbtn.setVisibility(View.GONE);
@@ -253,6 +289,8 @@ public class SettingFragment5 extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //     filter(searchtext.getText().toString());
                 Log.i("textt",searchtxt.getText().toString()+s);
+                if(adapterdiscipline==null)
+                    return;
                 adapterdiscipline.getFilter().filter(searchtxt.getText().toString());
                 if(searchtxt.getText().toString().isEmpty())
                     cancelbtn.setVisibility(View.GONE);
@@ -299,58 +337,14 @@ public class SettingFragment5 extends Fragment {
     }
 
 
-    private static void setSystemRecycle(Activity context) {
 
-        systemcount.setText(systemData.size()+" Systems");
-        adapterSystem = new RecyclerViewAdapterSystemSt(context,systemData,0);
-        recycsystem.setVisibility(View.VISIBLE);
-
-        recycsystem.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.VERTICAL,false);
-        // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        recycsystem.setNestedScrollingEnabled(true);
-
-        // recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(AddEventActivity.this,GridLayoutManager.HORIZONTAL,false));
-        recycsystem.setLayoutManager(mLayoutManager);
-        //    if(areaData.size()>4){
-        ViewGroup.LayoutParams params=recycsystem.getLayoutParams();
-        params.height=height*60/100;
-        if(systemData.size()*35>height*60/100)
-            recycsystem.setLayoutParams(params);
-        //}
-        //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recycsystem.setItemAnimator(new DefaultItemAnimator());
-        recycsystem.setAdapter(adapterSystem);
-
-        adapterSystem.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                systemcount.setText(systemData.size()+" Systems");
-            }
-        });
-
-
-//        recyimages.addOnItemTouchListener(new RecyclerItemClickListener(context, recyimages, new RecyclerItemClickListener.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                new PreviewDialog(context,ddimage.get(position),false);
-//            }
-//
-//            @Override
-//            public void onLongItemClick(View view, int position) {
-//
-//            }
-//        }));
-    }
 
     private static void setDisplineRecycle(final Activity context) {
 
 
         disciplinecount.setText(disciplineData.size()+" discipline");
         adapterdiscipline=null;
-        recycdiscipline=v.findViewById(R.id.recycprjcts);
+        recycdiscipline=v.findViewById(R.id.recyclerView5);
         adapterdiscipline = new RecyclerViewAdapterDisciplineSt(context,disciplineData,0);
         recycdiscipline.setVisibility(View.VISIBLE);
 
@@ -455,7 +449,7 @@ public class SettingFragment5 extends Fragment {
 
     public static void loadDisciplineset(Activity context) {
 
-        disciplineData= new SqliteDb(context).getDiscipline("");
+        disciplineData= new SqliteDb(context).getPrjctsDiscipline(((PrjctData)selectedprjct.getTag()).getId(),"");
         setDisplineRecycle(context);
         recycdiscipline.scrollToPosition(disciplineData.size()-1);
 

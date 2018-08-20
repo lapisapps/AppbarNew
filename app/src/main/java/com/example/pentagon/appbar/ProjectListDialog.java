@@ -7,11 +7,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.Group;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -46,6 +49,10 @@ import com.example.pentagon.appbar.Fragments.PageReport1;
 import com.example.pentagon.appbar.Fragments.PageReport2;
 import com.example.pentagon.appbar.Fragments.PageReportDiscipline;
 import com.example.pentagon.appbar.Fragments.PageReportSystem;
+import com.example.pentagon.appbar.Fragments.SettingFragment3;
+import com.example.pentagon.appbar.Fragments.SettingFragment4;
+import com.example.pentagon.appbar.Fragments.SettingFragment5;
+import com.example.pentagon.appbar.Fragments.SettingFragment6;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,7 +64,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class ProjectListDialog extends Dialog {
 
-    private  int type;
+    private Fragment type;
     private  ArrayList<DataTag> otagData;
     private static ArrayList<DataTag> tagData;
     private  ArrayList<DataTag> existtagData;
@@ -71,13 +78,17 @@ Group group;
     static RecyclerView recycprjcts;
     Activity context;
     Dialog alertDialog;
+  public  Fragment fragment;
     TextView head;
     Button add;
     Button close;
 CheckBox ch;
     View layout;
     String hh="Discipline";
-    public ProjectListDialog(@NonNull Activity mContext,int type) {
+    private AutoCompleteTextView searchtxt;
+    Button cancelbtn;
+
+    public ProjectListDialog(@NonNull Activity mContext,Fragment type) {
         super(mContext);
 
         context = mContext;
@@ -92,7 +103,7 @@ CheckBox ch;
 
 alertDialog.setContentView(layout);
 
-this.type=type;
+this.fragment=type;
 
 
 initlize();
@@ -114,9 +125,11 @@ close.setOnClickListener(new View.OnClickListener() {
         alertDialog.dismiss();
     }
 });
+        setSearchView();
     }
 
     private void initlize() {
+        ((FloatingActionButton)  layout.findViewById(R.id.addnew)).setVisibility(View.GONE);
         ch=layout.findViewById(R.id.norsok);
         ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -157,7 +170,7 @@ selectedtags.add(model);
 
                     }
                 }
-                if(type==2) {
+                if(fragment.getClass().equals(PageReportDiscipline.class)) {
                     //new SqliteDb(getContext()).insertReportDiscipline(selectedtags, PageReport1.reportid.getText().toString());
                    // tagData = new SqliteDb(context).getReportDiscipline(CreateReport.loaddata.getId());
                     CreateReport.dataDisciplines.addAll(selectedtags);
@@ -178,13 +191,13 @@ group=layout.findViewById(R.id.group2);
         prjctcount=layout.findViewById(R.id.prjctcount);
         selected=layout.findViewById(R.id.selected);
         group.setVisibility(View.GONE);
-        if(type==0){
+        if(fragment.getClass().equals(PageReport2.class)||fragment.getClass().equals(SettingFragment4.class)||fragment.getClass().equals(SettingFragment6.class)||fragment.getClass().equals(SettingFragment3.class)||fragment.getClass().equals(SettingFragment5.class)){
 ch.setVisibility(View.GONE);
-            prjctdatas = PageReport2.prjctdatas;
+            prjctdatas = new SqliteDb(context).getPrjcts();
 
             setPrjctRecycle(context,layout);
         }
-        else if(type==2){
+        else if(fragment.getClass().equals(PageReportDiscipline.class)){
             head.setText("Select Disciplines");
             tagData= new SqliteDb(context).getDiscipline("0");
         tagData=Utility.compare(tagData,CreateReport.dataDisciplines);
@@ -248,9 +261,30 @@ ch.setVisibility(View.GONE);
             @Override
             public void onItemClick(View view, int position) {
 
+                if (fragment.getClass().equals(PageReport2.class)) {
 
-
-                PageReport2.loadprjctset(context,prjctdatas.get(position));
+                    PageReport2.loadprjctset(context,prjctdatas.get(position));
+                }
+                else if (fragment.getClass().equals(SettingFragment4.class)) {
+                    SettingFragment4.selectedprjct.setTag(prjctdatas.get(position));
+                    SettingFragment4.selectedprjct.setText(prjctdatas.get(position).getPrjct());
+                    SettingFragment4.loadareaset(context);
+                }
+                else if (fragment.getClass().equals(SettingFragment6.class)) {
+                    SettingFragment6.selectedprjct.setTag(prjctdatas.get(position));
+                    SettingFragment6.selectedprjct.setText(prjctdatas.get(position).getPrjct());
+                    SettingFragment6.loadtagset(context);
+                }
+                else if (fragment.getClass().equals(SettingFragment5.class)) {
+                    SettingFragment5.selectedprjct.setTag(prjctdatas.get(position));
+                    SettingFragment5.selectedprjct.setText(prjctdatas.get(position).getPrjct());
+                    SettingFragment5.loadDisciplineset(context);
+                }
+                else if (fragment.getClass().equals(SettingFragment3.class)) {
+                    SettingFragment3.selectedprjct.setTag(prjctdatas.get(position));
+                    SettingFragment3.selectedprjct.setText(prjctdatas.get(position).getPrjct());
+                    SettingFragment3.loadSystemset(context);
+                }
 alertDialog.dismiss();
             }
 
@@ -264,7 +298,7 @@ alertDialog.dismiss();
 
     private  void setDisciplineRecycle(final Activity context, View v, final ArrayList<DataTag> dd) {
 
-        if(type==1)
+        if(fragment.getClass().equals(PageReportSystem.class))
    hh="System";
 
 otagData=dd;
@@ -324,5 +358,90 @@ otagData=dd;
         }));
 
     }
+    private void setSearchView() {
+        searchtxt=layout.findViewById(R.id.searchtext);
+        cancelbtn=layout.findViewById(R.id.cancel);
+        cancelbtn.setVisibility(View.GONE);
+//        searchbtn.setTag("search");
+//        searchbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                //  searchlay.setVisibility(View.VISIBLE);
+//                loadbtn.setVisibility(View.GONE);
+//                // searchbtn.setVisibility(View.GONE);
+//                addprjct.setVisibility(View.GONE);
+//                searchtxt.setText("");
+//
+//
+//            }
+//        });
 
+        cancelbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //searchbtn.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_search_green_24dp),null,null,null);
+                // searchlay.setVisibility(View.GONE);
+                // loadbtn.setVisibility(View.VISIBLE);
+                //searchbtn.setVisibility(View.VISIBLE);
+
+
+
+
+                searchtxt.setText("");
+                cancelbtn.setVisibility(View.GONE);
+                adapterprjcts.getFilter().filter("");
+
+            }
+        });
+        searchtxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //     filter(searchtext.getText().toString());
+                Log.i("textt",searchtxt.getText().toString()+s);
+               // adapterprjcts.getFilter().filter(searchtxt.getText().toString());
+
+                filter(searchtxt.getText().toString());
+                if(searchtxt.getText().toString().isEmpty())
+                    cancelbtn.setVisibility(View.GONE);
+                else
+                    cancelbtn.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+
+        });
+    }
+    public void filter(String charString) {
+        if (charString.isEmpty()) {
+
+            prjctdatas = new SqliteDb(context).getPrjcts();
+        } else {
+            ArrayList<PrjctData> filteredList = new ArrayList<>();
+            for (PrjctData row : prjctdatas) {
+
+                // name match condition. this might differ depending on your requirement
+                // here we are looking for name or phone number match
+                if (row.getPrjct().toLowerCase().contains(charString.toLowerCase()) || row.getId().toLowerCase().contains(charString.toLowerCase())) {
+                    filteredList.add(row);
+                }
+            }
+
+            prjctdatas = filteredList;
+        }
+        adapterprjcts = new RecyclerViewAdapterProjects(context,prjctdatas,recycprjcts);
+
+        recycprjcts.setAdapter(adapterprjcts);
+        prjctcount.setText(prjctdatas.size()+"Project");
+    }
 }

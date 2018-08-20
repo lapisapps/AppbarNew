@@ -13,7 +13,7 @@
         <item name="windowActionModeOverlay">true</item>
 
         <!--  For Custom Action Mode Background Color/Drawable -->
-        <item name="actionModeBackground">@color/c3_light</item>
+        <item name="actionModeBackground">@color/c3</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -11,7 +11,7 @@
 
 
     android:layout_height="wrap_content">
-    <TableRow
+    <android.support.constraint.ConstraintLayout
         android:gravity="center"
         android:weightSum="2"
 
@@ -23,51 +23,55 @@
 
         <LinearLayout
 
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1.6"
             android:weightSum="1"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            >
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-               android:layout_gravity="center"
-                android:background="@color/row"
-                android:textStyle="bold"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
                 android:id="@+id/id"
-
-                android:autoSizeTextType="uniform"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="0.2"
                 android:autoSizeMaxTextSize="14dp"
-                android:autoSizeMinTextSize="5dp"
-                android:textColor="@color/green"
 
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textSize="@dimen/recyh"
+                android:autoSizeMinTextSize="5dp"
+                android:autoSizeTextType="uniform"
+                android:background="@color/row"
                 android:gravity="center"
+
+                android:paddingBottom="5dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
                 android:text="1
 fggf
+hfhfsfdsfsf
 hfhf
-hfhf"
-                android:layout_weight="0.2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
+ffdhhds"
+                android:textColor="@color/green"
+                android:textSize="@dimen/recyh"
+                android:textStyle="bold" />
 
             <TextView
 
 
-                android:paddingBottom="7dp"
-                android:paddingTop="7dp"
-                android:layout_weight="0.8"
                 android:id="@+id/tag"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_alignLeft="@+id/checkBox"
                 android:layout_alignStart="@+id/checkBox"
                 android:layout_marginRight="5dp"
-
+                android:layout_weight="0.8"
+                android:paddingBottom="7dp"
                 android:paddingLeft="2dp"
+
+                android:paddingTop="7dp"
                 android:text="10B100
 fhhfh
 fhhfhfhf"
@@ -76,7 +80,7 @@ fhhfhfhf"
 
         <LinearLayout
 
-
+android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="0.4"
@@ -89,7 +93,7 @@ fhhfhfhf"
                 android:id="@+id/delete"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-android:backgroundTint="@color/dgreen"
+                android:backgroundTint="@color/dgreen"
                 android:background="@drawable/ic_delete_black_24dp"
 
 
@@ -107,17 +111,29 @@ android:backgroundTint="@color/dgreen"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="5dp"
-android:backgroundTint="@color/dgreen"
+                android:backgroundTint="@color/dgreen"
                 android:background="@drawable/ic_edit_black_24dp"
 
                 android:layout_alignParentRight="true" />
         </LinearLayout>
 
 
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
 
 
 
-    </TableRow>
+            android:button="@drawable/checkboxselector"
+            android:focusable="false"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
 

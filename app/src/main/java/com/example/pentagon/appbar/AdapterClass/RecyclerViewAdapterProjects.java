@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +28,10 @@ import java.util.ArrayList;
 /**
  * Created by Ravi Tamada on 18/05/16.
  */
-public class RecyclerViewAdapterProjects extends RecyclerView.Adapter<RecyclerViewAdapterProjects.MyViewHolder> {
+public class RecyclerViewAdapterProjects extends RecyclerView.Adapter<RecyclerViewAdapterProjects.MyViewHolder> implements Filterable {
 
-    private final ArrayList<PrjctData> albumList;
+    private ArrayList<PrjctData> albumList;
+    private ArrayList<PrjctData> albumListf;
     //    public static ArrayList<String> albumList1;
     private Activity mContext;
     //  private List<S> albumList;
@@ -60,6 +63,7 @@ View v;
     public RecyclerViewAdapterProjects(Activity mContext, ArrayList<PrjctData> albumList, RecyclerView recyclerView) {
         this.mContext = mContext;
         this.albumList = albumList;
+        this.albumListf = albumList;
         this.recyclerView=recyclerView;
         this.type=type;
 
@@ -263,4 +267,43 @@ ArrayList<DataTag> dataTags=new SqliteDb(mContext).getPrjctsTags(prjct,"");
 //
 //        }, jsonObjectCall,1));
 //    }
+@Override
+
+public Filter getFilter() {
+    return new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            String charString = charSequence.toString();
+            if (charString.isEmpty()) {
+                albumList = albumListf;
+            } else {
+                ArrayList<PrjctData> filteredList = new ArrayList<>();
+                for (PrjctData row : albumListf) {
+
+                    // name match condition. this might differ depending on your requirement
+                    // here we are looking for name or phone number match
+                    if (row.getPrjct().toLowerCase().contains(charString.toLowerCase()) || row.getId().toLowerCase().contains(charString.toLowerCase())) {
+                        filteredList.add(row);
+                    }
+                }
+
+                albumList = filteredList;
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = albumList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            albumList = (ArrayList<PrjctData>) filterResults.values;
+            //  size=albumList.size();
+            // refresh the list with filtered data
+            notifyDataSetChanged();
+
+
+        }
+    };
+}
 }

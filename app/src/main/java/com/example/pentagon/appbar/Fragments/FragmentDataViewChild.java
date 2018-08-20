@@ -213,10 +213,10 @@ desc.setOnClickListener(new View.OnClickListener() {
             vidpreview.setImageResource(R.drawable.ic_videopreview_24dp);
             vidpreview.setVisibility(View.VISIBLE);
  videoView.setVisibility(View.VISIBLE);
-////               //Uri uri = Uri.parse(dataPreview.getPath());
-////            videoView.setVideoURI(Uri.parse(dataPreview.getPath()));
-////
-////           // videoView.seekTo(10);
+               //Uri uri = Uri.parse(dataPreview.getPath());
+//            videoView.setVideoURI(Uri.parse(dataPreview.getPath()));
+//
+//          videoView.seekTo(10);
             vidpreview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

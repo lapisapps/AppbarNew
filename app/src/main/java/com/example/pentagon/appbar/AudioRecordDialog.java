@@ -35,8 +35,9 @@ import static com.example.pentagon.appbar.Utility.MEDIA_TYPE_AUDIO;
 import static com.example.pentagon.appbar.Utility.MEDIA_TYPE_IMAGE;
 
 public class AudioRecordDialog extends Dialog implements View.OnClickListener {
+    private final Button close;
     private int RECORD_AUDIO_REQUEST_CODE =123 ;
-    public static CreateReport main2Activity;
+    public static PageReportDataView main2Activity;
     private Toolbar toolbar;
     private Chronometer chronometer;
     private ImageView imageViewRecord, imageViewPlay, imageViewStop;
@@ -66,7 +67,7 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
                 null);
         linearlayoutdesc=(LinearLayout)layout.findViewById(R.id.linearLayout) ;
         linearlayoutdesc.setVisibility(View.GONE);
-        btnsave=(Button)layout.findViewById(R.id.btnsave) ;
+        btnsave=(Button)layout.findViewById(R.id.done) ;
         btnsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +77,7 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
                 dd.setDescr(desc.getText().toString());
                 dd.setSelected(true);
                 CreateReport.dataPreviews.add(dd);
-                FragmentDataViewAudio.addImage(dd,-1);
+                PageReportDataView.addAudio(dd,-1);
 
                 Toast.makeText(mContext, "Audio Record saved", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
@@ -102,6 +103,14 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
 
             setForView();
         }
+
+        close=layout.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
         //  alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         alertDialog.show();
     }

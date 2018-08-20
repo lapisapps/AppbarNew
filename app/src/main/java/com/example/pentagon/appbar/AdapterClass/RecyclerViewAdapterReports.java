@@ -91,7 +91,7 @@ holder.reportname.setText(product.getId()+"\n"+product.getReportname());
         }catch (Exception e){e.printStackTrace();}
         /** Change background color of the selected items in list view  **/
         holder.back
-                .setBackgroundColor(mSelectedItemsIds.get(position) ? mContext.getResources().getColor(R.color.grey)
+                .setBackgroundColor(mSelectedItemsIds.get(position) ? mContext.getResources().getColor(R.color.c3)
                         :mContext.getResources().getColor(R.color.rportrow) );
     }
     public void toggleSelection(int position) {

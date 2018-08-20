@@ -1,5 +1,5 @@
 package com.example.pentagon.appbar;
-
+import com.itextpdf.text.Chapter;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -273,13 +273,13 @@ if(!CreateReport.loaddata.getPrjct().equals(""))
                 if(PageReport2.prjctareas.size()>0)
                     new SharedPreferenceClass().storeDatabaseLastArea(activity,reportid.getText().toString());
 
-                new SqliteDb(activity).insertReportSystem(CreateReport.dataSystems,CreateReport.loaddata.getId());
-                if(CreateReport.dataSystems.size()>0)
+                new SqliteDb(activity).insertReportSystem(PageReport2.prjctsystem,CreateReport.loaddata.getId());
+                if(PageReport2.prjctsystem.size()>0)
                     new SharedPreferenceClass().storeDatabaseLastSystem(activity,reportid.getText().toString());
 
 
-                new SqliteDb(activity).insertReportDiscipline(CreateReport.dataDisciplines,CreateReport.loaddata.getId());
-                if(CreateReport.dataDisciplines.size()>0)
+                new SqliteDb(activity).insertReportDiscipline(PageReport2.prjctdiscipline,CreateReport.loaddata.getId());
+                if(PageReport2.prjctdiscipline.size()>0)
                     new SharedPreferenceClass().storeDatabaseLastDiscipline(activity,reportid.getText().toString());
 
                 //                for (int i = 0; i <CreateReport.dataPreviews.size(); i++) {
@@ -359,6 +359,7 @@ public static Paragraph tablepara(PdfPTable pp1){
         Document document = new Document();
 
 PdfWriter pdfWriter= PdfWriter.getInstance(document, output);
+
         document.open();
         //Step 2
         PdfContentByte cb =   pdfWriter.getDirectContent();
@@ -402,8 +403,8 @@ int indentation=0;
         //add the call to the table
         table.addCell(cell1);
         document.add(tablepara(table));
-
-
+//        Chapter cc=new Chapter(tablepara(table), 1);
+//document.add(cc);
         document.add(setSpace());
      table = new PdfPTable(2);
 
@@ -690,6 +691,7 @@ image.addCell(dataPreview.get(j).getDescr());
      //   document.newPage();
 
         //Step 5: Close the document
+
         document.close();
         return myFile;
 

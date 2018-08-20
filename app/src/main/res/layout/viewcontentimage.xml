@@ -5,7 +5,7 @@
     style="@style/CardView.Light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginEnd="8dp"
+
 
     android:layout_marginTop="8dp">
 
@@ -15,9 +15,61 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RadioButton
+
+                    android:id="@+id/radioimage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radioback"
+                    android:button="@android:color/transparent"
+                    android:text="Images" />
+
+                <RadioButton
+                    android:id="@+id/radiovideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radioback"
+                    android:button="@android:color/transparent"
+                    android:text="Videos" />
+
+                <RadioButton
+                    android:id="@+id/radioaudio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radioback"
+                    android:button="@android:color/transparent"
+                    android:text="Audios" />
+            </RadioGroup>
+        </android.support.constraint.ConstraintLayout>
         <TextView
-
+android:visibility="gone"
             android:id="@+id/textView6"
             android:layout_width="0dp"
             android:layout_height="0dp"

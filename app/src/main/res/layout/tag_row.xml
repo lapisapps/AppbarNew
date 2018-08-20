@@ -4,40 +4,48 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_margin="5dp"
     android:clickable="true"
     android:elevation="3dp"
-    android:layout_height="35dp">
-<RelativeLayout
+    android:layout_height="wrap_content">
+<android.support.constraint.ConstraintLayout
 
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
     <TextView
-     android:layout_marginRight="5dp"
-android:layout_alignLeft="@+id/checkBox"
         android:id="@+id/tag"
-        android:gravity="center"
-        android:text="10B100"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignStart="@+id/checkBox" />
+        android:layout_alignLeft="@+id/checkBox"
+        android:layout_alignStart="@+id/checkBox"
+        android:gravity="center"
+        android:text="10B100
+ggg
+gggg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+
 
         android:button="@drawable/checkboxselector"
         android:focusable="false"
-
         android:gravity="center|center"
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        />
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
 
 
 </android.support.v7.widget.CardView>

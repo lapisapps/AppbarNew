@@ -113,7 +113,7 @@ android:visibility="gone"
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/layoutid"
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
@@ -144,7 +144,7 @@ android:visibility="gone"
                 </android.support.design.widget.TextInputLayout>
                 <LinearLayout
 
-                    android:backgroundTint="@color/white"
+
                     android:layout_gravity="center"
                     android:background="@drawable/rounddrw"
                     android:layout_width="30dp"
@@ -152,7 +152,7 @@ android:visibility="gone"
 
                     <ImageButton
                         android:layout_gravity="center"
-                        android:backgroundTint="@color/dgreen"
+
                         android:id="@+id/nextcode"
                         android:background="@drawable/ic_navigate_next_white_24dp"
 
@@ -193,7 +193,7 @@ android:visibility="gone"
                 </android.support.design.widget.TextInputLayout>
                 <LinearLayout
 
-                    android:backgroundTint="@color/white"
+
                     android:layout_gravity="center"
                     android:background="@drawable/rounddrw"
                     android:layout_width="30dp"
@@ -201,7 +201,7 @@ android:visibility="gone"
 
                     <ImageButton
                         android:layout_gravity="center"
-                        android:backgroundTint="@color/dgreen"
+
                         android:id="@+id/nextname"
                         android:background="@drawable/ic_navigate_next_white_24dp"
 

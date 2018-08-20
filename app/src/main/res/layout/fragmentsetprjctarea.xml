@@ -47,44 +47,59 @@ android:visibility="visible"
 android:textColor="@color/white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.4"
 
                         android:fontFamily="sans-serif-smallcaps"
 
                         android:text="Projects"
                         android:textSize="@dimen/setting_head" />
 
-                    <Button
-                        android:id="@+id/load"
+                    <LinearLayout
+                        android:layout_marginRight="10dp"
                         android:background="@drawable/rounddrw"
                         android:layout_width="30dp"
-                        android:paddingLeft="3dp"
                         android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:drawableLeft="@drawable/ic_archive_green_24dp"
-                        android:backgroundTint="@color/dgreen"
-                        android:drawableTint="@color/white"
-                        android:gravity="center"
+                        android:layout_marginEnd="10dp">
 
-                        android:text=""
-                        android:textColor="@color/c3" />
                         <Button
-                            android:id="@+id/addprjct"
-                            android:background="@drawable/rounddrw"
-                            android:layout_width="30dp"
-                            android:paddingLeft="3dp"
-                            android:layout_height="30dp"
+                            android:scaleType="fitXY"
+                            android:id="@+id/load"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:layout_marginRight="5dp"
-                            android:drawableLeft="@drawable/ic_add_white_24dp"
-                            android:backgroundTint="@color/dgreen"
-                            android:drawableTint="@color/white"
+
+
+                            android:background="@drawable/ic_archive_green_24dp"
+
                             android:gravity="center"
+
 
                             android:text=""
                             android:textColor="@color/c3" />
 
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:background="@drawable/rounddrw"
+
+                        android:layout_width="30dp"
+                        android:layout_height="30dp">
+
+                        <Button
+                            android:id="@+id/addprjct"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+
+
+                            android:background="@drawable/ic_add_white_24dp"
+
+
+
+
+                            android:text=""
+                            android:textColor="@color/c3" />
+                    </LinearLayout>
                     <Button
                         android:visibility="gone"
                         android:id="@+id/search"

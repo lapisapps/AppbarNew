@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.FilterWithSpaceAdapter;
+import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTagSelection;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
@@ -53,6 +54,7 @@ public class AddSystemDialog extends Dialog {
 public static PrjctData prjctData;
     public static DataTag systemdata;
 int type;
+public static AreaListDialog areaListDialog;
     private ImageButton nextcode,nextname;
 
     public AddSystemDialog(@NonNull Activity mContext, int type) {
@@ -153,7 +155,7 @@ code.setFocusable(false);
                     }
                     else if(type==0){
 
-                        if((new SqliteDb(context).addSystem(code.getText().toString(),tag.getText().toString()))){
+                        if((new SqliteDb(context).addSystem(prjctData.getId(),tag.getText().toString(),true,code.getText().toString()))){
                             Utility.customToastSave("Saved",context,"done");
                           //  Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
                             addedarea.setTagid(code.getText().toString());
@@ -169,9 +171,9 @@ code.setFocusable(false);
                             code.requestFocus();
                         }
                     }
-                    else {
+                    else if(type==1){
 
-                        if((new SqliteDb(context).addSystem(code.getText().toString(),tag.getText().toString()))){
+                        if((new SqliteDb(context).addSystem(prjctData.getId(),tag.getText().toString(),true,code.getText().toString()))){
                             Utility.customToastSave("Saved",context,"done");
                           //  Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
@@ -183,6 +185,27 @@ code.setFocusable(false);
                             code.setError("code already taken");
                             code.requestFocus();
                         }
+
+                    }
+                    else if(type==3){
+                        if((new SqliteDb(context).addSystem(null,tag.getText().toString(),true,code.getText().toString()))){
+                            Utility.customToastSave("Saved",context,"done");
+                            //  Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                            alertDialog.dismiss();
+
+                            areaListDialog.areadatas =   new SqliteDb(context).getSystems(areaListDialog.pid);
+//                            AreaListDialog.adaptertags.notifyDataSetChanged();
+//                           AreaListDialog.adaptertags = new RecyclerViewAdapterTagSelection(context,areaListDialog.areadatas,2);
+//                            areaListDialog.recycprjcts.setAdapter( AreaListDialog.adaptertags);
+                            areaListDialog.filter(areaListDialog.searchtxt.getText().toString());
+                        }
+                        else {
+
+                            code.setError("code already taken");
+                            code.requestFocus();
+                        }
+
+
 
                     }
                 }

@@ -7,6 +7,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +25,8 @@ import java.util.ArrayList;
  */
 public class RecyclerViewAdapterTagSelection extends RecyclerView.Adapter<RecyclerViewAdapterTagSelection.MyViewHolder> {
     private SparseBooleanArray mSelectedItemsIds;
-    private final ArrayList<DataTag> albumList;
+    private ArrayList<DataTag> albumList;
+    private ArrayList<DataTag> albumListf;
     //    public static ArrayList<String> albumList1;
     private Activity mContext;
     //  private List<S> albumList;
@@ -50,6 +52,7 @@ public class RecyclerViewAdapterTagSelection extends RecyclerView.Adapter<Recycl
     public RecyclerViewAdapterTagSelection(Activity mContext, ArrayList<DataTag> albumList, int type) {
         this.mContext = mContext;
         this.albumList = albumList;
+        albumListf=albumList;
         this.type=type;
         mSelectedItemsIds=new SparseBooleanArray();
     }
@@ -82,9 +85,17 @@ if(type==2) {
     holder.edit.setVisibility(View.GONE);
     holder.delete.setVisibility(View.GONE);
 }
-            holder.itemView
-                    .setBackgroundColor(mSelectedItemsIds.get(position) ? mContext.getResources().getColor(R.color.grey1)
-                            :mContext.getResources().getColor(R.color.row) );
+            if(product.getExist().equals("0"))
+                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.row));
+            else
+                holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+
+//            holder.itemView
+//                    .setBackgroundColor((product.getExist().equals("0")) ? mContext.getResources().getColor(R.color.grey1)
+//                            :mContext.getResources().getColor(R.color.white) );
+//            holder.itemView
+//                    .setBackgroundColor(mSelectedItemsIds.get(position) ? mContext.getResources().getColor(R.color.grey1)
+//                            :mContext.getResources().getColor(R.color.row) );
         }catch (Exception e){e.printStackTrace();}
 
 
@@ -120,7 +131,41 @@ if(type==2) {
 
         notifyDataSetChanged();
     }
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    albumList = albumListf;
+                } else {
+                    ArrayList<DataTag> filteredList = new ArrayList<>();
+                    for (DataTag row : albumListf) {
 
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getTagid().toLowerCase().contains(charString.toLowerCase()) || row.getTag().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    albumList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = albumList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                albumList = (ArrayList<DataTag>) filterResults.values;
+
+                // refresh the list with filtered data
+                notifyDataSetChanged();
+            }
+        };
+    }
     //Get total selected count
     public int getSelectedCount() {
         return mSelectedItemsIds.size();

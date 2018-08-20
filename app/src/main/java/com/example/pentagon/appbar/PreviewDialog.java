@@ -3,6 +3,7 @@ package com.example.pentagon.appbar;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,9 +20,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
@@ -57,6 +60,8 @@ public class PreviewDialog extends Dialog {
     boolean edit;
     EditText description;
     Dialog alertDialog;
+    private Button close;
+
     public PreviewDialog(@NonNull Context mContext,DataPreview dataPreview,boolean edit) {
         super(mContext);
         prjcttags=Main2Activity.prjcttags;
@@ -80,7 +85,7 @@ public class PreviewDialog extends Dialog {
         description=layout.findViewById(R.id.description);
         tagdetails=layout.findViewById(R.id.tagdetails);
         recyclerViewtag=layout.findViewById(R.id.tags);
-        ImageView vidpreview=layout.findViewById(R.id.videopreview);
+        final ImageView vidpreview=layout.findViewById(R.id.videopreview);
         final VideoView videoView=layout.findViewById(R.id.videoView);
         this.edit=edit;
         initialize();
@@ -102,11 +107,21 @@ public class PreviewDialog extends Dialog {
             vidpreview.setVisibility(View.VISIBLE);
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoPath(dataPreview.getPath());
+            MediaController mc = new MediaController(mContext);
+            videoView.setMediaController(mc);
             videoView.seekTo(10);
             vidpreview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    v.setVisibility(View.GONE);
                     videoView.start();
+                }
+            });
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+Log.e("ddd","ffff");
+vidpreview.setVisibility(View.VISIBLE);
                 }
             });
         }else {
@@ -135,29 +150,37 @@ public class PreviewDialog extends Dialog {
         alertDialog.show();
         Window window = alertDialog.getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    
+    
     }
 
     private void initialize() {
         View navigationView=layout;
 
 
+        close=layout.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
 
-
-        Button save=(Button) navigationView.findViewById(R.id.btnsave);
+        Button save=(Button) navigationView.findViewById(R.id.done);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dataPreview.setDescr(description.getText().toString());
                 dataPreview.setSelected(true);
-                CreateReport.dataPreviews.add(dataPreview);
+                CreateReport.dataPreviews.add(0,dataPreview);
                 CreateReport.dataPreviews.get(CreateReport.dataPreviews.size()-1).setDescr(description.getText().toString());
                 if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_AUDIO)
-                    FragmentDataViewAudio.addImage(dataPreview,-1);
+                    PageReportDataView.addAudio(dataPreview,-1);
                 else if(Integer.parseInt(dataPreview.getType())==Utility.MEDIA_TYPE_VIDEO)
-                    FragmentDataViewVideo.addImage(dataPreview,-1);
+                    PageReportDataView.addVideo(dataPreview,-1);
                 else
 
-                FragmentDataViewImage.addImage(dataPreview,-1);
+                PageReportDataView.addImage(dataPreview,-1);
                 alertDialog.dismiss();
             }
         });

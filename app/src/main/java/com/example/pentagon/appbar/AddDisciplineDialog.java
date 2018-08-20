@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTagSelection;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
@@ -44,6 +45,7 @@ public class AddDisciplineDialog extends Dialog {
     android.app.AlertDialog alertDialog;
 public static PrjctData prjctData;
     ImageButton nextcode,nextname;
+    public static AreaListDialog areaListDialog;
     public static DataTag systemdata;
 int type;
 
@@ -126,7 +128,7 @@ code.setFocusable(false);
                     }
                     else if(type==0){
 
-                        if((new SqliteDb(context).addDiscipline(code.getText().toString(),tag.getText().toString()))){
+                        if((new SqliteDb(context).addDiscipline(prjctData.getId(),tag.getText().toString(),true,code.getText().toString()))){
                             Utility.customToastSave("Saved",context,"done");
                             //Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
                             addedarea.setTagid(code.getText().toString());
@@ -142,14 +144,35 @@ code.setFocusable(false);
                             code.requestFocus();
                         }
                     }
-                    else {
+                    else if(type==1){
 
-                        if((new SqliteDb(context).addDiscipline(code.getText().toString(),tag.getText().toString()))){
+                        if((new SqliteDb(context).addDiscipline(prjctData.getId(),tag.getText().toString(),true,code.getText().toString()))){
                             Utility.customToastSave("Saved",context,"done");
                            // Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
 
                             SettingFragment5.loadDisciplineset(context);
+                        }
+                        else {
+
+                            code.setError("code already taken");
+                            code.requestFocus();
+                        }
+
+                    }
+
+                    else if(type==3){
+
+                        if((new SqliteDb(context).addDiscipline(null,tag.getText().toString(),true,code.getText().toString()))){
+                            Utility.customToastSave("Saved",context,"done");
+                            // Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                            alertDialog.dismiss();
+
+                            areaListDialog.areadatas =   new SqliteDb(context).getDiscipline(areaListDialog.pid);
+                     //     AreaListDialog.adaptertags.notifyDataSetChanged();
+                          //  AreaListDialog.adaptertags = new RecyclerViewAdapterTagSelection(context,areaListDialog.areadatas,2);
+                           // areaListDialog.recycprjcts.setAdapter( AreaListDialog.adaptertags);
+areaListDialog.filter(areaListDialog.searchtxt.getText().toString());
                         }
                         else {
 

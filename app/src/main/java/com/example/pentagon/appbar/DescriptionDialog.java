@@ -44,6 +44,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.example.pentagon.appbar.Main2Activity.BITMAP_SAMPLE_SIZE;
 
 public class DescriptionDialog extends Dialog {
+    private final Button close;
     Spinner prjcts;
     ArrayList<DataTag> prjcttags;
     LinearLayout arealayout;
@@ -74,7 +75,14 @@ public static int viewpos=-1;
                 null);
         description = (EditText) layout.findViewById(R.id.editText);
         description.setText(desc);
-        save = (Button) layout.findViewById(R.id.button9);
+        save = (Button) layout.findViewById(R.id.done);
+        close = (Button) layout.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
         if(fragment.getClass().equals(PageReport2.class))
         {
             edit = false;
@@ -87,7 +95,7 @@ public static int viewpos=-1;
         }  else
             edit=true;
         if (!edit) {
-
+save.setVisibility(View.GONE);
             save.setText("Close");
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,14 +134,14 @@ j=i;
 
                     if(Integer.parseInt(dataPreview.getType())== Main2Activity.MEDIA_TYPE_IMAGE){
 
-                        FragmentDataViewImage.addImage(CreateReport.dataPreviews.get(i),viewpos);
+                        PageReportDataView.addImage(CreateReport.dataPreviews.get(i),viewpos);
                     }else if(Integer.parseInt(dataPreview.getType())==Main2Activity.MEDIA_TYPE_VIDEO) {
 
-                        FragmentDataViewVideo.addImage(CreateReport.dataPreviews.get(i),viewpos);}
+                        PageReportDataView.addVideo(CreateReport.dataPreviews.get(i),viewpos);}
                         else {
 
 
-                        FragmentDataViewAudio.addImage(CreateReport.dataPreviews.get(i),viewpos);
+                        PageReportDataView.addAudio(CreateReport.dataPreviews.get(i),viewpos);
 
 
                     }

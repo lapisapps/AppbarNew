@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,15 +94,16 @@ View view;
                         next.setVisibility(View.VISIBLE);
                         previous.setVisibility(View.VISIBLE);
 
-                        if(viewPager.getCurrentItem()>=viewPager.getChildCount()) {
+                        if(position>=viewPager.getChildCount()-1) {
                             next.setVisibility(View.GONE);
 
                         }
 
-                        if(viewPager.getCurrentItem()==0){
+                        if(position==0){
                             previous.setVisibility(View.GONE);
 
                         }
+                        Log.e("position",position+"  "+viewPager.getChildCount());
                     }
 
                     @Override
@@ -125,14 +127,14 @@ View view;
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        CustomPagerAdapter adapter = new CustomPagerAdapter(getFragmentManager());
+        CustomPagerAdapter adapter = new CustomPagerAdapter(getChildFragmentManager());
         adapter.addFrag(new SettingFragment1(), "Project");
         adapter.addFrag(new SettingFragment4(), "Area");
         adapter.addFrag(new SettingFragment6(), "Tags");
         adapter.addFrag(new SettingFragment5(), "Discipline");
         adapter.addFrag(new SettingFragment3(), "System");
 
-viewPager.setOffscreenPageLimit(2);
+viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(adapter);
     }
 
@@ -164,6 +166,7 @@ viewPager.setOffscreenPageLimit(2);
             return mFragmentTitleList.get(position);
         }
     }
+
     @Override
     public void onResume() {
 
@@ -173,6 +176,7 @@ viewPager.setOffscreenPageLimit(2);
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setIcon(R.drawable.ic_settings_white_24dp);
+
     }
         }
 

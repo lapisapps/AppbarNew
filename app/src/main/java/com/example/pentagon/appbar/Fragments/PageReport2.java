@@ -79,6 +79,9 @@ View view;
    public static AutoCompleteTextView description;
     public static ArrayList<DataTag> prjcttags;
     public static ArrayList<DataTag> prjctareas;
+    public static ArrayList<DataTag> prjctdiscipline;
+    public static ArrayList<DataTag> prjctsystem;
+
     public static ArrayList<PrjctData> prjctdatas;
 
 
@@ -138,8 +141,8 @@ View view;
             }
         });
         prjctcount=view.findViewById(R.id.prjctcount);
-        group=view.findViewById(R.id.group);
-        group.setVisibility(View.VISIBLE);
+//        group=view.findViewById(R.id.group);
+//        group.setVisibility(View.VISIBLE);
         prjcts=view.findViewById(R.id.prjcts);
         prjcts.setVisibility(View.GONE);
 
@@ -171,7 +174,7 @@ prjctname.setOnClickListener(new View.OnClickListener() {
     public void onClick(View v) {
        // setPrjctRecycle(getActivity(),view);
         if(!Utility.savemenu.getTitle().equals("edit"))
-        new ProjectListDialog(getActivity(),0);
+        new ProjectListDialog(getActivity(),PageReport2.this);
     }
 });
         addprjct=view.findViewById(R.id.addprjct);
@@ -202,21 +205,27 @@ prjctname.setText(studentInfo.getId()+"-"+studentInfo.getPrjct());
     Log.e("isNewreport","1111"+ CreateReport.loaddata.getPrjct());
     prjcttags= new SqliteDb(context).getPrjctsTags(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
     prjctareas= new SqliteDb(context).getPrjctsAreas(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
+        prjctdiscipline= new SqliteDb(context).getPrjctsDiscipline(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
+        prjctsystem= new SqliteDb(context).getPrjctsSystem(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
 
     PageReportTag.setView(context,prjcttags);
   PageReportArea.setView(context,prjctareas);
+  PageReportDiscipline.setView(context,prjctdiscipline);
+        PageReportSystem.setView(context,prjctsystem);
     adapter1.notifyDataSetChanged();
 
 }
     private void setData() {
         DataReport dd=CreateReport.loaddata;
 
-        prjctname.setText(dd.getPrjctname());
+        prjctname.setText(dd.getPrjct()+"-"+dd.getPrjctname());
         description.setText(dd.getPrjctdescr());
 
 
        prjcttags= new SqliteDb(getActivity()).getPrjctsTags(dd.getPrjct(),dd.getId());
         prjctareas= new SqliteDb(getActivity()).getPrjctsAreas(dd.getPrjct(),dd.getId());
+        prjctdiscipline= new SqliteDb(getActivity()).getPrjctsDiscipline(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
+        prjctsystem= new SqliteDb(getActivity()).getPrjctsSystem(CreateReport.loaddata.getPrjct(),CreateReport.loaddata.getId());
 
         if(Utility.savemenu.getTitle().equals("edit")){
 
@@ -278,7 +287,7 @@ prjctname.setText(studentInfo.getId()+"-"+studentInfo.getPrjct());
     private  void setPrjctRecycle(final Activity context,View v) {
 
         prjcts.setVisibility(View.VISIBLE);
-        group.setVisibility(View.GONE);
+        //group.setVisibility(View.GONE);
         prjctcount.setText(prjctdatas.size()+" Projects");
         adapterprjcts=null;
         recycprjcts=v.findViewById(R.id.recycprjcts);
@@ -316,7 +325,7 @@ prjctname.setText(studentInfo.getId()+"-"+studentInfo.getPrjct());
         recycprjcts.addOnItemTouchListener(new RecyclerItemClickListener(context, recycprjcts, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-            group.setVisibility(View.VISIBLE);
+            //group.setVisibility(View.VISIBLE);
             prjcts.setVisibility(View.GONE);
 
                 prjctname.setText(prjctdatas.get(position).getPrjct());

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTags;
 import com.example.pentagon.appbar.AddTagDialog;
+import com.example.pentagon.appbar.AreaListDialog;
 import com.example.pentagon.appbar.DataClass.DataReport;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
@@ -113,14 +114,29 @@ if(PageReport2.prjcttags!=null)
             @Override
             public void onClick(View v) {
 
+//                if(Utility.savemenu.getTitle().equals("edit")){
+//
+//                    Utility.optionItemSave(getActivity(),0);
+//                }
+//                if(CreateReport.loaddata.getPrjct()!=null&&!CreateReport.loaddata.getPrjct().equals(""))
+//                new AddTagDialog(getActivity(),0);
+//                else
+//                    Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
+//
                 if(Utility.savemenu.getTitle().equals("edit")){
 
                     Utility.optionItemSave(getActivity(),0);
                 }
+
                 if(CreateReport.loaddata.getPrjct()!=null&&!CreateReport.loaddata.getPrjct().equals(""))
-                new AddTagDialog(getActivity(),0);
+                {
+
+                    new AreaListDialog(getActivity(),1,CreateReport.loaddata.getPrjct(),PageReportTag.this);
+
+                }
                 else
                     Toast.makeText(getContext(), "Select Project", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

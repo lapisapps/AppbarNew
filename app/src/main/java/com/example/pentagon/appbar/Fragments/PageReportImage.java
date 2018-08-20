@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterCameraPreviews;
+import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterDataImage;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.PreviewDialog;
 import com.example.pentagon.appbar.R;
@@ -38,7 +39,7 @@ public class PageReportImage extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-  public  static RecyclerViewAdapterCameraPreviews images;
+  public  static RecyclerViewAdapterDataImage images;
  public    static RecyclerViewAdapterCameraPreviews vidoes;
   public   static RecyclerViewAdapterCameraPreviews audios;
     static RecyclerView recyimages;
@@ -115,11 +116,11 @@ View view;
         }
         if(ddimage.size()>0)
             noimage.setVisibility(View.GONE);
-        images = new RecyclerViewAdapterCameraPreviews(context,ddimage);
+        images = new RecyclerViewAdapterDataImage(context,ddimage);
         recyimages.setVisibility(View.VISIBLE);
 
         recyimages.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.HORIZONTAL,false);
         // mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         recyimages.setNestedScrollingEnabled(true);

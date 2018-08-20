@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.CustomAutocompleteTextViewAd;
+import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTagSelection;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class AddTagDialog extends Dialog {
+    public static AreaListDialog areaListDialog;
     Activity context;
     public  RecyclerView recyclerView,recyclerViewtag;
     public static DataTag selectedtag;
@@ -57,17 +59,17 @@ LinearLayout layid;
     ImageButton nextcode,nextname;
     public static DataTag areadata;
 int type;
-String pid;
+
     public AddTagDialog(@NonNull Activity mContext, int type) {
         super(mContext);
 
         context=mContext;
         this.dataPreview=dataPreview;
 this.type=type;
-        if(type==0)
-            pid=CreateReport.loaddata.getPrjct();
-        else
-            pid=prjctData.getId();
+//        if(type==0)
+//            pid=CreateReport.loaddata.getPrjct();
+//        else
+//            pid=prjctData.getId();
 
         LayoutInflater inflater = (LayoutInflater)
                 mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -230,7 +232,7 @@ layid.setVisibility(View.VISIBLE);
                         code.setError("Enter tag_no");
                     else
                         if(type==0){
-                            if(new SqliteDb(context).addTag(pid,tag.getText().toString(),true,code.getText().toString())){
+                            if(new SqliteDb(context).addTag(prjctData.getId(),tag.getText().toString(),true,code.getText().toString())){
                                 Utility.customToastSave("Tag added to project",context,"done");
                                // Toast.makeText(context, "Tag added to project", Toast.LENGTH_SHORT).show();
                                 addedarea.setTag(tag.getText().toString());
@@ -247,7 +249,7 @@ addedarea.setSelected(true);
 
                         }else if(type==1){
 Log.e("ffff",prjctData.getId());
-                            if(new SqliteDb(context).addTag(pid,tag.getText().toString(),true, code.getText().toString())){
+                            if(new SqliteDb(context).addTag(prjctData.getId(),tag.getText().toString(),true, code.getText().toString())){
                                 Utility.customToastSave("Tag added to project",context,"done");
                            // Toast.makeText(context, "Tag added to project", Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
@@ -259,53 +261,33 @@ Log.e("ffff",prjctData.getId());
                             }
 
                     }
-                        else {
-//                            if((new SqliteDb(context).updateArea(areadata.getTagid(),tag.getText().toString(),true))){
-//                                Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
-//                                alertDialog.dismiss();
-//                                SettingFragment1.loadareaset(context);
-//                            }
+                        else if(type==3){
+                            if((new SqliteDb(context).addTag(null,tag.getText().toString(),true,code.getText().toString()))){
+                                Utility.customToastSave("Saved",context,"done");
+                                //  Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                                alertDialog.dismiss();
 
+                                areaListDialog.areadatas =   new SqliteDb(context).getTags(areaListDialog.pid);
+//                                AreaListDialog.adaptertags.notifyDataSetChanged();
+//                                AreaListDialog.adaptertags = new RecyclerViewAdapterTagSelection(context,areaListDialog.areadatas,2);
+//                                areaListDialog.recycprjcts.setAdapter( AreaListDialog.adaptertags);
+                                areaListDialog.filter(areaListDialog.searchtxt.getText().toString());
+                            }
+                            else {
+
+                                code.setError("code already taken");
+                                code.requestFocus();
                             }
 
-               // }
-//                else {
-//                    if(selectedtag==null)
-//                        tag.setError("invalid entry");
-//                    else
-//                        if(type==0){
-//                    if((new SqliteDb(context).addTag(pid,tag.getText().toString(),false,selectedtag.getTagid()))){
-//                       // Toast.makeText(context, "Tag added to project", Toast.LENGTH_SHORT).show();
-//                       Utility.customToastSave("Tag added to project",context,1);
-//                        addedarea.setTag(tag.getText().toString());
-//                        addedarea.setTagid(selectedtag.getTagid());
-//                        addedarea.setSelected(true);
-//                        alertDialog.dismiss();
-//                        PageReport2.prjcttags.add(addedarea);
-//                        PageReportTag.setView(getOwnerActivity(),  PageReport2.prjcttags);
-//                    }
-//
-//                }else if(type==1){
-//
-//                            if((new SqliteDb(context).addTag(pid,tag.getText().toString(),false, selectedtag.getTagid()))){
-//                              //  Toast.makeText(context, "Tag added to project", Toast.LENGTH_SHORT).show();
-//                                Utility.customToastSave("Tag added to project",context,1);
-//                                alertDialog.dismiss();
-//                                SettingFragment6.loadtagset(context);
-//                            }
-//
-//                        }
-//                        else {
-//
-//
-//                        }
-//
-//                }
+
+
+                        }
+
+
 
             }
         });
-//        if(type!=2)
-//        rdex.setChecked(true);
+
 
     }
 

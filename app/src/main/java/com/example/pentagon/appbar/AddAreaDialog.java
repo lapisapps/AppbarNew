@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.pentagon.appbar.AdapterClass.CustomAutocompleteTextViewAd;
 import com.example.pentagon.appbar.AdapterClass.FilterWithSpaceAdapter;
+import com.example.pentagon.appbar.AdapterClass.RecyclerViewAdapterTagSelection;
 import com.example.pentagon.appbar.DataClass.DataPreview;
 import com.example.pentagon.appbar.DataClass.DataTag;
 import com.example.pentagon.appbar.DataClass.PrjctData;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class AddAreaDialog extends Dialog {
+    public static AreaListDialog areaListDialog;
     Activity context;
     public  RecyclerView recyclerView,recyclerViewtag;
     public static DataTag selectedtag;
@@ -55,7 +57,7 @@ public class AddAreaDialog extends Dialog {
     ImageButton nextcode,nextname;
 public static PrjctData prjctData;
 LinearLayout layid;
-String pid;
+
     public static DataTag areadata;
 int type;
 
@@ -76,10 +78,7 @@ this.type=type;
 
         dataTags=new SqliteDb(mContext).getAreas("");
         setView(layout);
-if(type==0)
-    pid=CreateReport.loaddata.getPrjct();
-else
-    pid=prjctData.getId();
+
         builder = new android.app.AlertDialog.Builder(mContext);
         builder.setView(layout);
         alertDialog = builder.create();
@@ -224,7 +223,7 @@ layid.setVisibility(View.VISIBLE);
                         code.setError("Enter code");
                     else
                         if(type==0){
-                            if(new SqliteDb(context).addArea(pid,tag.getText().toString(),true,code.getText().toString())){
+                            if(new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),true,code.getText().toString())){
                                 Utility.customToastSave("Area added to project",context,"done");
                                // Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
                              addedarea.setTagid(code.getText().toString());
@@ -242,7 +241,7 @@ layid.setVisibility(View.VISIBLE);
 
                         }else if(type==1){
 Log.e("ffff",prjctData.getId());
-                            if(new SqliteDb(context).addArea(pid,tag.getText().toString(),true, code.getText().toString())){
+                            if(new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),true, code.getText().toString())){
                                 Utility.customToastSave("Area added to project",context,"done");
 
                              //   Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
@@ -255,53 +254,27 @@ Log.e("ffff",prjctData.getId());
                             }
 
                     }
-                        else {
-//                            if((new SqliteDb(context).updateArea(areadata.getTagid(),tag.getText().toString(),true))){
-//                                Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
-//                                alertDialog.dismiss();
-//                                SettingFragment1.loadareaset(context);
-//                            }
+                        else if(type==3){
+                            if((new SqliteDb(context).addArea(null,tag.getText().toString(),true,code.getText().toString()))){
+                                Utility.customToastSave("Saved",context,"done");
+                                //  Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                                alertDialog.dismiss();
 
+                                areaListDialog.areadatas =   new SqliteDb(context).getAreas(areaListDialog.pid);
+//                                AreaListDialog.adaptertags.notifyDataSetChanged();
+//                                AreaListDialog.adaptertags = new RecyclerViewAdapterTagSelection(context,areaListDialog.areadatas,2);
+//                                areaListDialog.recycprjcts.setAdapter( AreaListDialog.adaptertags);
+                                areaListDialog.filter(areaListDialog.searchtxt.getText().toString());
+                            }
+                            else {
+
+                                code.setError("code already taken");
+                                code.requestFocus();
                             }
 
-              //  }
-//                else {
-//                    if(selectedtag==null)
-//                        tag.setError("invalid entry");
-//                    else
-//                        if(type==0){
-//                    if((new SqliteDb(context).addArea(CreateReport.loaddata.getPrjct(),tag.getText().toString(),false, selectedtag.getTagid()))){
-//                        Utility.customToastSave("Area added to project",context,1);
-//
-//
-//                       // Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
-//
-//                        addedarea.setTagid(selectedtag.getTagid());
-//                        addedarea.setTag(tag.getText().toString());
-//                        addedarea.setSelected(true);
-//                        alertDialog.dismiss();
-//                        PageReport2.prjctareas.add(addedarea);
-//                        PageReportArea.setView(getOwnerActivity(),  PageReport2.prjctareas);
-//                    }
-//
-//                }else if(type==1){
-//
-//                            if((new SqliteDb(context).addArea(prjctData.getId(),tag.getText().toString(),false, selectedtag.getTagid()))){
-//
-//                                Utility.customToastSave("Area added to project",context,1);
-//
-//                               // Toast.makeText(context, "Area added to project", Toast.LENGTH_SHORT).show();
-//                                alertDialog.dismiss();
-//                                SettingFragment4.loadareaset(context);
-//                            }
-//
-//                        }
-//                        else {
-//
-//
-//                        }
-//
-//                }
+
+
+                        }
 
             }
         });

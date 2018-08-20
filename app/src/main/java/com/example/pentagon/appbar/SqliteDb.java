@@ -81,23 +81,43 @@ public static String CREATE_TABLE_REPORT="CREATE TABLE tblreport("+
             "rid TEXT DEFAULT NULL,"+
             "areaid TEXT DEFAULT NULL"+")";
 
+//    public static String CREATE_TABLE_REPORT_DISCIPLINE="CREATE TABLE tblreportdiscipline("+
+//            "id INTEGER PRIMARY KEY,"+
+//            "rid TEXT DEFAULT NULL,"+
+//            "areaid TEXT DEFAULT NULL"+")";
+//
+//    public static String CREATE_TABLE_REPORT_SYSTEM="CREATE TABLE tblreportdiscipline("+
+//            "id INTEGER PRIMARY KEY,"+
+//            "rid TEXT DEFAULT NULL,"+
+//            "areaid TEXT DEFAULT NULL"+")";
+
     public static String CREATE_TABLE_PROJECT_AREA="CREATE TABLE tblprojectarea("+
-            "id INTEGER PRIMARY KEY,"+
+            "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
             "prjctid TEXT DEFAULT NULL,"+
             "areaid TEXT DEFAULT NULL"+")";
 
+    public static String CREATE_TABLE_PROJECT_DISCIPLINE="CREATE TABLE tblprojectdiscipline("+
+            "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
+            "prjctid TEXT DEFAULT NULL,"+
+            "disciplineid TEXT DEFAULT NULL"+")";
+
+    public static String CREATE_TABLE_PROJECT_SYSTEM="CREATE TABLE tblprojectsystem("+
+            "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
+            "prjctid TEXT DEFAULT NULL,"+
+            "systemid TEXT DEFAULT NULL"+")";
+
     public static String CREATE_TABLE_REPORT_SYSTEM="CREATE TABLE tblreportsystem("+
-            "id INTEGER PRIMARY KEY,"+
+            "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
             "rid TEXT DEFAULT NULL,"+
             "systemid TEXT DEFAULT NULL"+")";
 
     public static String CREATE_TABLE_REPORT_DISCIPLINE="CREATE TABLE tblreportdiscipline("+
-            "id INTEGER PRIMARY KEY,"+
+            "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
             "rid TEXT DEFAULT NULL,"+
             "disciplineid TEXT DEFAULT NULL"+")";
 
     public static String CREATE_TABLE_PROJECT_TAG="CREATE TABLE tblprojecttag("+
-            "id INTEGER PRIMARY KEY,"+
+            "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
             "prjctid TEXT DEFAULT NULL,"+
             "tagid TEXT DEFAULT NULL"+")";
     public static String CREATE_TABLE_REPORT_DATA="CREATE TABLE tblreportdata("+
@@ -199,6 +219,9 @@ try{
     db.execSQL(CREATE_TABLE_REPORT_DISCIPLINE);
     db.execSQL(CREATE_TABLE_PROJECT_AREA);
 
+    db.execSQL(CREATE_TABLE_PROJECT_DISCIPLINE);
+    db.execSQL(CREATE_TABLE_PROJECT_SYSTEM);
+
     db.execSQL(CREATE_TABLE_DISCIPLINE);
     db.execSQL(CREATE_TABLE_DISCIPLINENORSOK);
     db.execSQL(CREATE_TABLE_AREA);
@@ -237,6 +260,9 @@ Log.i("error",e.toString());}
             db.execSQL(CREATE_TABLE_SYSTEM);
             db.execSQL(CREATE_TABLE_SYSTEMSFI);
             db.execSQL(CREATE_TABLE_SYSTEMNORSOK);
+
+            db.execSQL(CREATE_TABLE_PROJECT_DISCIPLINE);
+            db.execSQL(CREATE_TABLE_PROJECT_SYSTEM);
             Log.i("dbcreated","sss");
 
 
@@ -301,7 +327,7 @@ ss="INSERT OR REPLACE INTO tblproject(id,'prjct','descr') VALUES(1,'prjct1','abc
         //        "prjctid TEXT DEFAULT NULL,"+
         //        "cdate TEXT DEFAULT NULL,"+
         //        "udate TEXT DEFAULT NULL"+")";
-        dd.execSQL(ss);
+      //  dd.execSQL(ss);
         ss="INSERT OR REPLACE INTO tblprojectarea(id,prjctid,areaid) VALUES(1,'1','1'),(2,'2','2'),(3,'3','3'),(4,'4','4')";
 
 
@@ -676,15 +702,22 @@ else
     public ArrayList<DataTag> getPrjctsTags(String prjctid,String reportid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(tagid) as cont from tblprojecttag";
 
-        dde="select p.id,p.prjctid,p.tagid,t.tag,(select count(*) from tblreporttag where tagid=p.tagid and rid='"+reportid+"') as pp from tblprojecttag as p join tbltags as t on t.id=p.tagid where p.prjctid='"+prjctid+"'";
 
         Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        dde="select p.id,p.prjctid,p.tagid,t.tag,(select count(*) from tblreporttag where tagid=p.tagid and rid='"+reportid+"') as pp from tblprojecttag as p join tbltags as t on t.id=p.tagid where p.prjctid='"+prjctid+"'";
+
+       cursor=dd.rawQuery(dde,null );
 
         Cursor cursor1,cursor2;
         // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
         DataTag dt;
-        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+
         if (cursor.moveToFirst()) {
             do {
                 try {
@@ -721,15 +754,23 @@ else
     public ArrayList<DataTag> getPrjctsAreas(String prjctid,String reportid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(areaid) as cont from tblprojectarea";
 
-        dde="select p.id,p.prjctid,p.areaid,t.code,(select count(*) from tblreportarea where areaid=p.areaid and rid='"+reportid+"') as pp from tblprojectarea as p join tblareas as t on t.id=p.areaid where p.prjctid='"+prjctid+"'";
 
         Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        cursor.close();
+        dde="select p.id,p.prjctid,p.areaid,t.code,(select count(*) from tblreportarea where areaid=p.areaid and rid='"+reportid+"') as pp,t.exist from tblprojectarea as p join tblareas as t on t.id=p.areaid where p.prjctid='"+prjctid+"'";
+
+        cursor=dd.rawQuery(dde,null );
 
         Cursor cursor1,cursor2;
         // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
         DataTag dt;
-        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+
         if (cursor.moveToFirst()) {
             do {
                 try {
@@ -747,6 +788,112 @@ else
                         dt.setSelected(true);
                     else
                         dt.setSelected(false);
+                    dt.setExist(cursor.getString(5));
+                    dta.add(dt);
+
+
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                    Log.e("er",ee.toString()+"");
+                }
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        dd.close();
+        return dta;
+
+    }
+    public ArrayList<DataTag> getPrjctsDiscipline(String prjctid,String reportid) {
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String dde;
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(disciplineid) as cont from tblprojectdiscipline";
+
+
+        Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        dde="select p.id,p.prjctid,p.disciplineid,t.code,(select count(*) from tblreportdiscipline where disciplineid=p.disciplineid and rid='"+reportid+"') as pp,t.exist from tblprojectdiscipline as p join tbldiscipline as t on t.id=p.disciplineid where p.prjctid='"+prjctid+"'";
+
+        cursor=dd.rawQuery(dde,null );
+
+        Cursor cursor1,cursor2;
+        // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
+        DataTag dt;
+
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+//                    "id TEXT PRIMARY KEY,"+
+//                            "prjctid TEXT DEFAULT NULL,"+
+//                            "tagid TEXT DEFAULT NULL"+")";
+
+                    dt = new DataTag();
+
+                    dt.setId(cursor.getString(0));
+                    dt.setPrjctid(cursor.getString(1));
+                    dt.setTagid(cursor.getString(2));
+                    dt.setTag(cursor.getString(3));
+                    if(cursor.getInt(4)>0)
+                        dt.setSelected(true);
+                    else
+                        dt.setSelected(false);
+                    dt.setExist(cursor.getString(5));
+                    dta.add(dt);
+
+
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                    Log.e("er",ee.toString()+"");
+                }
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        dd.close();
+        return dta;
+
+    }
+
+    public ArrayList<DataTag> getPrjctsSystem(String prjctid,String reportid) {
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String dde;
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(systemid) as cont from tblprojectsystem";
+
+
+        Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        dde="select p.id,p.prjctid,p.systemid,t.code,(select count(*) from tblreportsystem where systemid=p.systemid and rid='"+reportid+"') as pp,t.exist from tblprojectsystem as p join tblsystem as t on t.id=p.systemid where p.prjctid='"+prjctid+"'";
+
+       cursor=dd.rawQuery(dde,null );
+
+        Cursor cursor1,cursor2;
+        // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
+        DataTag dt;
+
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+//                    "id TEXT PRIMARY KEY,"+
+//                            "prjctid TEXT DEFAULT NULL,"+
+//                            "tagid TEXT DEFAULT NULL"+")";
+
+                    dt = new DataTag();
+
+                    dt.setId(cursor.getString(0));
+                    dt.setPrjctid(cursor.getString(1));
+                    dt.setTagid(cursor.getString(2));
+                    dt.setTag(cursor.getString(3));
+                    if(cursor.getInt(4)>0)
+                        dt.setSelected(true);
+                    else
+                        dt.setSelected(false);
+                    dt.setExist(cursor.getString(5));
                     dta.add(dt);
 
 
@@ -809,19 +956,72 @@ else
 
     }
 
-    public ArrayList<DataTag> getSystems(String id) {
+//    public ArrayList<DataTag> getSystems(String id) {
+//        SQLiteDatabase dd=this.getReadableDatabase();
+//        String dde;
+//if(id.equals(""))
+//        dde="select id,code from tblsystem";
+//else
+//    dde="select id,code from tblsystem where exist='"+id+"'";
+//        Cursor cursor=dd.rawQuery(dde,null );
+//
+//        Cursor cursor1,cursor2;
+//        // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
+//        DataTag dt;
+//        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+//        if (cursor.moveToFirst()) {
+//            do {
+//                try {
+////                    "id TEXT PRIMARY KEY,"+
+////                            "prjctid TEXT DEFAULT NULL,"+
+////                            "tagid TEXT DEFAULT NULL"+")";
+//
+//                    dt = new DataTag();
+//
+//
+//
+//                    dt.setTagid(cursor.getString(0));
+//                    dt.setTag(cursor.getString(1));
+////                    if(cursor.getInt(2)>0)
+////                        dt.setSelected(true);
+////                    else
+////                        dt.setSelected(false);
+//                    dta.add(dt);
+//
+//
+//                } catch (Exception ee) {
+//                    ee.printStackTrace();
+//                    Log.e("er",ee.toString()+"");
+//                }
+//
+//            } while (cursor.moveToNext());
+//        }
+//        cursor.close();
+//        dd.close();
+//        return dta;
+//
+//    }
+
+
+    public ArrayList<DataTag> getSystems(String pid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
-if(id.equals(""))
-        dde="select id,code from tblsystem";
-else
-    dde="select id,code from tblsystem where exist='"+id+"'";
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(systemid) as cont from tblprojectsystem";
+
+
         Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        dde="select * from tblsystem where id NOT IN(select systemid from tblprojectsystem where prjctid='"+pid+"')";
+
+        cursor=dd.rawQuery(dde,null );
 
         Cursor cursor1,cursor2;
         // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
         DataTag dt;
-        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+
         if (cursor.moveToFirst()) {
             do {
                 try {
@@ -831,17 +1031,12 @@ else
 
                     dt = new DataTag();
 
-
-
                     dt.setTagid(cursor.getString(0));
+
+
                     dt.setTag(cursor.getString(1));
-//                    if(cursor.getInt(2)>0)
-//                        dt.setSelected(true);
-//                    else
-//                        dt.setSelected(false);
+                    dt.setExist(cursor.getString(2));
                     dta.add(dt);
-
-
                 } catch (Exception ee) {
                     ee.printStackTrace();
                     Log.e("er",ee.toString()+"");
@@ -854,19 +1049,70 @@ else
         return dta;
 
     }
-    public ArrayList<DataTag> getDiscipline(String n) {
+
+//    public ArrayList<DataTag> getDiscipline(String n) {
+//        SQLiteDatabase dd=this.getReadableDatabase();
+//        String dde;
+//if(n.equals(""))
+//        dde="select id,code from tbldiscipline";
+//else
+//    dde="select id,code from tbldiscipline where exist='"+n+"'";
+//        Cursor cursor=dd.rawQuery(dde,null );
+//
+//        Cursor cursor1,cursor2;
+//        // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
+//        DataTag dt;
+//        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+//        if (cursor.moveToFirst()) {
+//            do {
+//                try {
+////                    "id TEXT PRIMARY KEY,"+
+////                            "prjctid TEXT DEFAULT NULL,"+
+////                            "tagid TEXT DEFAULT NULL"+")";
+//
+//                    dt = new DataTag();
+//
+//
+//
+//                    dt.setTagid(cursor.getString(0));
+//                    dt.setTag(cursor.getString(1));
+////                    if(cursor.getInt(2)>0)
+////                        dt.setSelected(true);
+////                    else
+////                        dt.setSelected(false);
+//                    dta.add(dt);
+//
+//
+//                } catch (Exception ee) {
+//                    ee.printStackTrace();
+//                    Log.e("er",ee.toString()+"");
+//                }
+//
+//            } while (cursor.moveToNext());
+//        }
+//        cursor.close();
+//        dd.close();
+//        return dta;
+//
+//    }
+
+    public ArrayList<DataTag> getDiscipline(String pid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
-if(n.equals(""))
-        dde="select id,code from tbldiscipline";
-else
-    dde="select id,code from tbldiscipline where exist='"+n+"'";
-        Cursor cursor=dd.rawQuery(dde,null );
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(disciplineid) as cont from tblprojectdiscipline";
 
+
+        Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        dde="select * from tbldiscipline where id NOT IN(select disciplineid from tblprojectdiscipline where prjctid='"+pid+"')";
+      cursor=dd.rawQuery(dde,null );
         Cursor cursor1,cursor2;
         // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
         DataTag dt;
-        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+
         if (cursor.moveToFirst()) {
             do {
                 try {
@@ -876,17 +1122,12 @@ else
 
                     dt = new DataTag();
 
-
-
                     dt.setTagid(cursor.getString(0));
+
+
                     dt.setTag(cursor.getString(1));
-//                    if(cursor.getInt(2)>0)
-//                        dt.setSelected(true);
-//                    else
-//                        dt.setSelected(false);
+                    dt.setExist(cursor.getString(2));
                     dta.add(dt);
-
-
                 } catch (Exception ee) {
                     ee.printStackTrace();
                     Log.e("er",ee.toString()+"");
@@ -947,15 +1188,22 @@ else
     public ArrayList<DataTag> getTags(String pid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(tagid) as cont from tblprojecttag";
 
-        dde="select * from tbltags where id NOT IN(select tagid from tblprojecttag where prjctid='"+pid+"' )";
 
         Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        dde="select * from tbltags where id NOT IN(select tagid from tblprojecttag where prjctid='"+pid+"' )";
+
+         cursor=dd.rawQuery(dde,null );
 
         Cursor cursor1,cursor2;
         // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
         DataTag dt;
-        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+
         if (cursor.moveToFirst()) {
             do {
                 try {
@@ -969,7 +1217,7 @@ else
 
 
                     dt.setTag(cursor.getString(1));
-
+                    dt.setExist(cursor.getString(2));
 dta.add(dt);
                 } catch (Exception ee) {
                     ee.printStackTrace();
@@ -1100,15 +1348,14 @@ if(isnew)
 
 
         boolean	status=false;
-        cursor=dd.rawQuery("select max(id) from tblprojecttag",null );
-        int prjctcount=0;
-        if(cursor.moveToFirst())
-            prjctcount=cursor.getInt(0);
+//        cursor=dd.rawQuery("select max(id) from tblprojecttag",null );
+//        int prjctcount=0;
+//        if(cursor.moveToFirst())
+//            prjctcount=cursor.getInt(0);
         String insertCategoryQuery1 = "INSERT INTO tblprojecttag(" +
-                "id,"+
                 "prjctid,"+
                 "tagid"+")"+
-                " VALUES (?,?,?)";
+                " VALUES (?,?)";
         String insertCategoryQuery = "INSERT INTO tbltags(" +
                 "id,"+
                 "tag"+")"+
@@ -1131,17 +1378,20 @@ if(isnew)
                 insertCategory.bindString(2,tag);
 
 
-                prjctcount++;
-                insertCategory1.bindLong(1,prjctcount);
-                insertCategory1.bindString(2,prjct);
+if(prjct!=null){
 
-                insertCategory1.bindString(3,s);
+    insertCategory1.bindString(1,prjct);
+
+    insertCategory1.bindString(2,s);
+    insertCategory1.execute();
+}
+
                 //insertCategory.bindString(9,actor.getString("published"));
 
                 Log.i("error1","111");
                 if(isnew)
                     insertCategory.execute();//Insert();
-                insertCategory1.execute();
+
                 status=true;
 
             }catch (android.database.sqlite.SQLiteConstraintException ee){
@@ -1736,7 +1986,7 @@ for(int j=0;j<prjcttags.size();j++) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
 
-        dde="select * from tblreportdata where rid='"+rid+"'";
+        dde="select * from tblreportdata where rid='"+rid+"' order by id desc";
 
         Cursor cursor=dd.rawQuery(dde,null );
 
@@ -1782,15 +2032,22 @@ for(int j=0;j<prjcttags.size();j++) {
     public ArrayList<DataTag> getAreas(String pid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        dde="select count(areaid) as cont from tblprojectarea";
 
-        dde="select * from tblareas where id NOT IN(select areaid from tblprojectarea where prjctid='"+pid+"')";
 
         Cursor cursor=dd.rawQuery(dde,null );
+        cursor.moveToFirst();
+        if(cursor.getInt(0)==0)
+            return dta;
+        dde="select * from tblareas where id NOT IN(select areaid from tblprojectarea where prjctid='"+pid+"')";
+
+     cursor=dd.rawQuery(dde,null );
 
         Cursor cursor1,cursor2;
         // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
         DataTag dt;
-        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+
         if (cursor.moveToFirst()) {
             do {
                 try {
@@ -1804,7 +2061,7 @@ for(int j=0;j<prjcttags.size();j++) {
 
 
                     dt.setTag(cursor.getString(1));
-
+                    dt.setExist(cursor.getString(2));
                     dta.add(dt);
                 } catch (Exception ee) {
                     ee.printStackTrace();
@@ -1827,7 +2084,7 @@ for(int j=0;j<prjcttags.size();j++) {
         int transactioncount=1;
         Cursor cursor=null;
         if(isnew) {
-          cursor = dd.rawQuery("select id from tblareas where id='" + s + "'", null);
+            cursor = dd.rawQuery("select id from tblareas where id='" + s + "'", null);
             if (cursor.getCount() > 0){
                 cursor.close();
                 return false;
@@ -1835,20 +2092,29 @@ for(int j=0;j<prjcttags.size();j++) {
             }
 
             cursor.close();
+        }else {
+            cursor = dd.rawQuery("select id from tblprojectarea where prjctid='" + prjct + "' and areaid='"+s+"'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
+            cursor.close();
+
         }
 
 
 
         boolean	status=false;
-        cursor=dd.rawQuery("select max(id) from tblprojectarea",null );
-        int prjctcount=0;
-if(cursor.moveToFirst())
-    prjctcount=cursor.getInt(0);
+//        cursor=dd.rawQuery("select max(id) from tblprojecttag",null );
+//        int prjctcount=0;
+//        if(cursor.moveToFirst())
+//            prjctcount=cursor.getInt(0);
         String insertCategoryQuery1 = "INSERT INTO tblprojectarea(" +
-                "id,"+
                 "prjctid,"+
                 "areaid"+")"+
-                " VALUES (?,?,?)";
+                " VALUES (?,?)";
         String insertCategoryQuery = "INSERT INTO tblareas(" +
                 "id,"+
                 "code"+")"+
@@ -1871,17 +2137,20 @@ if(cursor.moveToFirst())
                 insertCategory.bindString(2,tag);
 
 
-                prjctcount++;
-                insertCategory1.bindLong(1,prjctcount);
-                insertCategory1.bindString(2,prjct);
+if(prjct!=null){
 
-                insertCategory1.bindString(3,s);
+    insertCategory1.bindString(1,prjct);
+
+    insertCategory1.bindString(2,s);
+    insertCategory1.execute();
+}
+
                 //insertCategory.bindString(9,actor.getString("published"));
 
                 Log.i("error1","111");
                 if(isnew)
                     insertCategory.execute();//Insert();
-                insertCategory1.execute();
+
                 status=true;
 
             }catch (android.database.sqlite.SQLiteConstraintException ee){
@@ -2222,30 +2491,169 @@ Log.e("oidd",id);
 
         return status;
     }
-    public boolean addSystem(String code,String name) {
+
+
+
+    public boolean addToPrjct(String prjct, ArrayList<DataTag> systems,String table) {
+
 
         SQLiteDatabase dd=this.getReadableDatabase();
         String systemarea;
         int transactioncount=1;
-        Cursor cursor=dd.rawQuery("select id from tblsystem where id='"+code+"'",null );
-        boolean	status=false;
-       if(cursor.getCount()>0)
+        Cursor cursor=null;
 
-        {
+
+
+
+        boolean	status=false;
+//        cursor=dd.rawQuery("select max(id) from tblprojecttag",null );
+//        int prjctcount=0;
+//        if(cursor.moveToFirst())
+//            prjctcount=cursor.getInt(0);
+        String insertCategoryQuery1="";
+        if(table.equals("system")){
+
+       insertCategoryQuery1 = "INSERT INTO tblprojectsystem(" +
+                    "prjctid,"+
+                    "systemid"+")"+
+                    " VALUES (?,?)";
+
+        }
+        else if(table.equals("tag")){
+
+         insertCategoryQuery1 = "INSERT INTO tblprojecttag(" +
+                    "prjctid,"+
+                    "tagid"+")"+
+                    " VALUES (?,?)";
+
+        }
+        else if(table.equals("discipline")){
+
+            insertCategoryQuery1 = "INSERT INTO tblprojectdiscipline(" +
+                    "prjctid,"+
+                    "disciplineid"+")"+
+                    " VALUES (?,?)";
+
+        }
+        else if(table.equals("area")){
+
+            insertCategoryQuery1 = "INSERT INTO tblprojectarea(" +
+                    "prjctid,"+
+                    "areaid"+")"+
+                    " VALUES (?,?)";
+
+        }
+        dd= this.getWritableDatabase();
+
+        SQLiteStatement insertCategory1 = dd.compileStatement(insertCategoryQuery1);
+        try {
+            //JSONArray jsn=new JSONArray(data);
+
+            for (DataTag System:systems
+                 ) {
+
+
+                try {
+
+
+
+
+
+                    insertCategory1.bindString(1,prjct);
+
+                    insertCategory1.bindString(2,System.getTagid());
+                    //insertCategory.bindString(9,actor.getString("published"));
+
+                    Log.i("error1","111");
+
+                    insertCategory1.execute();
+                    status=true;
+
+                }catch (android.database.sqlite.SQLiteConstraintException ee){
+                    ee.printStackTrace();
+                    Log.i("error",ee.toString()+"");
+                }
+
+
+
+            }
+
+
+
+
+
+            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+
+            // Cursor cursor=dd.rawQuery(ss,null );
+
+
+
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+//Utility.addReminder(df,co);
+//Utility.setAlaram1(co,df);
+//   cursor=dd.rawQuery("select max(id) from tblareas",null );
+//        DataTag dt=new DataTag();
+//        dt.setTag(tag);
+//        if(cursor.moveToFirst())
+//        dt.setTagid(cursor.getString(0));
+
+        dd.close();
+        return status;
+    }
+
+
+    public boolean addSystem(String prjct, String tag, boolean isnew, String s) {
+
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String systemarea;
+        int transactioncount=1;
+        Cursor cursor=null;
+        if(isnew) {
+            cursor = dd.rawQuery("select id from tblsystem where id='" + s + "'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
             cursor.close();
-            return status;
+        }else {
+            cursor = dd.rawQuery("select id from tblprojectsystem where prjctid='" + prjct + "' and systemid='"+s+"'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
+            cursor.close();
+
         }
 
 
 
-
+        boolean	status=false;
+//        cursor=dd.rawQuery("select max(id) from tblprojecttag",null );
+//        int prjctcount=0;
+//        if(cursor.moveToFirst())
+//            prjctcount=cursor.getInt(0);
+        String insertCategoryQuery1 = "INSERT INTO tblprojectsystem(" +
+                "prjctid,"+
+                "systemid"+")"+
+                " VALUES (?,?)";
         String insertCategoryQuery = "INSERT INTO tblsystem(" +
                 "id,"+
                 "code"+")"+
                 " VALUES (?,?)";
         dd= this.getWritableDatabase();
         SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
-
+        SQLiteStatement insertCategory1 = dd.compileStatement(insertCategoryQuery1);
         try {
             //JSONArray jsn=new JSONArray(data);
 
@@ -2257,11 +2665,129 @@ Log.e("oidd",id);
 
                 insertCategory.clearBindings();
 
-                insertCategory.bindString(1,code);
-                insertCategory.bindString(2,name);
+                insertCategory.bindString(1,s);
+                insertCategory.bindString(2,tag);
+
+
+                if(prjct!=null){
+                insertCategory1.bindString(1,prjct);
+
+                insertCategory1.bindString(2,s);
+                    insertCategory1.execute();
+
+                }
+                //insertCategory.bindString(9,actor.getString("published"));
+
+                Log.i("error1","111");
+                if(isnew)
+                    insertCategory.execute();//Insert();
+
+
+                status=true;
+
+            }catch (android.database.sqlite.SQLiteConstraintException ee){
+                ee.printStackTrace();
+                Log.i("error",ee.toString()+"");
+            }
+
+            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+
+            // Cursor cursor=dd.rawQuery(ss,null );
+
+
+            cursor.close();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+//Utility.addReminder(df,co);
+//Utility.setAlaram1(co,df);
+//   cursor=dd.rawQuery("select max(id) from tblareas",null );
+//        DataTag dt=new DataTag();
+//        dt.setTag(tag);
+//        if(cursor.moveToFirst())
+//        dt.setTagid(cursor.getString(0));
+        cursor.close();
+        dd.close();
+        return status;
+    }
+
+    public boolean addDiscipline(String prjct, String tag, boolean isnew, String s) {
+
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String systemarea;
+        int transactioncount=1;
+        Cursor cursor=null;
+        if(isnew) {
+            cursor = dd.rawQuery("select id from tbldiscipline where id='" + s + "'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
+            cursor.close();
+        }else {
+            cursor = dd.rawQuery("select id from tblprojectdiscipline where prjctid='" + prjct + "' and disciplineid='"+s+"'", null);
+            if (cursor.getCount() > 0){
+                cursor.close();
+                return false;
+
+            }
+
+            cursor.close();
+
+        }
 
 
 
+        boolean	status=false;
+//        cursor=dd.rawQuery("select max(id) from tblprojecttag",null );
+//        int prjctcount=0;
+//        if(cursor.moveToFirst())
+//            prjctcount=cursor.getInt(0);
+        String insertCategoryQuery1 = "INSERT INTO tblprojectdiscipline(" +
+                "prjctid,"+
+                "disciplineid"+")"+
+                " VALUES (?,?)";
+        String insertCategoryQuery = "INSERT INTO tbldiscipline(" +
+                "id,"+
+                "code"+")"+
+                " VALUES (?,?)";
+        dd= this.getWritableDatabase();
+        SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
+        SQLiteStatement insertCategory1 = dd.compileStatement(insertCategoryQuery1);
+        try {
+            //JSONArray jsn=new JSONArray(data);
+
+
+
+
+
+            try {
+
+                insertCategory.clearBindings();
+
+                insertCategory.bindString(1,s);
+                insertCategory.bindString(2,tag);
+
+
+if(prjct!=null){
+
+    insertCategory1.bindString(1,prjct);
+
+    insertCategory1.bindString(2,s);
+    insertCategory1.execute();
+}
+
+                //insertCategory.bindString(9,actor.getString("published"));
+
+                Log.i("error1","111");
+                if(isnew)
                     insertCategory.execute();//Insert();
 
                 status=true;
@@ -2286,15 +2812,88 @@ Log.e("oidd",id);
 
 //Utility.addReminder(df,co);
 //Utility.setAlaram1(co,df);
-
+//   cursor=dd.rawQuery("select max(id) from tblareas",null );
+//        DataTag dt=new DataTag();
+//        dt.setTag(tag);
+//        if(cursor.moveToFirst())
+//        dt.setTagid(cursor.getString(0));
+        cursor.close();
+        dd.close();
         return status;
     }
+//    public boolean addSystem(String code,String name) {
+//
+//        SQLiteDatabase dd=this.getReadableDatabase();
+//        String systemarea;
+//        int transactioncount=1;
+//        Cursor cursor=dd.rawQuery("select id from tblsystem where id='"+code+"'",null );
+//        boolean	status=false;
+//       if(cursor.getCount()>0)
+//
+//        {
+//            cursor.close();
+//            return status;
+//        }
+//
+//
+//
+//
+//        String insertCategoryQuery = "INSERT INTO tblsystem(" +
+//                "id,"+
+//                "code"+")"+
+//                " VALUES (?,?)";
+//        dd= this.getWritableDatabase();
+//        SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
+//
+//        try {
+//            //JSONArray jsn=new JSONArray(data);
+//
+//
+//
+//
+//
+//            try {
+//
+//                insertCategory.clearBindings();
+//
+//                insertCategory.bindString(1,code);
+//                insertCategory.bindString(2,name);
+//
+//
+//
+//                    insertCategory.execute();//Insert();
+//
+//                status=true;
+//
+//            }catch (android.database.sqlite.SQLiteConstraintException ee){
+//                ee.printStackTrace();
+//                Log.i("error",ee.toString()+"");
+//            }
+//
+//            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+//
+//            // Cursor cursor=dd.rawQuery(ss,null );
+//
+//
+//            cursor.close();
+//
+//
+//        }catch(Exception e){
+//
+//            e.printStackTrace();
+//        }
+//
+////Utility.addReminder(df,co);
+////Utility.setAlaram1(co,df);
+//
+//        return status;
+//    }
     public void deleteSystem(String id) {
 
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde,pdf="";
 
-        dde="delete from tblsystem where id='"+id+"'";
+        dde="delete from tblprojectsystem where systemid='"+id+"'";
         dd.execSQL(dde);
     }
     public void deleteDiscipline(String id) {
@@ -2302,7 +2901,7 @@ Log.e("oidd",id);
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde,pdf="";
 
-        dde="delete from tbldiscipline where id='"+id+"'";
+        dde="delete from tblprojectdiscipline where disciplineid='"+id+"'";
         dd.execSQL(dde);
     }
 
@@ -2535,6 +3134,171 @@ if(cursor.getCount()==0){
 
     }
 
+
+    public void insertToPrjctSystem(ArrayList<DataTag> prjctsAreas, String prjct) {
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String systemarea;
+        int transactioncount=1;
+        Cursor cursor=null;
+
+
+
+
+
+        boolean	status=false;
+        cursor=dd.rawQuery("select max(id) from tblprojectarea",null );
+        int prjctcount=0;
+        if(cursor.moveToFirst())
+            prjctcount=cursor.getInt(0);
+        String insertCategoryQuery1 = "INSERT INTO tblprojectsystem(" +
+                "prjctid,"+
+                "systemid"+")"+
+                " VALUES (?,?)";
+
+        dd= this.getWritableDatabase();
+        // SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
+        SQLiteStatement insertCategory1 = dd.compileStatement(insertCategoryQuery1);
+        try {
+            //JSONArray jsn=new JSONArray(data);
+
+
+
+            for (int i = 0; i <prjctsAreas.size() ; i++) {
+                try {
+
+                    insertCategory1.clearBindings();
+
+
+                    cursor=dd.rawQuery("select id from tblprojectsystem where prjctid='"+prjct+"' and systemid='"+prjctsAreas.get(i).getTagid()+"'",null );
+
+                    if(cursor.getCount()==0) {
+
+                        prjctcount++;
+                        //insertCategory1.bindLong(1, prjctcount);
+                        insertCategory1.bindString(2, prjct);
+
+                        insertCategory1.bindString(3, prjctsAreas.get(i).getTagid());
+                        //insertCategory.bindString(9,actor.getString("published"));
+
+
+                        insertCategory1.execute();
+                        status = true;
+                    }
+                }catch (android.database.sqlite.SQLiteConstraintException ee){
+                    ee.printStackTrace();
+                    Log.i("error",ee.toString()+"");
+                }
+            }
+
+
+
+            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+
+            // Cursor cursor=dd.rawQuery(ss,null );
+
+
+            cursor.close();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+//Utility.addReminder(df,co);
+//Utility.setAlaram1(co,df);
+//   cursor=dd.rawQuery("select max(id) from tblareas",null );
+//        DataTag dt=new DataTag();
+//        dt.setTag(tag);
+//        if(cursor.moveToFirst())
+//        dt.setTagid(cursor.getString(0));
+        cursor.close();
+        dd.close();
+    }
+
+
+    public void insertToPrjctDiscipline(ArrayList<DataTag> prjctsAreas, String prjct) {
+
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String systemarea;
+        int transactioncount=1;
+        Cursor cursor=null;
+
+
+
+
+
+        boolean	status=false;
+        cursor=dd.rawQuery("select max(id) from tblprojectarea",null );
+        int prjctcount=0;
+        if(cursor.moveToFirst())
+            prjctcount=cursor.getInt(0);
+        String insertCategoryQuery1 = "INSERT INTO tblprojectdiscipline(" +
+                "prjctid,"+
+                "disciplineid"+")"+
+                " VALUES (?,?)";
+
+        dd= this.getWritableDatabase();
+        // SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
+        SQLiteStatement insertCategory1 = dd.compileStatement(insertCategoryQuery1);
+        try {
+            //JSONArray jsn=new JSONArray(data);
+
+
+
+            for (int i = 0; i <prjctsAreas.size() ; i++) {
+                try {
+
+                    insertCategory1.clearBindings();
+
+
+                    cursor=dd.rawQuery("select id from tblprojectdiscipline where prjctid='"+prjct+"' and disciplineid='"+prjctsAreas.get(i).getTagid()+"'",null );
+
+                    if(cursor.getCount()==0) {
+
+                        prjctcount++;
+                        //insertCategory1.bindLong(1, prjctcount);
+                        insertCategory1.bindString(2, prjct);
+
+                        insertCategory1.bindString(3, prjctsAreas.get(i).getTagid());
+                        //insertCategory.bindString(9,actor.getString("published"));
+
+
+                        insertCategory1.execute();
+                        status = true;
+                    }
+                }catch (android.database.sqlite.SQLiteConstraintException ee){
+                    ee.printStackTrace();
+                    Log.i("error",ee.toString()+"");
+                }
+            }
+
+
+
+            //       "INSERT OR REPLACE INTO tax(gstid,cgst,sgst,igst,GST,published) VALUES(" + actor.getString("gstid") + ",'" + actor.getString("cgst") + "," + actor.getString("igst") + actor.getString("igst") + ")";
+
+            // Cursor cursor=dd.rawQuery(ss,null );
+
+
+            cursor.close();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+//Utility.addReminder(df,co);
+//Utility.setAlaram1(co,df);
+//   cursor=dd.rawQuery("select max(id) from tblareas",null );
+//        DataTag dt=new DataTag();
+//        dt.setTag(tag);
+//        if(cursor.moveToFirst())
+//        dt.setTagid(cursor.getString(0));
+        cursor.close();
+        dd.close();
+    }
     public void insertToPrjctAreas(ArrayList<DataTag> prjctsAreas, String prjct) {
 
         SQLiteDatabase dd=this.getReadableDatabase();
@@ -2552,10 +3316,10 @@ if(cursor.getCount()==0){
         if(cursor.moveToFirst())
             prjctcount=cursor.getInt(0);
         String insertCategoryQuery1 = "INSERT INTO tblprojectarea(" +
-                "id,"+
+
                 "prjctid,"+
                 "areaid"+")"+
-                " VALUES (?,?,?)";
+                " VALUES (?,?)";
 
         dd= this.getWritableDatabase();
         // SQLiteStatement insertCategory = dd.compileStatement(insertCategoryQuery);
@@ -2576,7 +3340,7 @@ if(cursor.getCount()==0){
                     if(cursor.getCount()==0) {
 
                         prjctcount++;
-                        insertCategory1.bindLong(1, prjctcount);
+                        //insertCategory1.bindLong(1, prjctcount);
                         insertCategory1.bindString(2, prjct);
 
                         insertCategory1.bindString(3, prjctsAreas.get(i).getTagid());
@@ -2701,7 +3465,7 @@ if(cursor.moveToFirst())
 
 
     dd.execSQL("delete from tblsystem where exist='"+ss+"'" );
-
+       // dd.execSQL("delete from tblprojectsystem where exist='"+ss+"'" );
     }
 
     public void loadDiscipline(String  ss){
@@ -2793,4 +3557,45 @@ if(cursor.moveToFirst())
     }
 
 
+    public ArrayList<DataTag> getPrjctTags(String id) {
+        SQLiteDatabase dd=this.getReadableDatabase();
+        String dde;
+
+        dde="select * from tbltags where id IN(select tagid from tblprojecttag where prjctid='"+id+"' )";
+
+        Cursor cursor=dd.rawQuery(dde,null );
+
+        Cursor cursor1,cursor2;
+        // Cursor cursor=dd.rawQuery("select voucher.id,,voucher.amount,voucher.naration, from voucher,acc_ledgers where vourcher_type='"+type+"'",null );
+        DataTag dt;
+        ArrayList<DataTag> dta=new ArrayList<DataTag>();
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+//                    "id TEXT PRIMARY KEY,"+
+//                            "prjctid TEXT DEFAULT NULL,"+
+//                            "tagid TEXT DEFAULT NULL"+")";
+
+                    dt = new DataTag();
+
+                    dt.setTagid(cursor.getString(0));
+
+
+                    dt.setTag(cursor.getString(1));
+dt.setExist(cursor.getString(2));
+                    dta.add(dt);
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                    Log.e("er",ee.toString()+"");
+                }
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        dd.close();
+        return dta;
+
+
+
+    }
 }

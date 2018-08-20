@@ -19,32 +19,10 @@
         android:layout_height="match_parent"
         tools:layout_editor_absoluteY="81dp">
 
-        <Button
-            android:id="@+id/addprjct"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/name_shapebtn"
-            android:drawableRight="@drawable/ic_add_black_24dp"
-            android:drawableTint="@color/c3_light"
-            android:gravity="center"
-            android:paddingBottom="2dp"
-            android:paddingLeft="12dp"
-            android:paddingTop="2dp"
-            android:text="New"
-            android:textColor="@color/c3_light"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toEndOf="@+id/textView2"
-            app:layout_constraintHorizontal_bias="0.96"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
+            android:visibility="visible"
             android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -187,16 +165,7 @@ android:focusable="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/guideline4" />
 
-        <android.support.constraint.Group
-            android:id="@+id/group"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="visible"
-            app:constraint_referenced_ids="addprjct,guideline3,guideline2,textView2,textInputLayout2,textInputLayout3,guideline4"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TableLayout
             android:id="@+id/prjcts"
@@ -315,23 +284,58 @@ android:focusable="false"
 
         </TableLayout>
 
-        <Button
-            android:id="@+id/copy"
-
+        <LinearLayout
+            android:id="@+id/line"
             android:layout_width="30dp"
+
             android:layout_height="30dp"
-            android:layout_marginBottom="8dp"
+
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/ic_content_copy_white_24dp"
-            android:text=""
+
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toStartOf="@+id/addprjct"
-            app:layout_constraintHorizontal_bias="0.96"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/line1"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@+id/guideline15"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/copy"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+
+                android:background="@drawable/ic_content_copy_white_24dp"
+                android:gravity="center"
+
+                android:text=""
+                android:textColor="@color/c3_light" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/line1"
+            android:layout_width="30dp"
+
+            android:layout_height="30dp"
+            android:background="@drawable/rounddrw"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/line"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/addprjct"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+
+                android:background="@drawable/ic_add_white_24dp"
+                android:gravity="center"
+
+                android:text=""
+                android:textColor="@color/c3_light" />
+        </LinearLayout>
+
         <android.support.constraint.Guideline
             android:id="@+id/guideline15"
             android:layout_width="wrap_content"
