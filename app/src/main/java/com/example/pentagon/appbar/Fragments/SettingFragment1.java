@@ -239,7 +239,7 @@ new ImportListDialog(getActivity(),"project");
 
 
         prjctData= new SqliteDb(getActivity()).getPrjcts();
-        areaData= new SqliteDb(getActivity()).getAreas("");
+      //  areaData= new SqliteDb(getActivity()).getAreas("");
         setPrjctRecycle(getActivity());
 
 

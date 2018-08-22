@@ -1013,7 +1013,8 @@ else
         Cursor cursor=dd.rawQuery(dde,null );
         cursor.moveToFirst();
         if(cursor.getInt(0)==0)
-            return dta;
+            dde="select * from tblsystem";
+        else
         dde="select * from tblsystem where id NOT IN(select systemid from tblprojectsystem where prjctid='"+pid+"')";
 
         cursor=dd.rawQuery(dde,null );
@@ -1106,7 +1107,8 @@ else
         Cursor cursor=dd.rawQuery(dde,null );
         cursor.moveToFirst();
         if(cursor.getInt(0)==0)
-            return dta;
+            dde="select * from tbldiscipline";
+        else
         dde="select * from tbldiscipline where id NOT IN(select disciplineid from tblprojectdiscipline where prjctid='"+pid+"')";
       cursor=dd.rawQuery(dde,null );
         Cursor cursor1,cursor2;
@@ -1195,7 +1197,8 @@ else
         Cursor cursor=dd.rawQuery(dde,null );
         cursor.moveToFirst();
         if(cursor.getInt(0)==0)
-            return dta;
+            dde="select * from tbltags";
+        else
         dde="select * from tbltags where id NOT IN(select tagid from tblprojecttag where prjctid='"+pid+"' )";
 
          cursor=dd.rawQuery(dde,null );
@@ -2032,14 +2035,19 @@ for(int j=0;j<prjcttags.size();j++) {
     public ArrayList<DataTag> getAreas(String pid) {
         SQLiteDatabase dd=this.getReadableDatabase();
         String dde;
+        Cursor cursor;
         ArrayList<DataTag> dta=new ArrayList<DataTag>();
-        dde="select count(areaid) as cont from tblprojectarea";
 
 
-        Cursor cursor=dd.rawQuery(dde,null );
-        cursor.moveToFirst();
-        if(cursor.getInt(0)==0)
-            return dta;
+
+            dde="select count(areaid) as cont from tblprojectarea";
+
+
+           cursor=dd.rawQuery(dde,null );
+            cursor.moveToFirst();
+            if(cursor.getInt(0)==0)
+                dde="select * from tblareas";
+            else
         dde="select * from tblareas where id NOT IN(select areaid from tblprojectarea where prjctid='"+pid+"')";
 
      cursor=dd.rawQuery(dde,null );

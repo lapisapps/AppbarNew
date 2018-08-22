@@ -1,4 +1,5 @@
 package com.example.pentagon.appbar;
+
 import com.itextpdf.text.Chapter;
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -42,19 +44,31 @@ import com.example.pentagon.appbar.Fragments.SettingsFragments.FragmentSettingTa
 
 import com.example.pentagon.appbar.Fragments.PageReport5;
 import com.itextpdf.text.BaseColor;
+
+import com.itextpdf.text.DocListener;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
+
+import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+
+import com.itextpdf.text.pdf.PdfPageEvent;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -82,6 +96,8 @@ import static com.example.pentagon.appbar.Fragments.PageReport2.prjctname;
 
 import static com.example.pentagon.appbar.Fragments.PageReportTag.addtag;
 import static com.example.pentagon.appbar.Main2Activity.BITMAP_SAMPLE_SIZE;
+import static com.itextpdf.text.html.HtmlTags.ALIGN_CENTER;
+import static com.itextpdf.text.html.HtmlTags.FONT;
 
 public class Utility extends Activity {
     public static MenuItem savemenu;
@@ -138,7 +154,7 @@ public class Utility extends Activity {
                     }
                 }).check();
     }
-    public void audioDialog(Context context) {
+    public void audioDialog(Activity context) {
 
         new AudioRecordDialog(context,false);
     }
@@ -252,10 +268,9 @@ reportid.setTag("error");
 
                 if(!checkValuesNull()){
                     if(from==0)
-                    Toast.makeText(activity, "Report Discarded", Toast.LENGTH_SHORT).show();
+                        Utility.customToastSave("Report Discarded",activity,"");
                    else
-                        Toast.makeText(activity, "Empty Report Details", Toast.LENGTH_SHORT).show();
-
+                       Utility.customToastSave("Empty Report Details",activity,"");
                     return;
 
                 }}
@@ -335,18 +350,16 @@ public static Paragraph tablepara(PdfPTable pp1){
     pp.add(pp1);
     return pp;
 }
-    public static File createPdf(Activity activity,DataReport data, ArrayList<DataTag> dataTag, ArrayList<DataPreview> dataPreview) throws IOException, DocumentException {
+    public static File createPdf(final Activity activity, DataReport data, ArrayList<DataTag> dataTag, ArrayList<DataPreview> dataPreview) throws IOException, DocumentException {
 
-
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
       ArrayList<DataTag> dataDisciplines = new SqliteDb(activity).getReportDiscipline(data.getId());
         ArrayList<DataTag> dataSystems = new SqliteDb(activity).getReportSystem(data.getId());
         ArrayList<DataTag> prjctareas= new SqliteDb(activity).getPrjctsAreas(data.getPrjct(),data.getId());
         CameraUtils.reportid=data.getId()+"_"+data.getReportname();
         File myFile = CameraUtils.getOutputMediaFile(MEDIA_TYPE_PDF);
 
-//        if (file != null) {
-//            imageStoragePath = file.getAbsolutePath();
-//        }
+
 
         assert myFile != null;
         OutputStream output = new FileOutputStream(myFile);
@@ -356,36 +369,108 @@ public static Paragraph tablepara(PdfPTable pp1){
 
 
 
-        Document document = new Document();
 
-PdfWriter pdfWriter= PdfWriter.getInstance(document, output);
+        final Document document = new Document();
 
-        document.open();
-        //Step 2
-        PdfContentByte cb =   pdfWriter.getDirectContent();
-
-        //Step 3
-int indentation=0;
-//        float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
-//                - document.rightMargin() - indentation) / image.getWidth()) * 100;
-//
-//        image.scalePercent(scaler);
-        //Step 4 Add content
-//first page--report
+final PdfWriter pdfWriter= PdfWriter.getInstance(document, byteArrayOutputStream);
 
 
+        pdfWriter.setPageEvent(new PdfPageEvent() {
+            @Override
+            public void onOpenDocument(PdfWriter writer, Document document) {
+
+            }
+
+            @Override
+            public void onStartPage(PdfWriter writer, Document document) {
+
+            }
+
+            @Override
+            public void onEndPage(PdfWriter writer, Document document) {
+                Rectangle boderrect= new Rectangle(50,50,pdfWriter.getPageSize().getWidth()-50,pdfWriter.getPageSize().getHeight()-50); // you can resize rectangle
+                boderrect.enableBorderSide(1);
+                boderrect.enableBorderSide(2);
+                boderrect.enableBorderSide(4);
+                boderrect.enableBorderSide(8);
+                boderrect.setBorderColor(BaseColor.BLACK);
+                boderrect.setBorderWidth(1);
+                try {
+                    document.add(boderrect);
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onCloseDocument(PdfWriter writer, Document document) {
+
+            }
+
+            @Override
+            public void onParagraph(PdfWriter writer, Document document, float paragraphPosition) {
+
+            }
+
+            @Override
+            public void onParagraphEnd(PdfWriter writer, Document document, float paragraphPosition) {
+
+            }
+
+            @Override
+            public void onChapter(PdfWriter writer, Document document, float paragraphPosition, Paragraph title) {
+
+            }
+
+            @Override
+            public void onChapterEnd(PdfWriter writer, Document document, float paragraphPosition) {
+
+            }
+
+            @Override
+            public void onSection(PdfWriter writer, Document document, float paragraphPosition, int depth, Paragraph title) {
+
+            }
+
+            @Override
+            public void onSectionEnd(PdfWriter writer, Document document, float paragraphPosition) {
+
+            }
+
+            @Override
+            public void onGenericTag(PdfWriter writer, Document document, Rectangle rect, String text) {
+
+            }
+        });
 
 
+
+
+       document.setMargins(0, 0, 60, 0);
+     document.setMarginMirroring(false);
+document.open();
+
+        Rectangle rect1= new Rectangle(12,12);
+        Rectangle boderrect= new Rectangle(50,50,pdfWriter.getPageSize().getWidth()-50,pdfWriter.getPageSize().getHeight()-50); // you can resize rectangle
+        boderrect.enableBorderSide(1);
+        boderrect.enableBorderSide(2);
+        boderrect.enableBorderSide(4);
+        boderrect.enableBorderSide(8);
+        boderrect.setBorderColor(BaseColor.BLACK);
+        boderrect.setBorderWidth(1);
+       // document.add(boderrect);
         document.add(tablepara(setpage1("Report",bf12,data.getId()+"-"+data.getReportname(),data.getDescrpotion(),bf12,document.getPageSize().getHeight())));
 
-        document.newPage();
-        document.add(tablepara(setpage1("Project Details",bf12,data.getPrjct()+"-"+data.getPrjctname(),data.getPrjctdescr(),bf12,document.getPageSize().getHeight())));
+       document.newPage();
+       // document.add(boderrect);
+        document.add( tablepara(setpage1("Project Details",bf12,data.getPrjct()+"-"+data.getPrjctname(),data.getPrjctdescr(),bf12,document.getPageSize().getHeight())));
 
 
-        document.newPage();
+     document.newPage();
 
-//Tags
-
+//Tags---------------------------------------------------------------------------------
+        //document.add(boderrect);
         PdfPTable table = new PdfPTable(1);
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
 
@@ -402,7 +487,7 @@ int indentation=0;
 
         //add the call to the table
         table.addCell(cell1);
-        document.add(tablepara(table));
+        document.add( tablepara(table));
 //        Chapter cc=new Chapter(tablepara(table), 1);
 //document.add(cc);
         document.add(setSpace());
@@ -419,10 +504,12 @@ int indentation=0;
             insertCell(table,dataTag.get(j).getTag(),Element.ALIGN_CENTER,1,bf12);
 
         }
-        document.add(tablepara(table));
+
+        document.add( tablepara(table));
 
         document.newPage();
-//Area
+//Area-----------------------------------------------------------------------------
+       // document.add(boderrect);
      table = new PdfPTable(1);
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
 
@@ -440,7 +527,7 @@ int indentation=0;
         //add the call to the table
         table.addCell(cell1);
         document.add(tablepara(table));
-        document.add(setSpace());
+        document.add( setSpace());
         table = new PdfPTable(2);
 
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -453,11 +540,12 @@ int indentation=0;
             insertCell(table,prjctareas.get(j).getTag(),Element.ALIGN_CENTER,1,bf12);
 
         }
-        document.add(tablepara(table));
+        document.add( tablepara(table));
 
         document.newPage();
 
-   //system
+   //system-----------------------------------------------------------------------
+     //   document.add(boderrect);
         table = new PdfPTable(1);
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
 
@@ -475,7 +563,7 @@ int indentation=0;
         //add the call to the table
         table.addCell(cell1);
         document.add(tablepara(table));
-document.add(setSpace());
+document.add( setSpace());
         table = new PdfPTable(2);
 
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -490,10 +578,10 @@ document.add(setSpace());
         }
         document.add(tablepara(table));
 
-        document.newPage();
+       document.newPage();
 
-        //Discipline
-
+        //Discipline--------------------------------------------------------------------
+       // document.add(boderrect);
         table = new PdfPTable(1);
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
 
@@ -510,7 +598,7 @@ document.add(setSpace());
 
         //add the call to the table
         table.addCell(cell1);
-        document.add(tablepara(table));
+        document.add( tablepara(table));
 document.add(setSpace());
         table = new PdfPTable(2);
 
@@ -526,10 +614,10 @@ document.add(setSpace());
         }
         document.add(tablepara(table));
 
-        document.newPage();
+       document.newPage();
 
-
-
+//file-----------------------------------------------------------------------------------
+     //  document.add(boderrect);
 int flag=0;
         PdfPTable image = new PdfPTable(1);
         PdfPTable video = new PdfPTable(1);
@@ -599,102 +687,160 @@ image.addCell(dataPreview.get(j).getDescr());
         //add the call to the table
         table.addCell(cell1);
         if(flag==1) {
-            document.add(tablepara(table));
+            document.add( tablepara(table));
 
-            document.add(tablepara(image));
+            document.add( tablepara(image));
 
             document.newPage();
         }
 
 
-//        document.add(tablepara(video));
-//
-//        document.newPage();
-//        document.add(tablepara(audio));
-//
-//        document.newPage();
 
-       //end
-
-
-
-
-
-//        Paragraph pp=new Paragraph();
-//pp.setAlignment(Element.ALIGN_MIDDLE);
-//        pp.add(image);
-//        document.add(pp);
-//        document.newPage();
-
-        //Fifth page
-//        table = new PdfPTable(1);
-//        table.setHorizontalAlignment(Element.ALIGN_CENTER);
-//
-//        cell1 = new PdfPCell(new Phrase("Summary\n\n"+data.getSummary(), bf12));
-//        //set the cell alignment
-//        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
-//        //set the cell column span in case you want to merge two or more cells
-//        cell1.setVerticalAlignment(Element.ALIGN_TOP);
-//
-//        cell1.setBorderWidth(0f);
-//        cell1.setRowspan(1);
-//        //in case there is no text and you wan to create an empty row
-//        cell1.setMinimumHeight(50f);
-//
-//        //add the call to the table
-//        table.addCell(cell1);
-//        document.add(table);
-//        document.add(setSpace());
-//        table = new PdfPTable(2);
-//        table.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        //document.setMargins(10f,10f,100f,10f);
-//
-//
-//
-//        insertCell(table,"Checked By:",Element.ALIGN_CENTER,1,bf12);
-//
-//        insertCell(table,data.getChecked(),Element.ALIGN_CENTER,1,bf12);
-//        insertCell(table,"Prepared By:",Element.ALIGN_CENTER,1,bf12);
-//        insertCell(table,data.getPrepared(),Element.ALIGN_CENTER,1,bf12);
-//        insertCell(table,"Approved By:",Element.ALIGN_CENTER,1,bf12);
-//        insertCell(table,data.getApproved(),Element.ALIGN_CENTER,1,bf12);
-//        table = new PdfPTable(1);
-//        table.setHorizontalAlignment(Element.ALIGN_CENTER);
-//
-
-        PdfPTable tables=setpageSummary(data,bf12,bf12,document.getPageSize().getHeight());
+//summary-----------------------------------------------------------------------------
+     //   document.add(boderrect);
+        PdfPTable tables=setpageSummary(data,bf12,bf12,0);
         document.add(tablepara(tables));
+document.newPage();
+document.add(tablepara(setFrontPage(pdfWriter.getCurrentPageNumber(),pdfWriter.getPageSize().getWidth())));
 
-     //   document.newPage();
-// float columnWidths1[] = {1.5f, 3f};
-//        //create PDF table with the given widths
-//  table = new PdfPTable(columnWidths1);
-//        table.getDefaultCell().setVerticalAlignment(Element.ALIGN_CENTER);
-//        insertCell(table,"Summary:",Element.ALIGN_LEFT,1,bfBold12);
-//        insertCell(table,data.getSummary(),Element.ALIGN_LEFT,1,bfBold12);
-//        insertCell(table,"Checked:",Element.ALIGN_LEFT,1,bfBold12);
-//        insertCell(table,data.getChecked(),Element.ALIGN_LEFT,1,bfBold12);
-//        insertCell(table,"Prepared:",Element.ALIGN_LEFT,1,bfBold12);
-//        insertCell(table,data.getPrepared(),Element.ALIGN_LEFT,1,bfBold12);
-//        insertCell(table,"Approved:",Element.ALIGN_LEFT,1,bfBold12);
-//        insertCell(table,data.getApproved(),Element.ALIGN_LEFT,1,bfBold12);
-// pp=new Paragraph();
-//pp.add(table);
-//        pp.setAlignment(Element.ALIGN_MIDDLE);
-//        document.add(pp);
-
-//        document.add(getPara("Summary:"+data.getSummary()));
-//        document.add(getPara("Checked:"+data.getChecked()));
-//        document.add(getPara("Prepared:"+data.getPrepared()));
-//        document.add(getPara("Approved:"+data.getApproved()));
-
-     //   document.newPage();
-
-        //Step 5: Close the document
 
         document.close();
+        PdfReader reader = new PdfReader(byteArrayOutputStream.toByteArray());
+        int startToc = reader.getNumberOfPages();
+        int n = reader.getNumberOfPages();
+
+        reader.selectPages(String.format("1,%s, 2-%s",
+                startToc, n - 1));
+        PdfStamper stamper = new PdfStamper(reader, output);
+        stamper.close();
         return myFile;
 
+    }
+
+    private static PdfPTable  setFrontPage(int currentPageNumber,float width) {
+BaseColor whiteclr=BaseColor.WHITE;
+new BaseColor(217,217,217);
+        BaseColor greyclr=BaseColor.LIGHT_GRAY;
+        Font bfBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, new BaseColor(0, 0, 0));
+
+        float[] columnWidths = {1.5f, 3f};
+        //create PDF table with the given widths
+        PdfPTable main = new PdfPTable(1);
+        main.getDefaultCell().setBorder(0);
+        main.getDefaultCell().setBorderWidth(0f);
+        PdfPTable table = new PdfPTable(new float[] {2,3,6,1,1,1});
+
+        table.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        PdfPCell cell1 = new PdfPCell(new Phrase("PROJECT", bfBold12));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+
+        cell1.setBorderWidth(0f);
+        cell1.setRowspan(1);
+        //in case there is no text and you wan to create an empty row
+        cell1.setMinimumHeight(30f);
+
+        //add the call to the table
+        main.addCell(cell1);
+
+table.addCell(getPdfCell("Rev.",bfBold12,greyclr));
+
+
+        table.addCell(getPdfCell("Date",bfBold12,greyclr));
+        table.addCell(getPdfCell("Reason for issue",bfBold12,greyclr));
+        table.addCell(getPdfCell("org.",bfBold12,greyclr));
+        table.addCell(getPdfCell("chk.",bfBold12,greyclr));
+        table.addCell(getPdfCell("app.",bfBold12,greyclr));
+        table.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+
+        cell1 = new PdfPCell();
+
+cell1.setColspan(1);
+        cell1.setBorderWidth(0f);
+        cell1.addElement(table);
+
+      main.addCell(table);
+        table = new PdfPTable(new float[] {2,3});
+       table.getDefaultCell().setPadding(0f);
+//        table.getDefaultCell().setBorderWidth(0f);
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+     PdfPTable   table1 = new PdfPTable(1);
+        table1.addCell(getPdfCell("Project Name",bfBold12,greyclr));
+        table1.addCell(getPdfCell("",bfBold12,whiteclr));
+        table1.addCell(getPdfCell("Document Number",bfBold12,greyclr));
+        table1.addCell(getPdfCell("",bfBold12,whiteclr));
+        cell1 = new PdfPCell();
+
+
+        cell1.setBorderWidth(0f);
+        cell1.addElement(table1);
+        table.addCell(table1);
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+        table1 = new PdfPTable(1);
+        table1.addCell(getPdfCell("Document Title",bfBold12,greyclr));
+        table1.addCell(getPdfCell("",bfBold12,whiteclr));
+//        table1.addCell(getPdfCell("Document Number",bfBold12));
+//        table1.addCell(getPdfCell("",bfBold12));
+        cell1 = new PdfPCell();
+
+
+        cell1.setBorderWidth(0f);
+        cell1.addElement(table1);
+        table.addCell(table1);
+        table.addCell(getPdfCell("",bfBold12,greyclr));
+        table1 = new PdfPTable(new float[] {3,1});
+        table1.addCell(getPdfCell("Contract No:",bfBold12,greyclr));
+
+        table1.addCell(getPdfCell("No of Pages",bfBold12,greyclr));
+
+        cell1 = new PdfPCell();
+
+
+        cell1.setBorderWidth(0f);
+        cell1.addElement(table1);
+        table.addCell(table1);
+        table.addCell(getPdfCell("",bfBold12,whiteclr));
+        table1 = new PdfPTable(new float[] {3,1});
+
+
+        table1.addCell(getPdfCell("",bfBold12,whiteclr));
+        table1.addCell(getPdfCell("",bfBold12,whiteclr));
+        cell1 = new PdfPCell();
+
+
+        cell1.setBorderWidth(0f);
+        cell1.addElement(table1);
+        table.addCell(table1);
+        main.addCell(table);
+        return main;
+    }
+
+    private static PdfPCell getPdfCell(String s,Font hfont,BaseColor bb) {
+       PdfPCell cell1 = new PdfPCell(new Phrase(s, hfont));
+        //set the cell alignment
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        //set the cell column span in case you want to merge two or more cells
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+        if(s.equals(""))
+cell1.setMinimumHeight(20f);
+        cell1.setBorderWidth(0.5f);
+        cell1.setRowspan(1);
+
+        cell1.setBackgroundColor(bb);
+        //in case there is no text and you wan to create an empty row
+
+
+        //add the call to the table
+    return cell1;
     }
 
     private static PdfPTable setSpace() {
@@ -765,7 +911,7 @@ image.addCell(dataPreview.get(j).getDescr());
 
         cell.setRowspan(1);
         //in case there is no text and you wan to create an empty row
-        cell.setMinimumHeight((pagersize-150f));
+        cell.setMinimumHeight((pagersize-250f));
         table.addCell(cell);
 
 
@@ -1124,4 +1270,45 @@ public static void customToastSave(String text,Activity activity,String n){
 
     toast.show();
 }
+    static class Header extends PdfPageEventHelper {
+        Font font;
+        PdfTemplate t;
+        Image total;
+
+        @Override
+        public void onOpenDocument(PdfWriter writer, Document document) {
+            t = writer.getDirectContent().createTemplate(30, 16);
+            try {
+                total = Image.getInstance(t);
+                total.setRole(PdfName.ARTIFACT);
+                font = new Font(Font.FontFamily.TIMES_ROMAN, 10);
+                //font =  new Font(BaseFont.createFont(FONT, BaseFont.COURIER_BOLD, BaseFont.EMBEDDED), 10);
+            } catch (DocumentException de) {
+                throw new ExceptionConverter(de);
+            }
+        }
+
+        @Override
+        public void onEndPage(PdfWriter writer, Document document) {
+            PdfPTable table = new PdfPTable(1);
+            table.setWidthPercentage(100);
+            //table.getDefaultCell().setBorder(Rectangle.BOTTOM);
+            //table.addCell(new Phrase("Test", font));
+            table.setTotalWidth(writer.getPageSize().getWidth());
+            table.addCell(new Phrase(String.format("%d", writer.getPageNumber()), font));
+
+
+            PdfContentByte canvas = writer.getDirectContent();
+            canvas.beginMarkedContentSequence(PdfName.ARTIFACT);
+            table.writeSelectedRows(0, -1, 36, 30, canvas);
+            canvas.endMarkedContentSequence();
+        }
+
+        @Override
+        public void onCloseDocument(PdfWriter writer, Document document) {
+            ColumnText.showTextAligned(t, Element.ALIGN_LEFT,
+                    new Phrase(String.valueOf(writer.getPageNumber()), font),
+                    2, 4, 0);
+        }
+    }
 }

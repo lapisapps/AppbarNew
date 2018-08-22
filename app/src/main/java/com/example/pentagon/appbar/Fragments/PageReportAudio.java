@@ -1,5 +1,6 @@
 package com.example.pentagon.appbar.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -103,7 +104,7 @@ View view;
     }
 
 
-    public static void setAudios(final Context context) {
+    public static void setAudios(final Activity context) {
  ddaudio=new ArrayList<>();
         for(int j=0;j<dataPreviews.size();j++){
 

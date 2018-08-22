@@ -1,5 +1,6 @@
 package com.example.pentagon.appbar;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -54,7 +55,7 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
     Button btnsave;
     android.app.AlertDialog alertDialog;
     public static DataPreview dataPreview;
-    public AudioRecordDialog(@NonNull final Context mContext,Boolean forview) {
+    public AudioRecordDialog(@NonNull final Activity mContext, Boolean forview) {
         super(mContext);
         context=mContext;
         android.app.AlertDialog.Builder builder;
@@ -78,8 +79,8 @@ public class AudioRecordDialog extends Dialog implements View.OnClickListener {
                 dd.setSelected(true);
                 CreateReport.dataPreviews.add(dd);
                 PageReportDataView.addAudio(dd,-1);
-
-                Toast.makeText(mContext, "Audio Record saved", Toast.LENGTH_SHORT).show();
+//Utility.customToastSave("Audio Record saved",mContext,"save");
+             //   Toast.makeText(mContext, "Audio Record saved", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
         });

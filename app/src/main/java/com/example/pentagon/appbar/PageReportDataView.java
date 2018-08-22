@@ -675,7 +675,7 @@ viewPager.setOffscreenPageLimit(3);
 
     private void audioDialog() {
         AudioRecordDialog.main2Activity=PageReportDataView.this;
-        new AudioRecordDialog(getContext(),false);
+        new AudioRecordDialog(getActivity(),false);
     }
 
     private void captureImage() {

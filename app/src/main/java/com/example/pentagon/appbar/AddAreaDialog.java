@@ -76,7 +76,7 @@ this.type=type;
                 null);
 
 
-        dataTags=new SqliteDb(mContext).getAreas("");
+      //  dataTags=new SqliteDb(mContext).getAreas("");
         setView(layout);
 
         builder = new android.app.AlertDialog.Builder(mContext);
